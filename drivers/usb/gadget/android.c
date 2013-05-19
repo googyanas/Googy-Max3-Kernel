@@ -583,7 +583,7 @@ static int rmnet_function_bind_config(struct android_usb_function *f,
 
 	if (!rmnet_initialized) {
 		rmnet_initialized = 1;
-		strlcpy(buf, rmnet_transports, sizeof(buf));
+		strlcpy(buf, rmnet_transports, (int)sizeof(buf));
 		b = strim(buf);
 
 		strlcpy(xport_name_buf, rmnet_xport_names,
@@ -831,7 +831,7 @@ static int diag_function_bind_config(struct android_usb_function *f,
 	int (*notify)(uint32_t, const char *);
 	struct android_dev *dev = cdev_to_android_dev(c->cdev);
 
-	strlcpy(buf, diag_clients, sizeof(buf));
+	strlcpy(buf, diag_clients, (int)sizeof(buf));
 	b = strim(buf);
 
 	while (b) {
@@ -946,7 +946,7 @@ static int serial_function_bind_config(struct android_usb_function *f,
 		goto bind_config;
 
 	serial_initialized = 1;
-	strlcpy(buf, serial_transports, sizeof(buf));
+	strlcpy(buf, serial_transports, (int)sizeof(buf));
 	b = strim(buf);
 
 	strlcpy(xport_name_buf, serial_xport_names, sizeof(xport_name_buf));
@@ -1040,7 +1040,7 @@ static int acm_function_bind_config(struct android_usb_function *f,
 		goto bind_config;
 
 	acm_initialized = 1;
-	strlcpy(buf, acm_transports, sizeof(buf));
+	strlcpy(buf, acm_transports, (int)sizeof(buf));
 	b = strim(buf);
 
 	strlcpy(xport_name_buf, acm_xport_names, sizeof(xport_name_buf));
@@ -2240,7 +2240,7 @@ functions_store(struct device *pdev, struct device_attribute *attr,
 	}
 
 	printk(KERN_DEBUG "usb: %s buff=%s\n", __func__, buff);
-	strlcpy(buf, buff, sizeof(buf));
+	strlcpy(buf, buff, (int)sizeof(buf));
 	b = strim(buf);
 
 	while (b) {
