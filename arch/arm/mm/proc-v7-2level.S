@@ -176,7 +176,7 @@ TIMA_CMP_LOOP2:
  ARM(	str	r3, [r0, #2048]! )
  THUMB(	add	r0, r0, #2048 )
  THUMB(	str	r3, [r0] )
-	ALT_SMP(mov	pc,lr)
+	ALT_SMP(W(nop))
 	ALT_UP (mcr	p15, 0, r0, c7, c10, 1)		@ flush_pte
 #endif
 #endif
