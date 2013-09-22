@@ -496,10 +496,11 @@ static ssize_t show_scaling_governor(struct cpufreq_policy *policy, char *buf)
 /**
  * store_scaling_governor - store policy for the specified CPU
  */
-static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
+static ssize_t __ref store_scaling_governor(struct cpufreq_policy *policy,
 					const char *buf, size_t count)
 {
 	unsigned int ret = -EINVAL;
+	int cpu;
 	char	str_governor[16];
 	struct cpufreq_policy new_policy;
 
@@ -523,6 +524,17 @@ static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
 	policy->user_policy.governor = policy->governor;
 
 	sysfs_notify(policy->kobj, NULL, "scaling_governor");
+
+		/* Set extra CPU cores to same scaling governor */
+		for (cpu = 1; cpu < CPUS_AVAILABLE; cpu++)
+		{
+			if (!cpu_online(cpu)) cpu_up(cpu);
+			if (&trmlpolicy[cpu] != NULL)
+			{
+				ret = cpufreq_get_policy(&new_policy, cpu);
+				__cpufreq_set_policy(&trmlpolicy[cpu], &new_policy);
+			}
+		}
 
 	if (ret)
 		return ret;
