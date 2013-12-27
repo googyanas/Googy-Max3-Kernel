@@ -137,6 +137,24 @@ ENTRY(v7_flush_kern_cache_all)
 	mov	pc, lr
 ENDPROC(v7_flush_kern_cache_all)
 
+ /*
+ *     v7_flush_kern_cache_louis(void)
+ *
+ *     Flush the data cache up to Level of Unification Inner Shareable.
+ *     Invalidate the I-cache to the point of unification.
+ */
+ENTRY(v7_flush_kern_cache_louis)
+ ARM(	stmfd	sp!, {r4-r5, r7, r9-r11, lr}	)
+ THUMB(	stmfd	sp!, {r4-r7, r9-r11, lr}	)
+	bl	v7_flush_dcache_louis
+	mov	r0, #0
+	ALT_SMP(mcr	p15, 0, r0, c7, c1, 0)	@ invalidate I-cache inner shareable
+	ALT_UP(mcr	p15, 0, r0, c7, c5, 0)	@ I+BTB cache invalidate
+ ARM(	ldmfd	sp!, {r4-r5, r7, r9-r11, lr}	)
+ THUMB(	ldmfd	sp!, {r4-r7, r9-r11, lr}	)
+	mov	pc, lr
+ENDPROC(v7_flush_kern_cache_louis)
+
 /*
  *	v7_flush_cache_all()
  *
