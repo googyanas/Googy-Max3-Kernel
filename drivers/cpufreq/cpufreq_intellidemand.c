@@ -61,10 +61,6 @@
 #define DBS_SYNC_FREQ				(702000)
 #define DBS_OPTIMAL_FREQ			(1566000)
 
-#ifdef CONFIG_CPUFREQ_ID_PERFLOCK
-#define DBS_PERFLOCK_MIN_FREQ			(594000)
-#endif
-
 static u64 freq_boosted_time;
 /*
  * The polling frequency of this governor depends on the capability of
@@ -97,7 +93,7 @@ static u64 sampling_rate_boosted_time;
 static unsigned int current_sampling_rate = DEF_SAMPLING_RATE;
 
 #ifdef CONFIG_CPUFREQ_ID_PERFLOCK
-static unsigned int saved_policy_min = 0;
+static unsigned int saved_policy_min;
 #endif
 
 static void do_dbs_timer(struct work_struct *work);
@@ -479,8 +475,7 @@ static void update_sampling_rate(unsigned int new_rate)
 {
 	int cpu;
 
-	dbs_tuners_ins.sampling_rate = new_rate
-				     = max(new_rate, min_sampling_rate);
+	dbs_tuners_ins.sampling_rate = max(new_rate, min_sampling_rate);
 
 	for_each_online_cpu(cpu) {
 		struct cpufreq_policy *policy;
@@ -527,6 +522,7 @@ static ssize_t store_sampling_rate(struct kobject *a, struct attribute *b,
 	if (ret != 1)
 		return -EINVAL;
 	update_sampling_rate(input);
+	pr_alert("STORE SAMPLING RATE %d-%d", input, dbs_tuners_ins.sampling_rate);
 	current_sampling_rate = dbs_tuners_ins.sampling_rate;
 	return count;
 }
@@ -1352,18 +1348,6 @@ static void do_dbs_timer(struct work_struct *work)
 		if (rq_persist_count > 0)
 			rq_persist_count--;
 
-#ifdef CONFIG_CPUFREQ_ID_PERFLOCK
-	if (cpu == 0) {
-		if (num_online_cpus() >= 2) {
-			if (saved_policy_min != 0)
-				policy->min = saved_policy_min;
-		} else if (num_online_cpus() == 1) {
-			saved_policy_min = policy->min;
-			policy->min = DBS_PERFLOCK_MIN_FREQ;
-		}
-	}
-#endif
-
 #ifdef CONFIG_CPUFREQ_LIMIT_MAX_FREQ
 	if (rq_persist_count > 3) {
 		lmf_browsing_state = false;
@@ -1729,7 +1713,7 @@ static void dbs_input_event(struct input_handle *handle, unsigned int type,
 		}
 
 		if (current_sampling_rate > BOOSTED_SAMPLING_RATE) {
-			dbs_tuners_ins.sampling_rate = BOOSTED_SAMPLING_RATE;
+			//dbs_tuners_ins.sampling_rate = BOOSTED_SAMPLING_RATE;
 			sampling_rate_boosted_time = ktime_to_us(ktime_get());
 			sampling_rate_boosted = 1;
 		}
