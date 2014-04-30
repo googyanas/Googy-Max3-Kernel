@@ -28,7 +28,7 @@ obj-$(CONFIG_CPU_ABRT_EV6)	+= abort-ev6.o
 obj-$(CONFIG_CPU_ABRT_EV7)	+= abort-ev7.o
 
 AFLAGS_abort-ev6.o	:=-Wa,-march=armv6k
-AFLAGS_abort-ev7.o	:=-Wa,-march=armv7-a
+AFLAGS_abort-ev7.o	:=-Wa,-march=armv7-a$(plus_sec)
 
 obj-$(CONFIG_CPU_PABRT_LEGACY)	+= pabort-legacy.o
 obj-$(CONFIG_CPU_PABRT_V6)	+= pabort-v6.o
