@@ -31,10 +31,10 @@ on early-init
     mkdir /mnt 0775 root system
 
 on init
-    setenforce 0
-    setprop ro.boot.selinux 0
-    sysclktz 0
-    loglevel 3
+
+sysclktz 0
+
+loglevel 3
 
 # Vibetonz
     export VIBE_PIPE_PATH /dev/pipes
