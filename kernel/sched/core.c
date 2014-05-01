@@ -5331,8 +5331,6 @@ static void migrate_tasks(unsigned int dead_cpu)
 	 */
 	rq->stop = NULL;
 
-	/* Ensure any throttled groups are reachable by pick_next_task */
-	unthrottle_offline_cfs_rqs(rq);
 
 	/* if there is one or more rt threads on the rq and if throttled,
 	 * we will deadlock in below loop. rt sched hrtimer have to run to
