@@ -1,3 +1,4 @@
+/arch/arm/boot/compressed/piggy.gzip
 /scripts/basic/fixdep
 /scripts/bin2c
 /scripts/conmakehash
@@ -79,11 +80,11 @@ modules.builtin
 .*.cmd
 *.builtin
 *.order
-arch/arm/kernel/vmlinux.lds
+/arch/arm/kernel/vmlinux.lds
 /boot.img.pre
-arch/arm/boot/Image
-arch/arm/boot/compressed/vmlinux
-arch/arm/boot/zImage
+/arch/arm/boot/Image
+/arch/arm/boot/compressed/vmlinux
+/arch/arm/boot/zImage
 /usr/gen_init_cpio
 /usr/initramfs_data.cpio
 /tags
