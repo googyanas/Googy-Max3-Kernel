@@ -8,17 +8,119 @@ echo '
 <settingsRoot>' >> $XML
 
 echo '
-  
-  <settingsTab name="Android Logger">
 
-	<settingsPane name="Android Logger" 
-                  description="Android Logger is a useful tool for developers to test and debug their Applications, but it can be disabled on normal use, this may give you better performance.">
+  <settingsTab name="CPU">
 
-      <checkbox description="It is recommended to disable Android Logger if you do not need it" 
+    <settingsPane name="CPU Clock Control"
+	      description="CPU Clock control">		  
+      
+      <spinner description="Set the maximum freqency the CPU scales up to. Default: 1890 MHz." 
+               name="CPU max frequency" 
+               action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq">"
+             <spinnerItem name="1890000" value="1890000"/> 
+             <spinnerItem name="1782000" value="1782000"/> 
+             <spinnerItem name="1674000" value="1674000"/> 
+             <spinnerItem name="1566000" value="1566000"/> 
+             <spinnerItem name="1458000" value="1458000"/> 
+             <spinnerItem name="1350000" value="1350000"/> 
+             <spinnerItem name="1242000" value="1242000"/> 
+             <spinnerItem name="1134000" value="1134000"/> 
+             <spinnerItem name="1026000" value="1026000"/> 
+             <spinnerItem name="918000" value="918000"/> 
+             <spinnerItem name="810000" value="810000"/> 
+             <spinnerItem name="702000" value="702000"/> 
+             <spinnerItem name="594000" value="594000"/> 
+             <spinnerItem name="486000" value="486000"/> 
+             <spinnerItem name="384000" value="384000"/> 
+       </spinner>
+       
+      <spinner description="Set the minimum freqency the CPU scales down to. Default: 384 MHz." 
+               name="CPU min frequency" 
+               action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq">"
+             <spinnerItem name="384000" value="384000"/> 
+             <spinnerItem name="486000" value="486000"/> 
+             <spinnerItem name="594000" value="594000"/> 
+             <spinnerItem name="702000" value="702000"/> 
+             <spinnerItem name="810000" value="810000"/> 
+             <spinnerItem name="918000" value="918000"/> 
+             <spinnerItem name="1026000" value="1026000"/> 
+             <spinnerItem name="1134000" value="1134000"/> 
+             <spinnerItem name="1242000" value="1242000"/> 
+             <spinnerItem name="1350000" value="1350000"/> 
+             <spinnerItem name="1458000" value="1458000"/> 
+             <spinnerItem name="1566000" value="1566000"/> 
+             <spinnerItem name="1674000" value="1674000"/> 
+             <spinnerItem name="1782000" value="1782000"/> 
+             <spinnerItem name="1890000" value="1890000"/> 
+       </spinner>
+       
+    </settingsPane>
+  </settingsTab>
+
+  <settingsTab name="GPU">
+
+    <settingsPane name="GPU Clock Control"
+	      description="GPU Clock control">		  
+      
+      <spinner description="Set the maximum freqency the GPU scales up to. Default: 450 MHz." 
+               name="GPU max frequency" 
+               action="generic /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk">"
+             <spinnerItem name="450 MHz" value="450000000"/> 
+             <spinnerItem name="320 Mhz" value="320000000"/> 
+             <spinnerItem name="200 MHz" value="200000000"/> 
+             <spinnerItem name="128 MHz" value="128000000"/> 
+       </spinner>
+              
+    </settingsPane>
+  </settingsTab>
+        
+  <settingsTab name="Charge">
+
+    <settingsPane name="AC/USB Charge control"
+	      description="AC/USB Charge control">		  
+	      
+      <checkbox description="Charge control switch" name="Charge control switch" action="generic01 /sys/kernel/fast_charge/force_fast_charge" label="Charge control switch"/>      
+      
+      <spinner description="USB charge current (default 475 mA)" 
+               name="USB Charge" 
+               action="generic /sys/kernel/charge_levels/usb_charge_level">"
+             <spinnerItem name="460 mA" value="460"/> 
+             <spinnerItem name="700 mA" value="700"/> 
+             <spinnerItem name="900 mA" value="900"/> 
+       </spinner>
+      <spinner description="AC charge current (default 1000 mA)" 
+               name="AC Charge" 
+               action="generic /sys/kernel/charge_levels/ac_charge_level">"
+             <spinnerItem name="1000 mA" value="1000"/> 
+             <spinnerItem name="1300 mA" value="1300"/> 
+             <spinnerItem name="1600 mA" value="1600"/> 
+       </spinner>
+	      
+    </settingsPane>
+  </settingsTab>
+    
+  <settingsTab name="Misc">
+
+   <settingsPane name="Misc. Settings" 
+                  description="Misc. Settings">
+
+      <checkbox description="It is recommended to disable Android Logger if you do not need it. Default: On" 
                 name="Enable/Disable Android Logger" 
                 action="generic01 /sys/kernel/logger_mode/logger_mode" 
                 label="Enable Android logger"/>
+    
+      <seekBar  description="Vibrator Strength. Default: 119"
+		name="Vibrator Strength"
+                action="generic /sys/devices/timed_output/vibrator/vibe_strength"
+                unit="" min="50" reversed="false" step="10" max="150"/>
 
+      <spinner description="TCP congestion control method. Default: cubic" name="TCP congestion control method" action="generic /proc/sys/net/ipv4/tcp_congestion_control">
+             <spinnerItem name="cubic" value="cubic"/>
+             <spinnerItem name="westwood" value="westwood"/>
+             <spinnerItem name="reno" value="reno"/> 
+             <spinnerItem name="bic" value="bic"/> 
+             <spinnerItem name="htcp" value="htcp"/> 
+      </spinner>
     </settingsPane>
 
   </settingsTab>
