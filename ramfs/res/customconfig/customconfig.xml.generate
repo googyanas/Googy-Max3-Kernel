@@ -99,32 +99,6 @@ echo '
     </settingsPane>
   </settingsTab>
     
-  <settingsTab name="Misc">
-
-   <settingsPane name="Misc. Settings" 
-                  description="Misc. Settings">
-
-      <checkbox description="It is recommended to disable Android Logger if you do not need it. Default: On" 
-                name="Enable/Disable Android Logger" 
-                action="generic01 /sys/kernel/logger_mode/logger_mode" 
-                label="Enable Android logger"/>
-    
-      <seekBar  description="Vibrator Strength. Default: 119"
-		name="Vibrator Strength"
-                action="generic /sys/devices/timed_output/vibrator/vibe_strength"
-                unit="" min="50" reversed="false" step="10" max="150"/>
-
-      <spinner description="TCP congestion control method. Default: cubic" name="TCP congestion control method" action="generic /proc/sys/net/ipv4/tcp_congestion_control">
-             <spinnerItem name="cubic" value="cubic"/>
-             <spinnerItem name="westwood" value="westwood"/>
-             <spinnerItem name="reno" value="reno"/> 
-             <spinnerItem name="bic" value="bic"/> 
-             <spinnerItem name="htcp" value="htcp"/> 
-      </spinner>
-    </settingsPane>
-
-  </settingsTab>
-
   <settingsTab name="I/O">
     <settingsPane description="Set the active I/O elevator algorithm. The scheduler decides how to handle I/O requests and how to handle them. FIOPS is the everyday recommended default scheduler."  
                   name="I/O schedulers">' >> $XML
@@ -167,6 +141,31 @@ echo '
                 action="generictag sd /sys/block/mmcblk1/queue/read_ahead_kb"
                 unit="kB" min="128" reversed="false" step="128" max="2048"/>
 
+    </settingsPane>
+
+  </settingsTab>
+
+  <settingsTab name="Misc">
+
+   <settingsPane name="Misc. Settings" 
+                  description="Misc. Settings">
+
+      <checkbox description="It is recommended to disable Android Logger if you do not need it. Default: On" 
+                name="Enable/Disable Android Logger" 
+                action="generic01 /sys/kernel/logger_mode/logger_mode" 
+                label="Enable Android logger"/>
+    
+      <seekBar  description="Vibrator Strength. Default: 119"
+		name="Vibrator Strength"
+                action="generic /sys/devices/virtual/timed_output/vibrator/vibe_strength"
+                unit="" min="5" reversed="false" step="1" max="126"/>
+
+      <spinner description="TCP congestion control method. Default: cubic" name="TCP congestion control method" action="generic /proc/sys/net/ipv4/tcp_congestion_control">
+             <spinnerItem name="cubic" value="cubic"/>
+             <spinnerItem name="westwood" value="westwood"/>
+             <spinnerItem name="bic" value="bic"/> 
+             <spinnerItem name="htcp" value="htcp"/> 
+      </spinner>
     </settingsPane>
 
   </settingsTab>
