@@ -80,6 +80,63 @@ echo '
     </settingsPane>
   </settingsTab>
         
+  <settingsTab name="LED">
+    <settingsPane description="The notification LED has two brightness modes, depending on the external brightness detected by the light sensor."
+		  name="Brightness">
+
+      <seekBar  description="LED brightness in low brightness environments."
+		name="Low light environment brightness"
+                action="generic /sys/class/sec/led/led_lowpower_current"
+                unit="" min="0" reversed="false" step="1" max="255"/>
+
+      <seekBar  description="LED brightness in high brightness environments."
+		name="Bright light environment brightness"
+                action="generic /sys/class/sec/led/led_highpower_current"
+                unit="" min="0" reversed="false" step="1" max="255"/>
+
+    </settingsPane>
+
+    <settingsPane description="Control the way the LED blinks. The LED controller has 4 type of slopes in its waveform, 2 rising slopes, and two falling slopes. The following configurables can control the blinking waveform."
+		  name="Blinking effect">
+
+      <seekBar  description="Sets the time period of the two rising slopes (1,2), one time-unit is equal to 0.5 seconds."
+		name="Fade-in time period"
+                action="generic /sys/class/sec/led/led_fade_in_time"
+                unit="" min="0" reversed="false" step="1" max="12"/>
+
+      <seekBar  description="Sets the time period of the two falling slopes (3,4), one time-unit is equal to 0.5 seconds."
+		name="Fade-out time period"
+                action="generic /sys/class/sec/led/led_fade_out_time"
+                unit="" min="0" reversed="false" step="1" max="12"/>
+
+      <checkbox  description="If disabled, ignores the below detention times and the blinking waveform has no slopes, i.e. it is square." 
+                name="Enable fading" 
+                action="generic01 /sys/class/sec/led/led_fade"
+                label="Enable LED fading"/>
+
+      <seekBar  description="The LED is controlled by PWM/pulse wave modulation, the detention time dictates how long the controller spends time on a single step in its slope. One time-unit is equivalent to 4ms."
+		name="Slope 1 detention time"
+                action="generic /sys/class/sec/led/led_fade_dt1"
+                unit="" min="0" reversed="false" step="1" max="4"/>
+
+      <seekBar  description=""
+		name="Slope 2 detention time"
+                action="generic /sys/class/sec/led/led_fade_dt2"
+                unit="" min="0" reversed="false" step="1" max="4"/>
+
+      <seekBar  description=""
+		name="Slope 3 detention time"
+                action="generic /sys/class/sec/led/led_fade_dt3"
+                unit="" min="0" reversed="false" step="1" max="4"/>
+
+      <seekBar  description=""
+		name="Slope 4 detention time"
+                action="generic /sys/class/sec/led/led_fade_dt4"
+                unit="" min="0" reversed="false" step="1" max="4"/>
+
+    </settingsPane>
+  </settingsTab>    
+
   <settingsTab name="Charge">
 
     <settingsPane name="AC/USB Charge control"
@@ -156,6 +213,8 @@ echo '
    <settingsPane name="Misc. Settings" 
                   description="Misc. Settings">
 
+      <checkbox description="Dynamic Fsync switch" name="Dynamic Fsync switch" action="generic01 /sys/kernel/dyn_fsync/dyn_fsync_active" label="Dynamic Fsync"/>      
+      
       <checkbox description="It is recommended to disable Android Logger if you do not need it. Default: On" 
                 name="Enable/Disable Android Logger" 
                 action="generic01 /sys/kernel/logger_mode/logger_mode" 
