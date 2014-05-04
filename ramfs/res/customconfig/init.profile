@@ -6,3 +6,4 @@ scaling_max_freq=1890000
 scaling_min_freq=384000
 max_gpuclk=450000000
 scaling_governor=ondemand
+Dyn_fsync_active=on
