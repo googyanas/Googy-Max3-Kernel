@@ -14,6 +14,12 @@ echo '
     <settingsPane name="CPU Clock Control"
 	      description="CPU Clock control">		  
       
+       <spinner description="This will set the default CPU governor. Default CPU governor will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default CPU Governor" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor">
+             <spinnerItem name="OnDemand" value="ondemand"/> 
+             <spinnerItem name="Interactive" value="interactive"/> 
+             <spinnerItem name="Intelliactive" value="intelliactive"/> 
+       </spinner>
+       
       <spinner description="Set the maximum freqency the CPU scales up to. Default: 1890 MHz." 
                name="CPU max frequency" 
                action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq">"
