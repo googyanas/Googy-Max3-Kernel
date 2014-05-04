@@ -156,8 +156,6 @@ echo '
    <settingsPane name="Misc. Settings" 
                   description="Misc. Settings">
 
-      <checkbox description="Dynamic Fsync switch" name="Dynamic Fsync switch" action="generic01 /sys/kernel/dyn_fsync/Dyn_fsync_active" label="Dynamic Fsync"/>      
-      
       <checkbox description="It is recommended to disable Android Logger if you do not need it. Default: On" 
                 name="Enable/Disable Android Logger" 
                 action="generic01 /sys/kernel/logger_mode/logger_mode" 
