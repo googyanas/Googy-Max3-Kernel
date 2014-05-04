@@ -74,6 +74,49 @@ echo '
     </settingsPane>
   </settingsTab>
         
+  <settingsTab name="Sound">
+
+    <settingsPane name="Sound Control"
+	      description="Sound Control">		  
+      
+      <seekBar  description="Headphone gain. Default: 40" 
+                name="Headphone gain" 
+                action="generic /sys/kernel/sound_control/gpl_headphone_gain"
+                unit="" min="20" reversed="false" step="1" max="60"/>
+
+      <seekBar  description="Headphone PowerAmp gain. Default: 20" 
+                name="Headphone PA gain" 
+                action="generic /sys/kernel/sound_control/gpl_headphone_pa_gain"
+                unit="" min="10" reversed="false" step="1" max="30"/>
+
+      <seekBar  description="Speaker gain. Default: 40" 
+                name="Speaker gain" 
+                action="generic /sys/kernel/sound_control/gpl_speaker_gain"
+                unit="" min="20" reversed="false" step="1" max="60"/>
+
+      <seekBar  description="HDMI Speaker gain. Default: 40" 
+                name="HDMI Speaker gain" 
+                action="generic /sys/kernel/sound_control/gpl_hdmi_spkr_gain"
+                unit="" min="20" reversed="false" step="1" max="60"/>
+
+      <seekBar  description="General Mic gain. Default: 40" 
+                name="General Mic gain" 
+                action="generic /sys/kernel/sound_control/gpl_mic_gain"
+                unit="" min="20" reversed="false" step="1" max="60"/>
+
+      <seekBar  description="Camera Mic gain. Default: 40" 
+                name="Camera Mic gain" 
+                action="generic /sys/kernel/sound_control/gpl_cam_mic_gain"
+                unit="" min="20" reversed="false" step="1" max="60"/>
+
+      <seekBar  description="Headset Mic gain. Default: 40" 
+                name="Headset Mic gain" 
+                action="generic /sys/kernel/sound_control/gpl_headset_mic_gain"
+                unit="" min="20" reversed="false" step="1" max="60"/>
+
+    </settingsPane>
+  </settingsTab>
+        
   <settingsTab name="Charge">
 
     <settingsPane name="AC/USB Charge control"
