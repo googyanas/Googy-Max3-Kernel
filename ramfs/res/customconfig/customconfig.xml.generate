@@ -155,11 +155,6 @@ echo '
                 action="generic01 /sys/kernel/logger_mode/logger_mode" 
                 label="Enable Android logger"/>
     
-      <seekBar  description="Vibrator Strength. Default: 119"
-		name="Vibrator Strength"
-                action="generic /sys/devices/virtual/timed_output/vibrator/vibe_strength"
-                unit="" min="5" reversed="false" step="1" max="126"/>
-
       <spinner description="TCP congestion control method. Default: cubic" name="TCP congestion control method" action="generic /proc/sys/net/ipv4/tcp_congestion_control">
              <spinnerItem name="cubic" value="cubic"/>
              <spinnerItem name="westwood" value="westwood"/>
