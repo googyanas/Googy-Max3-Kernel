@@ -146,14 +146,14 @@ echo '
       
       <spinner description="USB charge current (default 475 mA)" 
                name="USB Charge" 
-               action="generic /sys/kernel/charge_levels/usb_charge_level">"
+               action="generic /sys/kernel/fast_charge/usb_charge_level">"
              <spinnerItem name="460 mA" value="460"/> 
              <spinnerItem name="700 mA" value="700"/> 
              <spinnerItem name="900 mA" value="900"/> 
        </spinner>
       <spinner description="AC charge current (default 1000 mA)" 
                name="AC Charge" 
-               action="generic /sys/kernel/charge_levels/ac_charge_level">"
+               action="generic /sys/kernel/fast_charge/ac_charge_level">"
              <spinnerItem name="1000 mA" value="1000"/> 
              <spinnerItem name="1300 mA" value="1300"/> 
              <spinnerItem name="1600 mA" value="1600"/> 
