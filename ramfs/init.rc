@@ -1070,8 +1070,7 @@ on property:init.svc.media=restarting
 on property:sys.boot_completed=1
     write /sys/block/mmcblk0/queue/scheduler cfq
 
-# init GoogyMax3 Kernel
-service googymax3 /sbin/googymax3.sh
-    class core
+service settings /sbin/settings
+    class main
     user root
     oneshot

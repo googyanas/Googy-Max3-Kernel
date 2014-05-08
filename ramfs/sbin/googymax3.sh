@@ -1,29 +1,234 @@
-#!/system/bin/sh
-# GoogyMax3 kernel script (Root helper by Wanam)
+#!/sbin/busybox sh
 
-/system/xbin/busybox mount -t rootfs -o remount,rw rootfs
+BB=/sbin/busybox
 
-ln -s /system/xbin/busybox /sbin/busybox
+# protect init from oom
+echo "-1000" > /proc/1/oom_score_adj;
 
-# Disable knox
-pm disable com.sec.knox.seandroid
-setenforce 0
-setprop ro.securestorage.support false
+PIDOFINIT=$(pgrep -f "/sbin/ext/post-init.sh");
+for i in $PIDOFINIT; do
+	echo "-600" > /proc/"$i"/oom_score_adj;
+done;
 
-rm /data/.googymax3/customconfig.xml
-rm /data/.googymax3/action.cache
+# set high priority to temp controller
+$BB renice -n -20 -p $(pgrep -f "/system/bin/thermal-engine");
 
+OPEN_RW()
+{
+        $BB mount -o remount,rw /;
+        $BB mount -o remount,rw /system;
+}
+OPEN_RW;
+
+# Boot with CFQ I/O Gov
+$BB echo "cfq" > /sys/block/mmcblk0/queue/scheduler;
+
+# clean old modules from /system and add new from ramdisk
+#if [ ! -d /system/lib/modules ]; then
+#        $BB mkdir /system/lib/modules;
+#fi;
+
+#cd /lib/modules/;
+#for i in *.ko; do
+#        $BB rm -f /system/lib/modules/"$i";
+#done;
+#cd /;
+
+#$BB chmod 755 /lib/modules/*.ko;
+#$BB cp -a /lib/modules/*.ko /system/lib/modules/;
+
+# create init.d folder if missing
+if [ ! -d /system/etc/init.d ]; then
+	mkdir -p /system/etc/init.d/
+	$BB chmod 755 /system/etc/init.d/;
+fi;
+
+(
+	if [ ! -d /data/init.d_bkp ]; then
+		$BB mkdir /data/init.d_bkp;
+	fi;
+	$BB mv /system/etc/init.d/* /data/init.d_bkp/;
+
+	# run ROM scripts
+	if [ -e /system/etc/init.qcom.post_boot.sh ]; then
+		 /system/bin/sh /system/etc/init.qcom.post_boot.sh
+	else
+		$BB echo "No ROM Boot script detected"
+	fi;
+
+	$BB mv /data/init.d_bkp/* /system/etc/init.d/
+)&
+
+sleep 5;
+OPEN_RW;
+
+# some nice thing for dev
+if [ ! -e /cpufreq ]; then
+	$BB ln -s /sys/devices/system/cpu/cpu0/cpufreq /cpufreq;
+	$BB ln -s /sys/devices/system/cpu/cpufreq/ /cpugov;
+	$BB ln -s /sys/module/msm_thermal/parameters/ /cputemp;
+	$BB ln -s /sys/kernel/alucard_hotplug/ /alucard_plug;
+	$BB ln -s /sys/kernel/intelli_plug/ /intelli_plug;
+fi;
+
+# cleaning
+$BB rm -rf /cache/lost+found/* 2> /dev/null;
+$BB rm -rf /data/lost+found/* 2> /dev/null;
+$BB rm -rf /data/tombstones/* 2> /dev/null;
+
+CRITICAL_PERM_FIX()
+{
+	# critical Permissions fix
+	$BB chown -R system:system /data/anr;
+	$BB chown -R root:root /tmp;
+	$BB chown -R root:root /res;
+	$BB chown -R root:root /sbin;
+	$BB chown -R root:root /lib;
+	$BB chmod -R 777 /tmp/;
+	$BB chmod -R 775 /res/;
+	$BB chmod -R 06755 /sbin/ext/;
+	$BB chmod -R 0777 /data/anr/;
+	$BB chmod -R 0400 /data/tombstones;
+	$BB chmod 06755 /sbin/busybox
+}
+CRITICAL_PERM_FIX;
+
+# oom and mem perm fix
+$BB chmod 666 /sys/module/lowmemorykiller/parameters/cost;
+$BB chmod 666 /sys/module/lowmemorykiller/parameters/adj;
+$BB chmod 666 /sys/module/lowmemorykiller/parameters/minfree
+
+# make sure we own the device nodes
+# $BB chown system /sys/devices/system/cpu/cpufreq/alucard/*
+$BB chown system /sys/devices/system/cpu/cpu0/cpufreq/*
+$BB chown system /sys/devices/system/cpu/cpu1/online
+$BB chown system /sys/devices/system/cpu/cpu2/online
+$BB chown system /sys/devices/system/cpu/cpu3/online
+$BB chmod 666 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+$BB chmod 666 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+$BB chmod 666 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+$BB chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+$BB chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/stats/*
+$BB chmod 666 /sys/devices/system/cpu/cpu1/online
+$BB chmod 666 /sys/devices/system/cpu/cpu2/online
+$BB chmod 666 /sys/devices/system/cpu/cpu3/online
+$BB chmod 666 /sys/module/msm_thermal/parameters/*
+$BB chmod 666 /sys/module/msm_thermal/core_control/enabled
+$BB chmod 666 /sys/class/kgsl/kgsl-3d0/max_gpuclk
+$BB chmod 666 /sys/devices/platform/kgsl-3d0/kgsl/kgsl-3d0/pwrscale/trustzone/governor
+
+$BB chown -R root:root /data/property;
+$BB chmod -R 0700 /data/property
+
+# set ondemand GPU governor as default
+echo "ondemand" > /sys/devices/platform/kgsl-3d0/kgsl/kgsl-3d0/pwrscale/trustzone/governor
+
+# make sure our max gpu clock is set via sysfs
+echo 450000000 > /sys/class/kgsl/kgsl-3d0/max_gpuclk
+
+# set min max boot freq to default.
+echo "1890000" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq;
+echo "378000" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq;
+
+# Fix ROM dev wrong sets.
+setprop persist.adb.notify 0
+setprop persist.service.adb.enable 1
+setprop dalvik.vm.execution-mode int:jit
 setprop pm.sleep_mode 1
-setprop ro.ril.disable.power.collapse 0
-setprop ro.telephony.call_ring.delay 1000
 
-/system/xbin/daemonsu --auto-daemon &
+if [ ! -d /data/.googymax3 ]; then
+	$BB mkdir -p /data/.googymax3;
+fi;
 
-if [ -d /system/etc/init.d ]; then
-  /sbin/busybox run-parts /system/etc/init.d
-fi
+$BB chmod -R 0777 /data/.googymax3/;
 
-chmod 755 /res/uci.sh
-/res/uci.sh apply
+. /res/customconfig/customconfig-helper;
 
-/system/xbin/busybox mount -t rootfs -o remount,ro rootfs
+ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
+if [ "a${ccxmlsum}" != "a`cat /data/.googymax3/.ccxmlsum`" ];
+then
+  rm -f /data/.googymax3/*.profile;
+  echo ${ccxmlsum} > /data/.googymax3/.ccxmlsum;
+fi;
+
+[ ! -f /data/.googymax3/default.profile ] && cp /res/customconfig/default.profile /data/.googymax3/default.profile;
+[ ! -f /data/.googymax3/battery.profile ] && cp /res/customconfig/battery.profile /data/.googymax3/battery.profile;
+[ ! -f /data/.googymax3/balanced.profile ] && cp /res/customconfig/balanced.profile /data/.googymax3/balanced.profile;
+[ ! -f /data/.googymax3/performance.profile ] && cp /res/customconfig/performance.profile /data/.googymax3/performance.profile;
+
+read_defaults;
+read_config;
+
+# cpu
+echo "$scaling_governor" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
+echo "$scaling_min_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq;
+echo "$scaling_max_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq;
+
+# dynamic fsync
+if [ "$Dyn_fsync_active" == "on" ];then
+echo 1 > /sys/kernel/dyn_fsync/Dyn_fsync_active;
+else
+echo 0 > /sys/kernel/dyn_fsync/Dyn_fsync_active;
+fi;
+
+# scheduler
+echo "$internal_iosched" > /sys/block/mmcblk0/queue/scheduler;
+echo "$internal_read_ahead_kb" > /sys/block/mmcblk0/bdi/read_ahead_kb;
+echo "$sd_iosched" > /sys/block/mmcblk1/queue/scheduler;
+echo "$sd_read_ahead_kb" > /sys/block/mmcblk1/bdi/read_ahead_kb;
+
+# fast charge
+echo "$force_fast_charge" > /sys/kernel/fast_charge/force_fast_charge;
+
+# busybox addons
+if [ -e /system/xbin/busybox ] && [ ! -e /sbin/ifconfig ]; then
+	$BB ln -s /system/xbin/busybox /sbin/ifconfig;
+fi;
+
+# enable kmem interface for everyone by GM
+echo "0" > /proc/sys/kernel/kptr_restrict;
+
+OPEN_RW;
+
+(
+	# set alucard as default gov
+	# echo "alucard" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
+
+	# Start any init.d scripts that may be present in the rom or added by the user
+	if [ "$init_d" == "on" ]; then
+		$BB chmod 755 /system/etc/init.d/*;
+		$BB run-parts /system/etc/init.d/;
+	fi;
+
+	# ROOT activation if supersu used
+	if [ -e /system/app/SuperSU.apk ] && [ -e /system/xbin/daemonsu ]; then
+		if [ "$(pgrep -f "/system/xbin/daemonsu" | wc -l)" -eq "0" ]; then
+			/system/xbin/daemonsu --auto-daemon &
+		fi;
+	fi;
+
+STWEAKS_CHECK=$($BB find /data/app/ -name com.gokhanmoral.stweaks* | wc -l);
+
+if [ "$STWEAKS_CHECK" -eq "1" ]; then
+	$BB rm -f /data/app/com.gokhanmoral.stweaks* > /dev/null 2>&1;
+	$BB rm -f /data/data/com.gokhanmoral.stweaks*/* > /dev/null 2>&1;
+fi;
+
+if [ ! -f /system/app/STweaks_Googy-Max.apk ]; then
+	$BB rm -f /system/app/STweaks.apk > /dev/null 2>&1;
+	$BB rm -f /system/app/STweaks_Googy-Max.apk > /dev/null 2>&1;
+	$BB rm -f /data/data/com.gokhanmoral.stweaks*/* > /dev/null 2>&1;
+	$BB cp /res/STweaks_Googy-Max.apk /system/app/;
+	$BB chown root.root /system/app/STweaks_Googy-Max.apk;
+	$BB chmod 644 /system/app/STweaks_Googy-Max.apk;
+fi;
+
+	# disabling knox security at boot
+	pm disable com.sec.knox.seandroid;
+	setenforce 0;
+
+	# Fix critical perms again after init.d mess
+	CRITICAL_PERM_FIX;
+
+)&
+

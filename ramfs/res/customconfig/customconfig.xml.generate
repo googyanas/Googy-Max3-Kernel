@@ -37,13 +37,16 @@ echo '
              <spinnerItem name="702000" value="702000"/> 
              <spinnerItem name="594000" value="594000"/> 
              <spinnerItem name="486000" value="486000"/> 
-             <spinnerItem name="384000" value="384000"/> 
+             <spinnerItem name="384000" value="378000"/> 
        </spinner>
        
       <spinner description="Set the minimum freqency the CPU scales down to. Default: 384 MHz." 
                name="CPU min frequency" 
                action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq">"
-             <spinnerItem name="384000" value="384000"/> 
+             <spinnerItem name="81000" value="81000"/> 
+             <spinnerItem name="135000" value="135000"/> 
+             <spinnerItem name="189000" value="189000"/> 
+             <spinnerItem name="384000" value="378000"/> 
              <spinnerItem name="486000" value="486000"/> 
              <spinnerItem name="594000" value="594000"/> 
              <spinnerItem name="702000" value="702000"/> 
@@ -206,49 +209,46 @@ echo '
   </settingsTab>
     
   <settingsTab name="I/O">
-    <settingsPane description="Set the active I/O elevator algorithm. The scheduler decides how to handle I/O requests and how to handle them. FIOPS is the everyday recommended default scheduler."  
-                  name="I/O schedulers">' >> $XML
 
-echo "
-      <spinner name=\"Current internal storage scheduler\"
-               action=\"iosched internal /sys/block/mmcblk0/queue/scheduler\">" >> $XML
-
-for IOSCHED in `cat /sys/block/mmcblk0/queue/scheduler | sed -e 's/\]//;s/\[//'`; do
-  echo "
-        <spinnerItem name=\"$IOSCHED\" value=\"$IOSCHED\"/>" >> $XML
-done
-
-echo '
-      </spinner>' >> $XML
-
-echo "
-      <spinner name=\"Current SD card scheduler\"
-               action=\"iosched sd /sys/block/mmcblk1/queue/scheduler\">" >> $XML
-
-for IOSCHED in `cat /sys/block/mmcblk1/queue/scheduler | sed -e 's/\]//;s/\[//'`; do
-  echo "
-        <spinnerItem name=\"$IOSCHED\" value=\"$IOSCHED\"/>" >> $XML
-done
-
-echo '
+   <settingsPane name="I/O settings" 
+                  description="I/O settings">
+                  
+      <spinner description="This will set the default I/O scheduler for Internal Storage" name="Default I/O Scheduler for Internal Storage" action="iosched_int /tmp/int_scheduler">
+             <spinnerItem name="cfq" value="cfq"/>
+             <spinnerItem name="bfq" value="bfq"/>
+             <spinnerItem name="fiops" value="fiops"/>
+             <spinnerItem name="noop" value="noop"/> 
+             <spinnerItem name="deadline" value="deadline"/> 
+             <spinnerItem name="sio" value="sio"/> 
+             <spinnerItem name="vr" value="vr"/> 
+             <spinnerItem name="fifo" value="fifo"/> 
+             <spinnerItem name="zen" value="zen"/> 
       </spinner>
-    </settingsPane>
-
-    <settingsPane name="I/O read-ahead" 
-                  description="The readahead value is the requested block size the host controller reads into memory on any given I/O read request. Increasing the read-ahead on cards with high latency and lower IOPS will increase the raw thoroughput.">
-
-      <seekBar  description="The read-ahead value on the internal phone memory." 
+      <seekBar  description="The read-ahead value for the internal storage." 
                 name="Internal storage read-ahead" 
-                action="generictag internal /sys/block/mmcblk0/queue/read_ahead_kb"
+                action="readahead_int /tmp/int_read_ahead_kb"
                 unit="kB" min="128" reversed="false" step="128" max="2048"/>
 
-      <seekBar  description="The read-ahead value on the external SD card." 
+<spinner description="This will set the default I/O scheduler for the external Storage (SD-Card)" name="Default I/O Scheduler for SD-Card Storage" action="iosched_ext /tmp/ext_scheduler">
+             <spinnerItem name="cfq" value="cfq"/>
+             <spinnerItem name="bfq" value="bfq"/>
+             <spinnerItem name="fiops" value="fiops"/> 
+             <spinnerItem name="noop" value="noop"/> 
+             <spinnerItem name="deadline" value="deadline"/> 
+             <spinnerItem name="sio" value="sio"/> 
+             <spinnerItem name="vr" value="vr"/> 
+             <spinnerItem name="fifo" value="fifo"/> 
+             <spinnerItem name="zen" value="zen"/> 
+      </spinner>
+
+      <seekBar  description="The read-ahead value for the external storage (SD-Card)." 
                 name="SD card read-ahead" 
-                action="generictag sd /sys/block/mmcblk1/queue/read_ahead_kb"
+                action="readahead_ext /tmp/ext_read_ahead_kb"
                 unit="kB" min="128" reversed="false" step="128" max="2048"/>
-
+                
+      <button description="Apply IO-Scheduler settings." name="Set IO-Schedulers" action="ioschedapply" label="Set IO-Schedulers"/>
+    
     </settingsPane>
-
   </settingsTab>
 
   <settingsTab name="Misc">
@@ -272,6 +272,23 @@ echo '
     </settingsPane>
 
   </settingsTab>
+
+  <settingsTab name="PROFILES">
+    <settingsPane description="For the first time use, the default profiles are exacly the same. You have to edit STWeaks settings and save them to the matching profile. Once you have your profiles correctly set, you can choose the active profile then apply its settings. IMPORTANT: The applied profile will not be shown in STWeaks until you restart STWeaks." name="Active profile settings">
+      <spinner description="" name="Active profile" action="activeprofile">
+             <spinnerItem name="Battery" value="battery"/> 
+             <spinnerItem name="Balanced (Default)" value="balanced"/> 
+             <spinnerItem name="Performance" value="performance"/> 
+      </spinner>
+      <button description="Please apply choosen active profile before activating it" name="Activate profile" action="applyprofile" label="Activate profile"/>
+    </settingsPane>
+    <settingsPane description="" name="Save current settings to :">
+      <button description="" name="Battery" action="saveprofile 0" label="Battery profile"/>
+      <button description="" name="Balanced" action="saveprofile 1" label="Balanced profile"/>
+      <button description="" name="Performance" action="saveprofile 2" label="Performance profile"/>  
+    </settingsPane>
+    
+  </settingsTab>  
 
 </settingsRoot>' >> $XML
 

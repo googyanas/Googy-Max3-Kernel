@@ -5,12 +5,8 @@ filename=$(basename $2)
 
 if [ "a$3" == "a" ];then
   evalcmd='eval "echo \$$filename"'
-  if [ "a`eval $evalcmd`" == "a" ];then
-    if [ "`cat $2`" == "0" ];then
-      eval $filename=off
-    else
-      eval $filename=on
-    fi
+  if [ "a`eval $evalcmd`" == "a" ]; then
+    eval $filename=`cat $2`
   fi
   eval $evalcmd
 else
@@ -19,14 +15,7 @@ else
   evalcmd='eval "echo \$$filename"'
   eval $evalcmd
   if [ -f $2 ];then
-    case "$3" in
-      off)
-        echo 0 > $2
-        ;;
-      on)
-        echo 1 > $2
-        ;;
-    esac;
+    echo $3 > /sys/block/mmcblk1/queue/read_ahead_kb
   fi
 fi
 fi
