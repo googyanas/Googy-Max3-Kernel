@@ -37,16 +37,13 @@ echo '
              <spinnerItem name="702000" value="702000"/> 
              <spinnerItem name="594000" value="594000"/> 
              <spinnerItem name="486000" value="486000"/> 
-             <spinnerItem name="384000" value="378000"/> 
+             <spinnerItem name="384000" value="384000"/> 
        </spinner>
        
       <spinner description="Set the minimum freqency the CPU scales down to. Default: 384 MHz." 
                name="CPU min frequency" 
                action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq">"
-             <spinnerItem name="81000" value="81000"/> 
-             <spinnerItem name="135000" value="135000"/> 
-             <spinnerItem name="189000" value="189000"/> 
-             <spinnerItem name="384000" value="378000"/> 
+             <spinnerItem name="384000" value="384000"/> 
              <spinnerItem name="486000" value="486000"/> 
              <spinnerItem name="594000" value="594000"/> 
              <spinnerItem name="702000" value="702000"/> 
@@ -71,6 +68,11 @@ echo '
     <settingsPane name="GPU Clock Control"
 	      description="GPU Clock control">		  
       
+       <spinner description="Default GPU governor" name="Default CPU Governor" action="generic /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone/governor">
+             <spinnerItem name="OnDemand" value="ondemand"/> 
+             <spinnerItem name="Simple" value="simple"/> 
+       </spinner>
+       
       <spinner description="Set the maximum freqency the GPU scales up to. Default: 450 MHz." 
                name="GPU max frequency" 
                action="generic /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk">"
