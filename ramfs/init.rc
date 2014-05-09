@@ -12,7 +12,6 @@ import /init.usb.rc
 import /init.${ro.hardware}.rc
 import /init.trace.rc
 import /init.carrier.rc
-import /init.container.rc
 
 on early-init
     # Set init and its forked children's oom_adj.
@@ -31,10 +30,10 @@ on early-init
     mkdir /mnt 0775 root system
 
 on init
-
-sysclktz 0
-
-loglevel 3
+    setenforce 0
+    setprop ro.boot.selinux 0
+    sysclktz 0
+    loglevel 3
 
 # Vibetonz
     export VIBE_PIPE_PATH /dev/pipes

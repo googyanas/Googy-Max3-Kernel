@@ -75,3 +75,4 @@ setupwizard.mode	u:object_r:setupwizard_prop:s0
 sys.mobicoredaemon.enable	u:object_r:mobicore_prop:s0
 vpnclientpm.	u:object_r:vpn_prop:s0
 persist.security.ams.       u:object_r:container_mgmt_prop:s0
+persist.security.mdm.       u:object_r:policy_mgmt_prop:s0

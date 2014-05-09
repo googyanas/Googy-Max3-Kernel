@@ -5,13 +5,10 @@ BB=/sbin/busybox
 # protect init from oom
 echo "-1000" > /proc/1/oom_score_adj;
 
-PIDOFINIT=$(pgrep -f "/sbin/ext/post-init.sh");
+PIDOFINIT=$(pgrep -f "/sbin/ext/googymax3.sh");
 for i in $PIDOFINIT; do
 	echo "-600" > /proc/"$i"/oom_score_adj;
 done;
-
-# set high priority to temp controller
-$BB renice -n -20 -p $(pgrep -f "/system/bin/thermal-engine");
 
 OPEN_RW()
 {
@@ -22,20 +19,6 @@ OPEN_RW;
 
 # Boot with CFQ I/O Gov
 $BB echo "cfq" > /sys/block/mmcblk0/queue/scheduler;
-
-# clean old modules from /system and add new from ramdisk
-#if [ ! -d /system/lib/modules ]; then
-#        $BB mkdir /system/lib/modules;
-#fi;
-
-#cd /lib/modules/;
-#for i in *.ko; do
-#        $BB rm -f /system/lib/modules/"$i";
-#done;
-#cd /;
-
-#$BB chmod 755 /lib/modules/*.ko;
-#$BB cp -a /lib/modules/*.ko /system/lib/modules/;
 
 # create init.d folder if missing
 if [ ! -d /system/etc/init.d ]; then
@@ -67,8 +50,6 @@ if [ ! -e /cpufreq ]; then
 	$BB ln -s /sys/devices/system/cpu/cpu0/cpufreq /cpufreq;
 	$BB ln -s /sys/devices/system/cpu/cpufreq/ /cpugov;
 	$BB ln -s /sys/module/msm_thermal/parameters/ /cputemp;
-	$BB ln -s /sys/kernel/alucard_hotplug/ /alucard_plug;
-	$BB ln -s /sys/kernel/intelli_plug/ /intelli_plug;
 fi;
 
 # cleaning
@@ -99,7 +80,6 @@ $BB chmod 666 /sys/module/lowmemorykiller/parameters/adj;
 $BB chmod 666 /sys/module/lowmemorykiller/parameters/minfree
 
 # make sure we own the device nodes
-# $BB chown system /sys/devices/system/cpu/cpufreq/alucard/*
 $BB chown system /sys/devices/system/cpu/cpu0/cpufreq/*
 $BB chown system /sys/devices/system/cpu/cpu1/online
 $BB chown system /sys/devices/system/cpu/cpu2/online
@@ -128,7 +108,7 @@ echo 450000000 > /sys/class/kgsl/kgsl-3d0/max_gpuclk
 
 # set min max boot freq to default.
 echo "1890000" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq;
-echo "378000" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq;
+echo "384000" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq;
 
 # Fix ROM dev wrong sets.
 setprop persist.adb.notify 0
@@ -142,8 +122,6 @@ fi;
 
 $BB chmod -R 0777 /data/.googymax3/;
 
-. /res/customconfig/customconfig-helper;
-
 ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
 if [ "a${ccxmlsum}" != "a`cat /data/.googymax3/.ccxmlsum`" ];
 then
@@ -155,6 +133,8 @@ fi;
 [ ! -f /data/.googymax3/battery.profile ] && cp /res/customconfig/battery.profile /data/.googymax3/battery.profile;
 [ ! -f /data/.googymax3/balanced.profile ] && cp /res/customconfig/balanced.profile /data/.googymax3/balanced.profile;
 [ ! -f /data/.googymax3/performance.profile ] && cp /res/customconfig/performance.profile /data/.googymax3/performance.profile;
+
+. /res/customconfig/customconfig-helper;
 
 read_defaults;
 read_config;
@@ -172,13 +152,10 @@ echo 0 > /sys/kernel/dyn_fsync/Dyn_fsync_active;
 fi;
 
 # scheduler
-echo "$internal_iosched" > /sys/block/mmcblk0/queue/scheduler;
-echo "$internal_read_ahead_kb" > /sys/block/mmcblk0/bdi/read_ahead_kb;
-echo "$sd_iosched" > /sys/block/mmcblk1/queue/scheduler;
-echo "$sd_read_ahead_kb" > /sys/block/mmcblk1/bdi/read_ahead_kb;
-
-# fast charge
-echo "$force_fast_charge" > /sys/kernel/fast_charge/force_fast_charge;
+echo "$int_scheduler" > /sys/block/mmcblk0/queue/scheduler;
+echo "$int_read_ahead_kb" > /sys/block/mmcblk0/bdi/read_ahead_kb;
+echo "$ext_scheduler" > /sys/block/mmcblk1/queue/scheduler;
+echo "$ext_read_ahead_kb" > /sys/block/mmcblk1/bdi/read_ahead_kb;
 
 # busybox addons
 if [ -e /system/xbin/busybox ] && [ ! -e /sbin/ifconfig ]; then
@@ -191,9 +168,6 @@ echo "0" > /proc/sys/kernel/kptr_restrict;
 OPEN_RW;
 
 (
-	# set alucard as default gov
-	# echo "alucard" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
-
 	# Start any init.d scripts that may be present in the rom or added by the user
 	if [ "$init_d" == "on" ]; then
 		$BB chmod 755 /system/etc/init.d/*;
@@ -207,16 +181,10 @@ OPEN_RW;
 		fi;
 	fi;
 
-STWEAKS_CHECK=$($BB find /data/app/ -name com.gokhanmoral.stweaks* | wc -l);
-
-if [ "$STWEAKS_CHECK" -eq "1" ]; then
-	$BB rm -f /data/app/com.gokhanmoral.stweaks* > /dev/null 2>&1;
-	$BB rm -f /data/data/com.gokhanmoral.stweaks*/* > /dev/null 2>&1;
-fi;
-
 if [ ! -f /system/app/STweaks_Googy-Max.apk ]; then
 	$BB rm -f /system/app/STweaks.apk > /dev/null 2>&1;
 	$BB rm -f /system/app/STweaks_Googy-Max.apk > /dev/null 2>&1;
+	$BB rm -f /data/app/com.gokhanmoral.stweaks* > /dev/null 2>&1;
 	$BB rm -f /data/data/com.gokhanmoral.stweaks*/* > /dev/null 2>&1;
 	$BB cp /res/STweaks_Googy-Max.apk /system/app/;
 	$BB chown root.root /system/app/STweaks_Googy-Max.apk;

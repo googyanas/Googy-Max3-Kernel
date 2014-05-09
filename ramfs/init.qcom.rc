@@ -701,7 +701,7 @@ service sdcard /system/bin/sdcard -u 1023 -g 1023 -l -r /data/media /mnt/shell/e
 on property:ro.fuse_sdcard=true
     start sdcard
 
-service fuse_extSdCard /system/bin/sdcard -u 1023 -g 1023 -d -f /mnt/media_rw/extSdCard /storage/extSdCard
+service fuse_extSdCard /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d -f /mnt/media_rw/extSdCard /storage/extSdCard
     class late_start
     disabled
     oneshot
