@@ -18,6 +18,7 @@ echo '
              <spinnerItem name="OnDemand" value="ondemand"/> 
              <spinnerItem name="Interactive" value="interactive"/> 
              <spinnerItem name="Intelliactive" value="intelliactive"/> 
+             <spinnerItem name="Intellidemand" value="intellidemand"/> 
        </spinner>
        
       <spinner description="Set the maximum freqency the CPU scales up to. Default: 1890 MHz." 
