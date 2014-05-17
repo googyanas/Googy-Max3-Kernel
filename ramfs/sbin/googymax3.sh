@@ -169,10 +169,10 @@ OPEN_RW;
 
 (
 	# Start any init.d scripts that may be present in the rom or added by the user
-	if [ "$init_d" == "on" ]; then
+#	if [ "$init_d" == "on" ]; then
 		$BB chmod 755 /system/etc/init.d/*;
 		$BB run-parts /system/etc/init.d/;
-	fi;
+#	fi;
 
 	# ROOT activation if supersu used
 	if [ -e /system/app/SuperSU.apk ] && [ -e /system/xbin/daemonsu ]; then
@@ -181,7 +181,7 @@ OPEN_RW;
 		fi;
 	fi;
 
-if [ ! -f /system/app/STweaks_Googy-Max.apk ]; then
+if [ ! -f /system/app/STweaks_Googy-Max.apk ] || [ -f /system/app/STweaks.apk ] || [ -f /data/app/STweaks.apk ] ; then
 	$BB rm -f /system/app/STweaks.apk > /dev/null 2>&1;
 	$BB rm -f /system/app/STweaks_Googy-Max.apk > /dev/null 2>&1;
 	$BB rm -f /data/app/com.gokhanmoral.stweaks* > /dev/null 2>&1;
