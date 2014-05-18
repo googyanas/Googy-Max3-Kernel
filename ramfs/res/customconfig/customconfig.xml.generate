@@ -12,7 +12,9 @@ echo '
   <settingsTab name="CPU">
 
     <settingsPane name="CPU Clock Control"
-	      description="CPU Clock control">		  
+	      description="CPU Clock control">
+	      
+      <checkbox description="Disabling GENTLE_FAIR_SLEEPERS may give you better UI responsiveness." name="GENTLE_FAIR_SLEEPERS" action="generic01 /sys/kernel/sched/gentle_fair_sleepers" label="GENTLE_FAIR_SLEEPERS"/>
       
        <spinner description="This will set the default CPU governor. Default CPU governor will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default CPU Governor" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor">
              <spinnerItem name="OnDemand" value="ondemand"/> 

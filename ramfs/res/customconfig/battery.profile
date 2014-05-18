@@ -3,6 +3,7 @@ int_read_ahead_kb=128
 ext_scheduler=cfq
 ext_read_ahead_kb=256
 logger_mode=on
+gentle_fair_sleepers=on
 scaling_max_freq=1890000
 scaling_min_freq=384000
 governor=ondemand
