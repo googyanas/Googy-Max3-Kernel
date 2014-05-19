@@ -151,9 +151,15 @@ fi
 
 # dynamic fsync
 if [ "$Dyn_fsync_active" == "on" ];then
-echo 1 > /sys/kernel/dyn_fsync/Dyn_fsync_active;
+echo "1" > /sys/kernel/dyn_fsync/Dyn_fsync_active;
 else
-echo 0 > /sys/kernel/dyn_fsync/Dyn_fsync_active;
+echo "0" > /sys/kernel/dyn_fsync/Dyn_fsync_active;
+fi;
+
+if [ "$logger_mode" == "on" ]; then
+	echo "1" > /sys/kernel/logger_mode/logger_mode;
+else
+	echo "0" > /sys/kernel/logger_mode/logger_mode;
 fi;
 
 # scheduler
@@ -169,6 +175,11 @@ fi;
 
 # enable kmem interface for everyone by GM
 echo "0" > /proc/sys/kernel/kptr_restrict;
+
+# apply STweaks defaults
+export CONFIG_BOOTING=1
+/res/uci.sh apply
+export CONFIG_BOOTING=
 
 OPEN_RW;
 

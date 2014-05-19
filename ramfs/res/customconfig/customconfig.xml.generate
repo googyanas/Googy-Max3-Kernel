@@ -195,7 +195,7 @@ echo '
 	      
       <checkbox description="Charge control switch" name="Charge control switch" action="generic01 /sys/kernel/fast_charge/force_fast_charge" label="Charge control switch"/>      
       
-      <spinner description="USB charge current (default 475 mA)" 
+      <spinner description="USB charge current (default 460 mA)" 
                name="USB Charge" 
                action="generic /sys/kernel/fast_charge/usb_charge_level">"
              <spinnerItem name="460 mA" value="460"/> 
@@ -218,7 +218,7 @@ echo '
    <settingsPane name="I/O settings" 
                   description="I/O settings">
                   
-      <spinner description="This will set the default I/O scheduler for Internal Storage" name="Default I/O Scheduler for Internal Storage" action="iosched_int /tmp/int_scheduler">
+      <spinner description="This will set the default I/O scheduler for Internal Storage. Default: cfq" name="Default I/O Scheduler for Internal Storage" action="iosched_int /tmp/int_scheduler">
              <spinnerItem name="cfq" value="cfq"/>
              <spinnerItem name="bfq" value="bfq"/>
              <spinnerItem name="fiops" value="fiops"/>
@@ -229,12 +229,12 @@ echo '
              <spinnerItem name="fifo" value="fifo"/> 
              <spinnerItem name="zen" value="zen"/> 
       </spinner>
-      <seekBar  description="The read-ahead value for the internal storage." 
+      <seekBar  description="The read-ahead value for the internal storage. Default: 128" 
                 name="Internal storage read-ahead" 
                 action="readahead_int /tmp/int_read_ahead_kb"
                 unit="kB" min="128" reversed="false" step="128" max="2048"/>
 
-<spinner description="This will set the default I/O scheduler for the external Storage (SD-Card)" name="Default I/O Scheduler for SD-Card Storage" action="iosched_ext /tmp/ext_scheduler">
+<spinner description="This will set the default I/O scheduler for the external Storage. Default: cfq" name="Default I/O Scheduler for SD-Card Storage" action="iosched_ext /tmp/ext_scheduler">
              <spinnerItem name="cfq" value="cfq"/>
              <spinnerItem name="bfq" value="bfq"/>
              <spinnerItem name="fiops" value="fiops"/> 
@@ -246,7 +246,7 @@ echo '
              <spinnerItem name="zen" value="zen"/> 
       </spinner>
 
-      <seekBar  description="The read-ahead value for the external storage (SD-Card)." 
+      <seekBar  description="The read-ahead value for the external storage (SD-Card). Default: 256" 
                 name="SD card read-ahead" 
                 action="readahead_ext /tmp/ext_read_ahead_kb"
                 unit="kB" min="128" reversed="false" step="128" max="2048"/>
@@ -275,7 +275,21 @@ echo '
              <spinnerItem name="htcp" value="htcp"/> 
       </spinner>
       
-      <checkbox description="Enable or Disable ZRAM for Sammy ROM (needs reboot). Default: on" name="Sammy ZRAM" action="generic01 /tmp/sammyzram" label="Sammy ZRAM"/>      
+      <checkbox description="Enable or Disable ZRAM (needs reboot). Default: on" name="Sammy ZRAM" action="generic01 /tmp/sammyzram" label="Sammy ZRAM"/>      
+      
+	<spinner description="VM swappiness. Default: 60" name="VM swappiness" action="generic /proc/sys/vm/swappiness">
+		<spinnerItem name="40" value="40"/> 
+		<spinnerItem name="50" value="50"/> 
+		<spinnerItem name="60" value="60"/> 
+		<spinnerItem name="70" value="70"/> 
+		<spinnerItem name="80" value="80"/> 
+		<spinnerItem name="90" value="90"/> 
+	</spinner>
+      
+      <seekBar description="Dirty background memory buffer. Default: 20%" name="Dirty Background ratio" action="generic /proc/sys/vm/dirty_background_ratio" unit="%" min="5" reversed="false" step="5" max="80"/>
+
+      <seekBar description="Dirty real time memory buffer. Default: 40%" name="Dirty ratio" action="generic /proc/sys/vm/dirty_ratio" unit="%" min="5" reversed="false" step="5" max="90"/>
+
     </settingsPane>
 
   </settingsTab>
