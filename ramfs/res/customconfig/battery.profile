@@ -31,3 +31,4 @@ led_fade_dt2=1
 led_fade_dt3=2
 led_fade_dt4=3
 
+sammyzram=on

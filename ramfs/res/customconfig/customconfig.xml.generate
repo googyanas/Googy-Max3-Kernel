@@ -274,6 +274,8 @@ echo '
              <spinnerItem name="bic" value="bic"/> 
              <spinnerItem name="htcp" value="htcp"/> 
       </spinner>
+      
+      <checkbox description="Enable or Disable ZRAM for Sammy ROM (needs reboot). Default: on" name="Sammy ZRAM" action="generic01 /tmp/sammyzram" label="Sammy ZRAM"/>      
     </settingsPane>
 
   </settingsTab>

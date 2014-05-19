@@ -107,7 +107,7 @@ on property:persist.sys.storage_preload=0
 #    exec /system/bin/scranton_RD
 
 # RTCC INIT
-service rtccd /system/bin/rtccd3 -a 700M
-    class core
-    user root
-    oneshot
+# service rtccd /system/bin/rtccd3 -a 700M
+#    class core
+#    user root
+#    oneshot
