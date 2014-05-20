@@ -122,12 +122,22 @@ fi;
 
 $BB chmod -R 0777 /data/.googymax3/;
 
-ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
-if [ "a${ccxmlsum}" != "a`cat /data/.googymax3/.ccxmlsum`" ];
-then
-  rm -f /data/.googymax3/*.profile;
-  echo ${ccxmlsum} > /data/.googymax3/.ccxmlsum;
+RESET_FLAG=0;
+if [ ! -e /data/.googymax3/reset_flag ]; then
+	echo "1" > /data/.googymax3/reset_flag;
 fi;
+if [ "$(cat /data/.googymax3/reset_flag)" -eq "$RESET_FLAG" ]; then
+	echo "no need to reset profiles";
+else
+	$BB rm -f /data/.googymax3/*.profile;
+	echo "$RESET_FLAG" > /data/.googmax3/reset_flag;
+fi;
+
+# ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
+# if [ "a${ccxmlsum}" != "a`cat /data/.googymax3/.ccxmlsum`" ];
+# then
+#   echo ${ccxmlsum} > /data/.googymax3/.ccxmlsum;
+# fi;
 
 [ ! -f /data/.googymax3/default.profile ] && cp /res/customconfig/default.profile /data/.googymax3/default.profile;
 [ ! -f /data/.googymax3/battery.profile ] && cp /res/customconfig/battery.profile /data/.googymax3/battery.profile;
