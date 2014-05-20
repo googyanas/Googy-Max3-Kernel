@@ -1,13 +1,7 @@
 #!/sbin/busybox sh
-
-XML=$CONFIG_XML
-
-echo "" > $XML
-
-echo '
-<settingsRoot>' >> $XML
-
-echo '
+ 
+cat << ENDCONFIG
+<settingsRoot>
 
   <settingsTab name="CPU">
 
@@ -311,7 +305,5 @@ echo '
     
   </settingsTab>  
 
-</settingsRoot>' >> $XML
-
-chmod 777 $XML
-
+</settingsRoot>
+ENDCONFIG
