@@ -10,11 +10,22 @@ cat << ENDCONFIG
 	      
       <checkbox description="Disabling GENTLE_FAIR_SLEEPERS may give you better UI responsiveness." name="GENTLE_FAIR_SLEEPERS" action="generic01 /sys/kernel/sched/gentle_fair_sleepers" label="GENTLE_FAIR_SLEEPERS"/>
       
+      <seekBar description="Sets the sched_mc value which changes the cpu scheduler behaviour for multi-cpu systems. 0 is kernel's default value which turns sched_mc off. Setting it to 1 means that the first core will be tried to be loaded more and setting it to 2 will bias task wake-ups to semi-idle cpu package for power savings. (default: 0)"
+            name="sched_mc" action="generic /sys/devices/system/cpu/sched_mc_power_savings" unit="" min="0" reversed="false" step="1" max="2"/>
+            
        <spinner description="This will set the default CPU governor. Default CPU governor will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default CPU Governor" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor">
              <spinnerItem name="OnDemand" value="ondemand"/> 
              <spinnerItem name="Interactive" value="interactive"/> 
              <spinnerItem name="Intelliactive" value="intelliactive"/> 
              <spinnerItem name="Intellidemand" value="intellidemand"/> 
+             <spinnerItem name="Abyssplugv2" value="abyssplugv2"/> 
+             <spinnerItem name="Abyssplug" value="abyssplug"/> 
+             <spinnerItem name="Asswax" value="asswax"/> 
+             <spinnerItem name="Badass" value="badass"/> 
+             <spinnerItem name="Dancedance" value="dancedance"/> 
+             <spinnerItem name="Nightmare" value="nightmare"/> 
+             <spinnerItem name="SmartassH3" value="smartassH3"/> 
+             <spinnerItem name="Wheatley" value="wheatley"/> 
        </spinner>
        
       <spinner description="Set the maximum freqency the CPU scales up to. Default: 1890 MHz." 
@@ -58,6 +69,27 @@ cat << ENDCONFIG
        </spinner>
        
     </settingsPane>
+    
+	<settingsPane description="CPU Voltage Control. FOR ADVANCED USERS ONLY! USE IT AT YOUR OWN RISK!!!" name="CPU Voltage Control">
+
+		<seekBar description="Voltage for 1890 MHz. (Default: 1212500)" name="Voltage 1890 MHz" action="cpu-voltage 1" unit="µV" min="1050000" reversed="false" step="12500" max="1300000"/>
+		<seekBar description="Voltage for 1782 MHz. (Default: 1162500)" name="Voltage 1782 MHz" action="cpu-voltage 2" unit="µV" min="1025000" reversed="false" step="12500" max="1225000"/>
+		<seekBar description="Voltage for 1674 MHz. (Default: 1112500)" name="Voltage 1674 MHz" action="cpu-voltage 3" unit="µV" min="1000000" reversed="false" step="12500" max="1175000"/>
+		<seekBar description="Voltage for 1566 MHz. (Default: 1075000)" name="Voltage 1566 MHz" action="cpu-voltage 4" unit="µV" min="975000" reversed="false" step="12500" max="1125000"/>
+		<seekBar description="Voltage for 1458 MHz. (Default: 1050000)" name="Voltage 1458 MHz" action="cpu-voltage 5" unit="µV" min="962500" reversed="false" step="12500" max="1100000"/>
+		<seekBar description="Voltage for 1350 MHz. (Default: 1012500)" name="Voltage 1350 MHz" action="cpu-voltage 6" unit="µV" min="950000" reversed="false" step="12500" max="1062500"/>
+		<seekBar description="Voltage for 1242 MHz. (Default: 987500)" name="Voltage 1242 MHz" action="cpu-voltage 7" unit="µV" min="937500" reversed="false" step="12500" max="1037500"/>
+		<seekBar description="Voltage for 1134 MHz. (Default: 975000)" name="Voltage 1134 MHz" action="cpu-voltage 8" unit="µV" min="925000" reversed="false" step="12500" max="1025000"/>
+		<seekBar description="Voltage for 1026 MHz. (Default: 950000)" name="Voltage 1026 MHz" action="cpu-voltage 9" unit="µV" min="900000" reversed="false" step="12500" max="1000000"/>
+		<seekBar description="Voltage for 918 MHz. (Default: 925000)" name="Voltage 918 MHz" action="cpu-voltage 10" unit="µV" min="887500" reversed="false" step="12500" max="975000"/>
+		<seekBar description="Voltage for 810 MHz. (Default: 912500)" name="Voltage 810 MHz" action="cpu-voltage 11" unit="µV" min="875000" reversed="false" step="12500" max="962500"/>
+		<seekBar description="Voltage for 702 MHz. (Default: 900000)" name="Voltage 702 MHz" action="cpu-voltage 12" unit="µV" min="850000" reversed="false" step="12500" max="950000"/>
+		<seekBar description="Voltage for 594 MHz. (Default: 900000)" name="Voltage 594 MHz" action="cpu-voltage 13" unit="µV" min="850000" reversed="false" step="12500" max="950000"/>
+		<seekBar description="Voltage for 486 MHz. (Default: 900000)" name="Voltage 486 MHz" action="cpu-voltage 14" unit="µV" min="850000" reversed="false" step="12500" max="950000"/>
+		<seekBar description="Voltage for 384 MHz. (Default: 900000)" name="Voltage 384 MHz" action="cpu-voltage 15" unit="µV" min="825000" reversed="false" step="12500" max="925000"/>
+
+	</settingsPane>
+
   </settingsTab>
 
   <settingsTab name="GPU">
@@ -80,6 +112,16 @@ cat << ENDCONFIG
        </spinner>
               
     </settingsPane>
+    
+    <settingsPane description="GPU Voltage Control. FOR ADVANCED USERS ONLY! USE IT AT YOUR OWN RISK!!!" name="GPU Voltage Control">
+      <seekBar description="GPU Voltage for the first (lowest) step" 
+		name="GPU Voltage Level1. (Default: 945000)" action="gpu-voltage 1" unit="µV" min="845000" reversed="false" step="25000" max="1050000"/>
+      <seekBar description="GPU Voltage for the second (mid) step" 
+		name="GPU Voltage Level2. (Default: 1050000)" action="gpu-voltage 2" unit="µV" min="950000" reversed="false" step="25000" max="1200000"/>
+      <seekBar description="GPU Voltage for the third (highest) step" 
+		name="GPU Voltage Level3. (Default: 1150000)" action="gpu-voltage 3" unit="µV" min="1050000" reversed="false" step="25000" max="1200000"/>
+    </settingsPane>
+
   </settingsTab>
         
   <settingsTab name="LED">
