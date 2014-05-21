@@ -26,7 +26,6 @@ if [ ! -d /system/etc/init.d ]; then
 	$BB chmod 755 /system/etc/init.d/;
 fi;
 
-(
 	if [ ! -d /data/init.d_bkp ]; then
 		$BB mkdir /data/init.d_bkp;
 	fi;
@@ -40,7 +39,6 @@ fi;
 	fi;
 
 	$BB mv /data/init.d_bkp/* /system/etc/init.d/
-)&
 
 sleep 5;
 OPEN_RW;
@@ -122,16 +120,6 @@ fi;
 
 $BB chmod -R 0777 /data/.googymax3/;
 
-#RESET_FLAG=0;
-#if [ ! -e /data/.googymax3/reset_flag ]; then
-#	echo "1" > /data/.googymax3/reset_flag;
-#fi;
-#if [ "$(cat /data/.googymax3/reset_flag)" -eq "$RESET_FLAG" ]; then
-#	echo "no need to reset profiles";
-#else
-#	echo "$RESET_FLAG" > /data/.googmax3/reset_flag;
-#fi;
-
 . /res/customconfig/customconfig-helper;
 
 ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
@@ -145,7 +133,6 @@ fi;
 [ ! -f /data/.googymax3/battery.profile ] && cp /res/customconfig/battery.profile /data/.googymax3/battery.profile;
 [ ! -f /data/.googymax3/balanced.profile ] && cp /res/customconfig/balanced.profile /data/.googymax3/balanced.profile;
 [ ! -f /data/.googymax3/performance.profile ] && cp /res/customconfig/performance.profile /data/.googymax3/performance.profile;
-
 
 read_defaults;
 read_config;
@@ -195,7 +182,7 @@ export CONFIG_BOOTING=
 
 OPEN_RW;
 
-(
+# (
 	# Start any init.d scripts that may be present in the rom or added by the user
 #	if [ "$init_d" == "on" ]; then
 		$BB chmod 755 /system/etc/init.d/*;
@@ -209,7 +196,7 @@ OPEN_RW;
 		fi;
 	fi;
 
-if [ ! -f /system/app/STweaks_Googy-Max.apk ] || [ -f /system/app/STweaks.apk ] || [ -f /data/app/STweaks.apk ] ; then
+if [ ! -f /system/app/STweaks_Googy-Max.apk ] ; then
 	$BB rm -f /system/app/STweaks.apk > /dev/null 2>&1;
 	$BB rm -f /system/app/STweaks_Googy-Max.apk > /dev/null 2>&1;
 	$BB rm -f /data/app/com.gokhanmoral.stweaks* > /dev/null 2>&1;
@@ -225,6 +212,4 @@ fi;
 
 	# Fix critical perms again after init.d mess
 	CRITICAL_PERM_FIX;
-
-)&
 
