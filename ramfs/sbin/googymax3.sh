@@ -155,9 +155,10 @@ echo "$scaling_governor" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo "$scaling_min_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq;
 echo "$scaling_max_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq;
 
-# zram
+# zram 700M
 if [ "$sammyzram" == "on" ];then
-/system/bin/rtccd3 -a 700M
+UNIT="M"
+/system/bin/rtccd3 -a "$zramdisksize$UNIT"
 fi
 
 # dynamic fsync
