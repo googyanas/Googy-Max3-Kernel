@@ -23,7 +23,7 @@ struct msm_buspm_map_dev {
 
 /* Read/write data into kernel buffer */
 struct buspm_xfer_req {
-	int size;		/* Size of this request, in bytes */
+	unsigned int  size;	/* Size of this request, in bytes */	
 	void *data;		/* Data buffer to transfer data to/from */
 };
 
