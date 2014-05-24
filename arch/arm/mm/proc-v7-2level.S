@@ -27,12 +27,6 @@
 #define TTB_FLAGS_SMP	TTB_IRGN_WBWA|TTB_S|TTB_NOS|TTB_RGN_OC_WBWA
 #define PMD_FLAGS_SMP	PMD_SECT_WBWA|PMD_SECT_S
 
-#ifdef        TIMA_ENABLED
-#if __GNUC__ >= 4 && __GNUC_MINOR__ >= 6
-        .arch_extension sec
-#endif
-#endif
-
 /*
  *	cpu_v7_switch_mm(pgd_phys, tsk)
  *
@@ -46,44 +40,23 @@
 ENTRY(cpu_v7_switch_mm)
 #ifdef CONFIG_MMU
 	mov	r2, #0
-	ldr	r1, [r1, #MM_CONTEXT_ID]	@ get mm->context.id
+	mmid	r1, r1				@ get mm->context.id
 	ALT_SMP(orr	r0, r0, #TTB_FLAGS_SMP)
 	ALT_UP(orr	r0, r0, #TTB_FLAGS_UP)
 #ifdef CONFIG_ARM_ERRATA_430973
 	mcr	p15, 0, r2, c7, c5, 6		@ flush BTAC/BTB
 #endif
-#ifdef CONFIG_ARM_ERRATA_754322
-	dsb
-#endif
 #ifdef CONFIG_PID_IN_CONTEXTIDR
-	mrc     p15, 0, r2, c13, c0, 1          @ read current context ID
-	bic     r2, r2, #0xff                   @ extract the PID
-	and     r1, r1, #0xff
-	orr     r1, r1, r2                      @ insert the PID into r1
+	mrc	p15, 0, r2, c13, c0, 1		@ read current context ID
+	lsr	r2, r2, #8			@ extract the PID
+	bfi	r1, r2, #8, #24			@ insert into new context ID
 #endif
-	mcr	p15, 0, r2, c13, c0, 1		@ set reserved context ID
-	isb
-1:
-#ifndef TIMA_ENABLED
-	mcr	p15, 0, r0, c2, c0, 0		@ set TTB 0
-#else
-        stmfd   sp!, {r2, r11}
-       /* TZ side expects r0 to be in r11 */
-        mov     r11,    r0
-       /* r2 : mcr_val */
-        mov     r2, r0
-       /* r0: command */
-        ldr     r0, =0x3f803221
-        smc     #1
-       /* Restore r0 and r2 */
-        ldmfd   sp!, {r2, r11}
-#endif
-
-	isb
 #ifdef CONFIG_ARM_ERRATA_754322
 	dsb
 #endif
 	mcr	p15, 0, r1, c13, c0, 1		@ set context ID
+	isb
+	mcr	p15, 0, r0, c2, c0, 0		@ set TTB 0
 	isb
 #endif
 	mov	pc, lr
@@ -101,11 +74,7 @@ ENDPROC(cpu_v7_switch_mm)
  */
 ENTRY(cpu_v7_set_pte_ext)
 #ifdef CONFIG_MMU
-#ifdef TIMA_L2_MANAGE
-        stmfd   sp!, {r1}
-#else
 	str	r1, [r0]			@ linux version
-#endif
 
 	bic	r3, r1, #0x000003f0
 	bic	r3, r3, #PTE_TYPE_MASK
@@ -121,63 +90,21 @@ ENTRY(cpu_v7_set_pte_ext)
 
 	tst	r1, #L_PTE_USER
 	orrne	r3, r3, #PTE_EXT_AP1
-#ifdef CONFIG_CPU_USE_DOMAINS
-	@ allow kernel read/write access to read-only user pages
-	tstne	r3, #PTE_EXT_APX
-	bicne	r3, r3, #PTE_EXT_APX | PTE_EXT_AP0
-#endif
 
 	tst	r1, #L_PTE_XN
 	orrne	r3, r3, #PTE_EXT_XN
 
 	tst	r1, #L_PTE_YOUNG
-	tstne	r1, #L_PTE_PRESENT
+	tstne	r1, #L_PTE_VALID
+	eorne	r1, r1, #L_PTE_NONE
+	tstne	r1, #L_PTE_NONE
 	moveq	r3, #0
 
-#ifdef TIMA_L2_MANAGE
-	pop	{r1}
-	stmfd   sp!,{r0-r3, r11}
-	stmfd   sp!,{r0}
-       	mov     r11, r0
-	/** Cache invalidate the values to be written
-	 */
-	mcr     p15, 0, r0, c7, c14, 1          @ flush_linux_pte
-        add     r0, r0, #2048
-	mcr     p15, 0, r0, c7, c14, 1          @ flush_arm_pte
-	dsb
-	isb
-	ldr     r0, =0x3f807221
-        smc     #1
-	pop	{r0}
-        /** Cache invalidate again to ensure no 
-	 *  values re-cached by speculative fetching
-         */
-	mcr     p15, 0, r0, c7, c6,  1
-	dsb
-	isb
-
-TIMA_CMP_LOOP1:
-        ldr     r2, [r0]
-        cmp     r1, r2
-        bne     TIMA_CMP_LOOP1
-
-        add	r0, r0, #2048
-	mcr     p15, 0, r0, c7, c6,  1
-	dsb
-	isb
-
-TIMA_CMP_LOOP2:
-        ldr     r2, [r0]
-        cmp     r3, r2
-        bne     TIMA_CMP_LOOP2
-
-	pop     {r0-r3, r11}
-#else
  ARM(	str	r3, [r0, #2048]! )
  THUMB(	add	r0, r0, #2048 )
  THUMB(	str	r3, [r0] )
- 	mcr     p15, 0, r0, c7, c10, 1          @ flush_pte
-#endif
+	ALT_SMP(W(nop))
+	ALT_UP (mcr	p15, 0, r0, c7, c10, 1)		@ flush_pte
 #endif
 	mov	pc, lr
 ENDPROC(cpu_v7_set_pte_ext)
@@ -211,11 +138,7 @@ ENDPROC(cpu_v7_set_pte_ext)
 	 *   NOS = PRRR[24+n] = 1	- not outer shareable
 	 */
 .equ	PRRR,	0xff0a81a8
-#ifdef CONFIG_ARCH_MSM_SCORPIONMP
-.equ	NMRR,	0x40e080e0
-#else
 .equ	NMRR,	0x40e040e0
-#endif
 
 	/*
 	 * Macro for setting up the TTBRx and TTBCR registers.
@@ -230,17 +153,13 @@ ENDPROC(cpu_v7_set_pte_ext)
 	mcr	p15, 0, \ttbr1, c2, c0, 1	@ load TTB1
 	.endm
 
-	__CPUINIT
-
 	/*   AT
 	 *  TFR   EV X F   I D LR    S
 	 * .EEE ..EE PUI. .T.T 4RVI ZWRS BLDP WCAM
 	 * rxxx rrxx xxx0 0101 xxxx xxxx x111 xxxx < forced
-	 *    1    0 110       0011 1100 .111 1101 < we want
+	 *   01    0 110       0011 1100 .111 1101 < we want
 	 */
 	.align	2
 	.type	v7_crval, #object
 v7_crval:
-	crval	clear=0x0120c302, mmuset=0x10c03c7d, ucset=0x00c01c7c
-
-	.previous
+	crval	clear=0x2120c302, mmuset=0x10c03c7d, ucset=0x00c01c7c

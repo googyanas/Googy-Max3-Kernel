@@ -1351,10 +1351,17 @@ void vma_prio_tree_insert(struct vm_area_struct *, struct prio_tree_root *);
 void vma_prio_tree_remove(struct vm_area_struct *, struct prio_tree_root *);
 struct vm_area_struct *vma_prio_tree_next(struct vm_area_struct *vma,
 	struct prio_tree_iter *iter);
+struct vm_area_struct *vma_interval_tree_iter_first(struct rb_root *root,
+				unsigned long start, unsigned long last);
+struct vm_area_struct *vma_interval_tree_iter_next(struct vm_area_struct *node,
+				unsigned long start, unsigned long last);
 
 #define vma_prio_tree_foreach(vma, iter, root, begin, end)	\
 	for (prio_tree_iter_init(iter, root, begin, end), vma = NULL;	\
 		(vma = vma_prio_tree_next(vma, iter)); )
+#define vma_interval_tree_foreach(vma, root, start, last)		\
+	for (vma = vma_interval_tree_iter_first(root, start, last);	\
+	     vma; vma = vma_interval_tree_iter_next(vma, start, last))
 
 static inline void vma_nonlinear_insert(struct vm_area_struct *vma,
 					struct list_head *list)
