@@ -1,0 +1,14 @@
+#!/sbin/busybox sh
+
+if [ "a$3" == "a" ]; then
+	evalcmd='eval "echo \$GPUVOLT$2"'
+	eval $evalcmd
+else
+	evalcmd='eval "GPUVOLT$2=$3"'
+	eval $evalcmd
+	evalcmd='eval "echo \$GPUVOLT$2"'
+	eval $evalcmd
+
+	echo "$GPUVOLT1 $GPUVOLT2 $GPUVOLT3" > /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table
+		
+fi

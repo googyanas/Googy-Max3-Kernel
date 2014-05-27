@@ -1,0 +1,27 @@
+#!/sbin/busybox sh
+
+if [ "a$3" == "a" ]; then
+	evalcmd='eval "echo \$CPUVOLT$2"'
+	eval $evalcmd
+else
+	evalcmd='eval "CPUVOLT$2=$3"'
+	eval $evalcmd
+	evalcmd='eval "echo \$CPUVOLT$2"'
+	eval $evalcmd
+
+		echo "384000 $CPUVOLT15" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "486000 $CPUVOLT14" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "594000 $CPUVOLT13" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "702000 $CPUVOLT12" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "810000 $CPUVOLT11" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "918000 $CPUVOLT10" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1026000 $CPUVOLT9" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1134000 $CPUVOLT8" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1242000 $CPUVOLT7" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1350000 $CPUVOLT6" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1458000 $CPUVOLT5" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1566000 $CPUVOLT4" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1674000 $CPUVOLT3" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1782000 $CPUVOLT2" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		echo "1890000 $CPUVOLT1" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+fi
