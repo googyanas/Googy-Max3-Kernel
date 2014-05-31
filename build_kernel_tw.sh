@@ -1,6 +1,6 @@
 #!/bin/sh
 export KERNELDIR=`readlink -f .`
-export RAMFS_SOURCE="/home/googy/Anas/Googy-Max3-Kernel/Kernel/ramfs"
+export RAMFS_SOURCE="/home/googy/Anas/Googy-Max3-Kernel/Kernel/ramfs_tw"
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
 # export CROSS_COMPILE=/usr/bin/arm-linux-gnueabihf-
@@ -13,7 +13,7 @@ export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.1-2014.04/bin/arm-gnueabi-
 #  export KERNELDIR=`readlink -f ${1}`
 # fi
 
-RAMFS_TMP="/home/googy/Anas/tmp3/ramfs"
+RAMFS_TMP="/home/googy/Anas/tmp_tw/ramfs"
 
 if [ "${2}" = "x" ];then
  make mrproper || exit 1
@@ -21,12 +21,12 @@ if [ "${2}" = "x" ];then
 fi
 
 # if [ ! -f $KERNELDIR/.config ];
-if [ "${2}" = "y" ];then
+# if [ "${2}" = "y" ];then
 find -name '*.ko' -exec rm -rf {} \;
-fi
+# fi
 
 # 
-make 0googymax3_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
+make -j4 0googymax3_TW_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
 
 . $KERNELDIR/.config
 
@@ -52,10 +52,10 @@ rm -rf $RAMFS_TMP/tmp3/*
 #remove mercurial repository
 rm -rf $RAMFS_TMP/.hg
 #copy modules into ramfs
-mkdir -p /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3.CWM/system/lib/modules
-rm -rf /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3.CWM/system/lib/modules/*
-find -name '*.ko' -exec cp -av {} /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3.CWM/system/lib/modules/ \;
-${CROSS_COMPILE}strip --strip-unneeded /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3.CWM/system/lib/modules/*
+mkdir -p /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM/system/lib/modules
+rm -rf /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM/system/lib/modules/*
+find -name '*.ko' -exec cp -av {} /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM/system/lib/modules/ \;
+${CROSS_COMPILE}strip --strip-unneeded /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM/system/lib/modules/*
 
 cd $RAMFS_TMP
 find | fakeroot cpio -H newc -o > $RAMFS_TMP.cpio 2>/dev/null
@@ -66,8 +66,8 @@ cd -
 ./mkbootimg --kernel $KERNELDIR/arch/arm/boot/zImage --ramdisk $RAMFS_TMP.cpio.gz --cmdline "console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3" -o $KERNELDIR/boot.img --base "0x80200000" --ramdiskaddr "0x82200000"
 
 cd /home/googy/Anas/Googy-Max3-Kernel
-mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3.CWM/boot.img
-cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3.CWM
-zip -v -r ../GT-I9505_GoogyMax3-Kernel_${1}_CWM.zip .
+mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM/boot.img
+cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM
+zip -v -r ../GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip .
 
-adb push /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3-Kernel_${1}_CWM.zip /storage/sdcard0/GT-I9505_GoogyMax3-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3-Kernel_${1}_CWM.zip /storage/sdcard1/GT-I9505_GoogyMax3-Kernel_${1}_CWM.zip
+adb push /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard1/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip

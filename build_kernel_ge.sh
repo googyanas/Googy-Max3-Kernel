@@ -11,7 +11,7 @@ export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.1-2014.04/bin/arm-gnueabi-
 #  export KERNELDIR=`readlink -f ${1}`
 # fi
 
-RAMFS_TMP="/home/googy/Anas/tmp5/ramfs_ge"
+RAMFS_TMP="/home/googy/Anas/tmp_ge/ramfs_ge"
 
 if [ "${2}" = "x" ];then
  make mrproper || exit 1
@@ -19,12 +19,12 @@ if [ "${2}" = "x" ];then
 fi
 
 # if [ ! -f $KERNELDIR/.config ];
-if [ "${2}" = "y" ];then
+# if [ "${2}" = "y" ];then
 find -name '*.ko' -exec rm -rf {} \;
-fi
+# fi
 
 # 
-make 0googymax3_GE_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
+make -j4 0googymax3_GE_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
 
 . $KERNELDIR/.config
 
