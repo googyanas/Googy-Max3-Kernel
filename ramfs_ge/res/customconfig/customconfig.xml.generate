@@ -237,19 +237,19 @@ cat << ENDCONFIG
 	      
       <checkbox description="Charge control switch" name="Charge control switch" action="generic01 /sys/kernel/fast_charge/force_fast_charge" label="Charge control switch"/>      
       
-      <spinner description="USB charge current (default 460 mA)" 
+      <spinner description="USB charge current (default 700 mA)" 
                name="USB Charge" 
                action="generic /sys/kernel/fast_charge/usb_charge_level">"
              <spinnerItem name="460 mA" value="460"/> 
              <spinnerItem name="700 mA" value="700"/> 
-             <spinnerItem name="900 mA" value="900"/> 
+             <spinnerItem name="1000 mA" value="1000"/> 
        </spinner>
-      <spinner description="AC charge current (default 1000 mA)" 
+      <spinner description="AC charge current (default 1450 mA)" 
                name="AC Charge" 
                action="generic /sys/kernel/fast_charge/ac_charge_level">"
              <spinnerItem name="1000 mA" value="1000"/> 
-             <spinnerItem name="1300 mA" value="1300"/> 
-             <spinnerItem name="1600 mA" value="1600"/> 
+             <spinnerItem name="1450 mA" value="1450"/> 
+             <spinnerItem name="1900 mA" value="1900"/> 
        </spinner>
 	      
     </settingsPane>

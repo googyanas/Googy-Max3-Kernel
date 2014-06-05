@@ -5,6 +5,8 @@
  * Adapted for 9505 from Note 3:
  * Paul Reioux <reioux@gmail.com>
  *
+ * Corrected values by googyanas <googyanas@gmail.com>
+ *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
  * may be copied, distributed, and modified under those terms.
@@ -39,7 +41,7 @@
  *   0 - disabled - allow anything up to 2.1A/h to be used as AC / USB custom current
  *   1 - enabled  - behaviour as described above (default)
  *
- * /sys/kernel/fast_charge/ac_leves (ro)
+ * /sys/kernel/fast_charge/ac_levels (ro)
  *
  *   display available levels for AC (for failsafe enabled mode)
  *
@@ -125,8 +127,8 @@ static ssize_t ac_charge_level_store(struct kobject *kobj,
 
 		switch (new_ac_charge_level) {
 			case AC_CHARGE_1000:
-			case AC_CHARGE_1300:
-			case AC_CHARGE_1600:
+			case AC_CHARGE_1450:
+			case AC_CHARGE_1900:
 				ac_charge_level = new_ac_charge_level;
 				return count;
 			default:
@@ -176,7 +178,7 @@ static ssize_t usb_charge_level_store(struct kobject *kobj,
 		switch (new_usb_charge_level) {
 			case USB_CHARGE_460:
 			case USB_CHARGE_700:
-			case USB_CHARGE_900:
+			case USB_CHARGE_1000:
 				usb_charge_level = new_usb_charge_level;
 				return count;
 			default:
@@ -256,7 +258,7 @@ static ssize_t info_show(struct kobject *kobj,
 {
 	return sprintf(
 		buf,
-		"Forced Fast Charge for Samsung Note 3 %s\n\n"
+		"Forced Fast Charge for Samsung Galaxy S4 Qualcomm %s\n\n"
 		"Fast charge mode : %s\n"
 		"Custom  AC level : %dmA/h\n"
 		"Custom USB level : %dmA/h\n"
@@ -314,10 +316,10 @@ int force_fast_charge_init(void)
 
 	/* Forced fast charge disabled by default */
 	force_fast_charge = FAST_CHARGE_DISABLED;
-	/* Default AC charge level to 1000mA/h    */
-	ac_charge_level   = AC_CHARGE_1000;
-	/* Default USB charge level to 460mA/h    */
-	usb_charge_level  = USB_CHARGE_460;
+	/* Default AC charge level to 1900mA/h    */
+	ac_charge_level   = AC_CHARGE_1900;
+	/* Default USB charge level to 700mA/h    */
+	usb_charge_level  = USB_CHARGE_700;
 	/* Allow only values in list by default   */
 	failsafe          = FAIL_SAFE_ENABLED;
 

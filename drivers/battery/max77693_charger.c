@@ -15,6 +15,7 @@
 #ifdef CONFIG_USB_HOST_NOTIFY
 #include "../../arch/arm/mach-msm/board-8064.h"
 #endif
+#include <linux/fastchg.h>
 
 #define ENABLE 1
 #define DISABLE 0
@@ -746,6 +747,9 @@ static int sec_chg_set_property(struct power_supply *psy,
 		POWER_SUPPLY_TYPE_USB].fast_charging_current;
 	const int wpc_charging_current = charger->pdata->charging_current[
 		POWER_SUPPLY_TYPE_WIRELESS].input_current_limit;
+
+	/* check and unlock */
+	check_charger_unlock_state(charger);
 
 	switch (psp) {
 	case POWER_SUPPLY_PROP_STATUS:
