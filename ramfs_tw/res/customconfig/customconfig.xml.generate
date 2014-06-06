@@ -318,6 +318,10 @@ cat << ENDCONFIG
              <spinnerItem name="htcp" value="htcp"/> 
       </spinner>
       
+      <checkbox description="Enable or Disable ZRAM (needs reboot). Default: on" name="Sammy ZRAM" action="generic01 /tmp/sammyzram" label="Sammy ZRAM"/>      
+      
+      <seekBar description="ZRAM disk size (needs reboot). Default: 700MB" name="ZRAM disk size" action="generic /tmp/zramdisksize" unit="MB" min="300" reversed="false" step="100" max="1000"/>
+      
 	<spinner description="VM swappiness. Default: 60" name="VM swappiness" action="generic /proc/sys/vm/swappiness">
 		<spinnerItem name="40" value="40"/> 
 		<spinnerItem name="50" value="50"/> 
