@@ -195,6 +195,11 @@ config CPU_FREQ_DEFAULT_GOV_LIONHEART
 	help
 	 Use the CPUFreq governor 'lionheart' as default.
 
+config CPU_FREQ_DEFAULT_GOV_DARKNESS
+	bool "darkness"
+  	select CPU_FREQ_GOV_DARKNESS
+  	help
+
 endchoice
 
 config CPU_FREQ_GOV_LIONHEART
@@ -204,6 +209,10 @@ config CPU_FREQ_GOV_LIONHEART
 	 Use the CPUFreq governor 'lionheart' as default.
 
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_DARKNESS
+	tristate "'darkness' cpufreq governor"
+	depends on CPU_FREQ
 
 config CPU_FREQ_GOV_ABYSSPLUG
 	tristate "'abyssplug' cpufreq governor"

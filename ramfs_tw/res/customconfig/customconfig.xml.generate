@@ -32,6 +32,7 @@ cat << ENDCONFIG
              <spinnerItem name="SmartassH3" value="smartassH3"/> 
              <spinnerItem name="Wheatley" value="wheatley"/> 
              <spinnerItem name="LionHeart" value="Lionheart"/> 
+             <spinnerItem name="Darkness" value="darkness"/> 
        </spinner>
        
       <spinner description="Set the maximum freqency the CPU scales up to. Default: 1890 MHz." 
