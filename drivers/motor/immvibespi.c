@@ -8,6 +8,10 @@
 **     to control PWM duty cycle, amp enable/disable, save IVT file, etc...
 **
 ** Portions Copyright (c) 2008-2010 Immersion Corporation. All Rights Reserved.
+**          Copyright (c) 2013 The CyanogenMod Project
+**                        Daniel Hillenbrand <codeworkx@cyanogenmod.com>
+**                        Dan Pasanen <dan.pasanen@gmail.com>
+**                        Shareef Ali <shareefalis@cyanogenmod.org>
 **
 ** This file contains Original Code and/or Modifications of Original Code
 ** as defined in and that are subject to the GNU Public License v2 -
@@ -30,6 +34,11 @@
 #include <linux/gpio.h>
 #include "tspdrv.h"
 
+#define LEVEL_MAX           100
+#define LEVEL_MIN           0
+#define LEVEL_DEFAULT       50
+#define LEVEL_THRESHOLD     75
+
 /*
 ** This SPI supports only one actuator.
 */
@@ -50,6 +59,8 @@ struct pm_gpio vib_pwm = {
 				.inv_int_pol = 0,
 			};
 
+
+unsigned long pwm_val = 100;
 
 static int32_t vibe_set_pwm_freq(int nForce)
 {
@@ -137,7 +148,7 @@ static int32_t ImmVibeSPI_ForceOut_AmpDisable(u_int8_t nActuatorIndex)
 			gpio_set_value(vibrator_drvdata.vib_pwm_gpio, \
 			    VIBRATION_OFF);
 		}
-		printk(KERN_DEBUG "tspdrv: %s\n", __func__);
+		//printk(KERN_DEBUG "tspdrv: %s\n", __func__);
 #if defined(CONFIG_MOTOR_DRV_MAX77693)
 		max77693_vibtonz_en(0);
 #endif
@@ -160,7 +171,7 @@ static int32_t ImmVibeSPI_ForceOut_AmpEnable(u_int8_t nActuatorIndex)
 			vib_pwm_gpio, 2, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, \
 			GPIO_CFG_2MA), 1);
 		}
-		printk(KERN_DEBUG "tspdrv: %s\n", __func__);
+		//printk(KERN_DEBUG "tspdrv: %s\n", __func__);
 #if defined(CONFIG_MOTOR_DRV_MAX77693)
 		max77693_vibtonz_en(1);
 #endif
@@ -266,6 +277,8 @@ static int32_t ImmVibeSPI_ForceOut_SetSamples(u_int8_t nActuatorIndex,
 		return VIBE_E_FAIL;
 	}
 
+	nforce = nforce * pwm_val / 100;
+
 	if (nforce == 0) {
 		/* Set 50% duty cycle or disable amp */
 		ImmVibeSPI_ForceOut_AmpDisable(0);
@@ -286,6 +299,92 @@ static int32_t ImmVibeSPI_ForceOut_SetSamples(u_int8_t nActuatorIndex,
 	}
 	return VIBE_S_SUCCESS;
 }
+static ssize_t pwm_max_show(struct device *dev,
+                            struct device_attribute *attr, char *buf)
+{
+	int count;
+    
+	count = sprintf(buf, "%d\n", LEVEL_MAX);
+	pr_info("vibrator: pwm max value: %d\n", LEVEL_MAX);
+    
+	return count;
+}
+
+static DEVICE_ATTR(pwm_max, S_IRUGO | S_IWUSR,
+                   pwm_max_show, NULL);
+
+static ssize_t pwm_min_show(struct device *dev,
+                            struct device_attribute *attr, char *buf)
+{
+	int count;
+    
+	count = sprintf(buf, "%d\n", LEVEL_MIN);
+	pr_info("vibrator: pwm min value: %d\n", LEVEL_MIN);
+    
+	return count;
+}
+
+static DEVICE_ATTR(pwm_min, S_IRUGO | S_IWUSR,
+                   pwm_min_show, NULL);
+
+static ssize_t pwm_default_show(struct device *dev,
+                                struct device_attribute *attr, char *buf)
+{
+	int count;
+    
+	count = sprintf(buf, "%d\n", LEVEL_DEFAULT);
+	pr_info("vibrator: pwm default value: %d\n", LEVEL_DEFAULT);
+    
+	return count;
+}
+
+static DEVICE_ATTR(pwm_default, S_IRUGO | S_IWUSR,
+                   pwm_default_show, NULL);
+
+static ssize_t pwm_threshold_show(struct device *dev,
+                                  struct device_attribute *attr, char *buf)
+{
+	int count;
+    
+	count = sprintf(buf, "%d\n", LEVEL_THRESHOLD);
+	pr_info("vibrator: pwm threshold value: %d\n", LEVEL_THRESHOLD);
+    
+	return count;
+}
+
+static DEVICE_ATTR(pwm_threshold, S_IRUGO | S_IWUSR,
+                   pwm_threshold_show, NULL);
+
+static ssize_t pwm_value_show(struct device *dev, struct device_attribute *attr,
+                              char *buf)
+{
+	int count;
+
+	count = sprintf(buf, "%lu\n", pwm_val);
+	pr_debug("[VIB] pwm_val: %lu\n", pwm_val);
+
+	return count;
+}
+
+ssize_t pwm_value_store(struct device *dev, struct device_attribute *attr,
+                        const char *buf, size_t size)
+{
+	if (kstrtoul(buf, 0, &pwm_val))
+
+	pr_err("[VIB] %s: error on storing pwm_val\n", __func__);
+	pr_info("[VIB] %s: pwm_val=%lu\n", __func__, pwm_val);
+
+	/* make sure new pwm duty is in range */
+	if(pwm_val > 100)
+		pwm_val = 100;
+	else if (pwm_val < 0)
+		pwm_val = 0;
+
+	return size;
+}
+
+static DEVICE_ATTR(pwm_value, S_IRUGO | S_IWUSR,
+    pwm_value_show, pwm_value_store);
 
 /*
 ** Called to get the device name (device name must be returned as ANSI char)

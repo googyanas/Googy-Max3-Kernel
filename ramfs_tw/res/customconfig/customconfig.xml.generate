@@ -335,6 +335,8 @@ cat << ENDCONFIG
 
       <seekBar description="Dirty real time memory buffer. Default: 40%" name="Dirty ratio" action="generic /proc/sys/vm/dirty_ratio" unit="%" min="5" reversed="false" step="5" max="90"/>
 
+      <seekBar description="Vibration intensity. Default: 50%" name="Vibration intensity" action="generic /sys/devices/virtual/timed_output/vibrator/pwm_value" unit="%" min="5" reversed="false" step="5" max="100"/>
+      
     </settingsPane>
 
   </settingsTab>
