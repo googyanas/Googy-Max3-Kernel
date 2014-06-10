@@ -3031,6 +3031,12 @@ config PCM_ROUTE_VOICE_STUB
 	 To compile this option, choose M here:
 	 If unsure, say N here.
 
+config GED_BUILD
+	bool "Use Google Experience Device"
+	default n
+	help
+	Use Google Experience Device.
+
 config SEC_FACTORY
 	bool "Enable FACTORY Features"
 	default n
