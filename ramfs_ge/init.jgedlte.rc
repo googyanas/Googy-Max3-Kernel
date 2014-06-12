@@ -616,8 +616,7 @@ service qcom-sh /system/bin/sh /init.qcom.sh
     user root
     oneshot
 
-# Run Kernel and ROM Tunings
-service qcom-post-boot /sbin/busybox sh /sbin/ext/busybox.sh
+service qcom-post-boot /sbin/busybox sh /sbin/googymax3_post_boot.sh
     class late_start
     user root
     disabled
