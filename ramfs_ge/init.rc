@@ -18,7 +18,7 @@ on early-init
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 378000
 
     # Set init and its forked children's oom_adj.
-    write /proc/1/oom_score_adj -1000
+    write /proc/1/oom_adj -16
 
     # Set the security context for the init process.
     # This should occur before anything else (e.g. ueventd) is started.
@@ -74,8 +74,6 @@ loglevel 3
 
     # Directory for putting things only root should see.
     mkdir /mnt/secure 0700 root root
-    # Create private mountpoint so we can MS_MOVE from staging
-    mount tmpfs tmpfs /mnt/secure mode=0700,uid=0,gid=0
 
     # Directory for staging bindmounts
     mkdir /mnt/secure/staging 0700 root root
@@ -146,12 +144,16 @@ loglevel 3
 # checker programs.
     mkdir /dev/fscklogs 0770 root system
 
+# pstore/ramoops previous console log
+    mount pstore pstore /sys/fs/pstore
+    chown system log /sys/fs/pstore/console-ramoops
+    chmod 0440 /sys/fs/pstore/console-ramoops
+
 on post-fs
     # once everything is setup, no need to modify /
     mount rootfs rootfs / ro remount
     # mount shared so changes propagate into child namespaces
     mount rootfs rootfs / shared rec
-    mount tmpfs tmpfs /mnt/secure private rec
 
     # We chown/chmod /cache again so because mount is run as root + defaults
     chown system cache /cache
@@ -515,7 +517,12 @@ on boot
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,30000,30000,4096,8760,11680
     setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
+# IR_LED
+    chown system radio /sys/class/sec/sec_ir/ir_send
+    chown system radio /sys/class/sec/sec_ir/ir_send_result
 
+# Define default initial receive window size in segments.
+    setprop net.tcp.default_init_rwnd 60
 # Assign TCP buffer thresholds to be ceiling value of technology maximums
 # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  1048576
@@ -563,9 +570,34 @@ on property:vold.decrypt=trigger_shutdown_framework
 on property:sys.powerctl=*
     powerctl ${sys.powerctl}
 
-# system server cannot write to /proc/sys files, so proxy it through init
+# system server cannot write to /proc/sys files,
+# and chown/chmod does not work for /proc/sys/ entries.
+# So proxy writes through init.
 on property:sys.sysctl.extra_free_kbytes=*
     write /proc/sys/vm/extra_free_kbytes ${sys.sysctl.extra_free_kbytes}
+# "tcp_default_init_rwnd" Is too long!
+on property:sys.sysctl.tcp_def_init_rwnd=*
+    write /proc/sys/net/ipv4/tcp_default_init_rwnd ${sys.sysctl.tcp_def_init_rwnd}
+
+# permission for CHARGING
+	chown system radio /sys/class/power_supply/battery/batt_reset_soc
+	chown system radio /sys/class/power_supply/battery/batt_slate_mode
+	chown system radio /sys/class/power_supply/battery/update
+	chown system radio /sys/class/power_supply/battery/factory_mode
+	chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/call
+	chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/video
+	chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/music
+	chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/browser
+	chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/hotspot
+	chown sdcard_rw sdcard_rw /sys/class/power_supply/battery/camera
+	chown system radio /sys/class/power_supply/battery/talk_wcdma
+	chown system radio /sys/class/power_supply/battery/talk_gsm
+	chown system radio /sys/class/power_supply/battery/call
+	chown system radio /sys/class/power_supply/battery/data_call
+	chown system radio /sys/class/power_supply/battery/gps
+	chown system radio /sys/class/power_supply/battery/wifi
+	chown system radio /sys/class/power_supply/battery/lte
+	chown system radio /sys/class/power_supply/battery/wc_enable
 
 ## Daemon processes to be run by init.
 ##
