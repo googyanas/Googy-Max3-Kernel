@@ -169,6 +169,9 @@ fi;
 # enable kmem interface for everyone by GM
 echo "0" > /proc/sys/kernel/kptr_restrict;
 
+# swappiness
+echo "0" > /proc/sys/vm/swappiness
+
 # apply STweaks defaults
 export CONFIG_BOOTING=1
 /res/uci.sh apply

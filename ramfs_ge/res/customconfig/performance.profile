@@ -30,7 +30,6 @@ led_fade_dt1=1
 led_fade_dt2=1
 led_fade_dt3=2
 led_fade_dt4=3
-swappiness=60
 dirty_background_ratio=20
 dirty_ratio=40
 GPUVOLT3=1150000
