@@ -316,6 +316,8 @@ cat << ENDCONFIG
              <spinnerItem name="westwood" value="westwood"/>
              <spinnerItem name="bic" value="bic"/> 
              <spinnerItem name="htcp" value="htcp"/> 
+             <spinnerItem name="highspeed" value="hstcp"/> 
+             <spinnerItem name="hybla" value="hybla"/> 
       </spinner>
       
       <seekBar description="Dirty background memory buffer. Default: 20%" name="Dirty Background ratio" action="generic /proc/sys/vm/dirty_background_ratio" unit="%" min="5" reversed="false" step="5" max="80"/>
