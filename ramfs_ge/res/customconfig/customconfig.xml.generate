@@ -79,21 +79,21 @@ cat << ENDCONFIG
     
 	<settingsPane description="CPU Voltage Control. FOR ADVANCED USERS ONLY! USE IT AT YOUR OWN RISK!!!" name="CPU Voltage Control">
 
-		<seekBar description="Voltage for 1890 MHz. (Default: 1212500)" name="Voltage 1890 MHz" action="cpu-voltage 1" unit="µV" min="1050000" reversed="false" step="12500" max="1300000"/>
-		<seekBar description="Voltage for 1782 MHz. (Default: 1162500)" name="Voltage 1782 MHz" action="cpu-voltage 2" unit="µV" min="1025000" reversed="false" step="12500" max="1225000"/>
-		<seekBar description="Voltage for 1674 MHz. (Default: 1112500)" name="Voltage 1674 MHz" action="cpu-voltage 3" unit="µV" min="1000000" reversed="false" step="12500" max="1175000"/>
-		<seekBar description="Voltage for 1566 MHz. (Default: 1075000)" name="Voltage 1566 MHz" action="cpu-voltage 4" unit="µV" min="975000" reversed="false" step="12500" max="1125000"/>
-		<seekBar description="Voltage for 1458 MHz. (Default: 1050000)" name="Voltage 1458 MHz" action="cpu-voltage 5" unit="µV" min="962500" reversed="false" step="12500" max="1100000"/>
-		<seekBar description="Voltage for 1350 MHz. (Default: 1012500)" name="Voltage 1350 MHz" action="cpu-voltage 6" unit="µV" min="950000" reversed="false" step="12500" max="1062500"/>
-		<seekBar description="Voltage for 1242 MHz. (Default: 987500)" name="Voltage 1242 MHz" action="cpu-voltage 7" unit="µV" min="937500" reversed="false" step="12500" max="1037500"/>
-		<seekBar description="Voltage for 1134 MHz. (Default: 975000)" name="Voltage 1134 MHz" action="cpu-voltage 8" unit="µV" min="925000" reversed="false" step="12500" max="1025000"/>
-		<seekBar description="Voltage for 1026 MHz. (Default: 950000)" name="Voltage 1026 MHz" action="cpu-voltage 9" unit="µV" min="900000" reversed="false" step="12500" max="1000000"/>
-		<seekBar description="Voltage for 918 MHz. (Default: 925000)" name="Voltage 918 MHz" action="cpu-voltage 10" unit="µV" min="887500" reversed="false" step="12500" max="975000"/>
-		<seekBar description="Voltage for 810 MHz. (Default: 912500)" name="Voltage 810 MHz" action="cpu-voltage 11" unit="µV" min="875000" reversed="false" step="12500" max="962500"/>
-		<seekBar description="Voltage for 702 MHz. (Default: 900000)" name="Voltage 702 MHz" action="cpu-voltage 12" unit="µV" min="850000" reversed="false" step="12500" max="950000"/>
-		<seekBar description="Voltage for 594 MHz. (Default: 900000)" name="Voltage 594 MHz" action="cpu-voltage 13" unit="µV" min="850000" reversed="false" step="12500" max="950000"/>
-		<seekBar description="Voltage for 486 MHz. (Default: 900000)" name="Voltage 486 MHz" action="cpu-voltage 14" unit="µV" min="850000" reversed="false" step="12500" max="950000"/>
-		<seekBar description="Voltage for 384 MHz. (Default: 900000)" name="Voltage 384 MHz" action="cpu-voltage 15" unit="µV" min="825000" reversed="false" step="12500" max="925000"/>
+		<seekBar description="Voltage for 1890 MHz. (Default: 1212500)" name="Voltage 1890 MHz" action="cpu-voltage 1" unit="µV" min="1062500" reversed="false" step="12500" max="1312500"/>
+		<seekBar description="Voltage for 1782 MHz. (Default: 1162500)" name="Voltage 1782 MHz" action="cpu-voltage 2" unit="µV" min="1012500" reversed="false" step="12500" max="1262500"/>
+		<seekBar description="Voltage for 1674 MHz. (Default: 1112500)" name="Voltage 1674 MHz" action="cpu-voltage 3" unit="µV" min="962500" reversed="false" step="12500" max="1212500"/>
+		<seekBar description="Voltage for 1566 MHz. (Default: 1075000)" name="Voltage 1566 MHz" action="cpu-voltage 4" unit="µV" min="925000" reversed="false" step="12500" max="1175000"/>
+		<seekBar description="Voltage for 1458 MHz. (Default: 1050000)" name="Voltage 1458 MHz" action="cpu-voltage 5" unit="µV" min="900000" reversed="false" step="12500" max="1150000"/>
+		<seekBar description="Voltage for 1350 MHz. (Default: 1012500)" name="Voltage 1350 MHz" action="cpu-voltage 6" unit="µV" min="862500" reversed="false" step="12500" max="1112500"/>
+		<seekBar description="Voltage for 1242 MHz. (Default: 987500)" name="Voltage 1242 MHz" action="cpu-voltage 7" unit="µV" min="837500" reversed="false" step="12500" max="1087500"/>
+		<seekBar description="Voltage for 1134 MHz. (Default: 975000)" name="Voltage 1134 MHz" action="cpu-voltage 8" unit="µV" min="825000" reversed="false" step="12500" max="1075000"/>
+		<seekBar description="Voltage for 1026 MHz. (Default: 950000)" name="Voltage 1026 MHz" action="cpu-voltage 9" unit="µV" min="800000" reversed="false" step="12500" max="1050000"/>
+		<seekBar description="Voltage for 918 MHz. (Default: 925000)" name="Voltage 918 MHz" action="cpu-voltage 10" unit="µV" min="775000" reversed="false" step="12500" max="1025000"/>
+		<seekBar description="Voltage for 810 MHz. (Default: 912500)" name="Voltage 810 MHz" action="cpu-voltage 11" unit="µV" min="762500" reversed="false" step="12500" max="1012500"/>
+		<seekBar description="Voltage for 702 MHz. (Default: 900000)" name="Voltage 702 MHz" action="cpu-voltage 12" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
+		<seekBar description="Voltage for 594 MHz. (Default: 900000)" name="Voltage 594 MHz" action="cpu-voltage 13" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
+		<seekBar description="Voltage for 486 MHz. (Default: 900000)" name="Voltage 486 MHz" action="cpu-voltage 14" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
+		<seekBar description="Voltage for 384 MHz. (Default: 900000)" name="Voltage 384 MHz" action="cpu-voltage 15" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
 
 	</settingsPane>
 
