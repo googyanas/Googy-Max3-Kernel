@@ -232,8 +232,14 @@ cat << ENDCONFIG
 
     <settingsPane name="AC/USB Charge control"
 	      description="AC/USB Charge control">		  
-	      
-      <checkbox description="Charge control switch" name="Charge control switch" action="generic01 /sys/kernel/fast_charge/force_fast_charge" label="Charge control switch"/>      
+    
+      <spinner description="Charge control switch" 
+               name="Charge control switch" 
+               action="generic /sys/kernel/fast_charge/force_fast_charge">"
+             <spinnerItem name="Disabled" value="0"/> 
+             <spinnerItem name="Substitute AC to USB" value="1"/> 
+             <spinnerItem name="Custom Values" value="2"/> 
+       </spinner>
       
       <spinner description="USB charge current (default 700 mA)" 
                name="USB Charge" 
