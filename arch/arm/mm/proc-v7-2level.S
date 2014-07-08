@@ -52,21 +52,13 @@ ENTRY(cpu_v7_switch_mm)
 #ifdef CONFIG_ARM_ERRATA_430973
 	mcr	p15, 0, r2, c7, c5, 6		@ flush BTAC/BTB
 #endif
-#ifdef CONFIG_ARM_ERRATA_754322
-	dsb
-#endif
 #ifdef CONFIG_PID_IN_CONTEXTIDR
 	mrc     p15, 0, r2, c13, c0, 1          @ read current context ID
 	bic     r2, r2, #0xff                   @ extract the PID
 	and     r1, r1, #0xff
 	orr     r1, r1, r2                      @ insert the PID into r1
 #endif
-	mcr	p15, 0, r2, c13, c0, 1		@ set reserved context ID
-	isb
-1:
-#ifndef TIMA_ENABLED
-	mcr	p15, 0, r0, c2, c0, 0		@ set TTB 0
-#else
+#ifdef TIMA_ENABLED
         stmfd   sp!, {r2, r11}
        /* TZ side expects r0 to be in r11 */
         mov     r11,    r0
@@ -79,11 +71,12 @@ ENTRY(cpu_v7_switch_mm)
         ldmfd   sp!, {r2, r11}
 #endif
 
-	isb
 #ifdef CONFIG_ARM_ERRATA_754322
 	dsb
 #endif
 	mcr	p15, 0, r1, c13, c0, 1		@ set context ID
+	isb
+	mcr	p15, 0, r0, c2, c0, 0		@ set TTB 0
 	isb
 #endif
 	mov	pc, lr
