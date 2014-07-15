@@ -323,6 +323,15 @@ cat << ENDCONFIG
              <spinnerItem name="hybla" value="hybla"/> 
       </spinner>
       
+	<spinner description="VM swappiness. Default: 60" name="VM swappiness" action="generic /proc/sys/vm/swappiness">
+		<spinnerItem name="40" value="40"/> 
+		<spinnerItem name="50" value="50"/> 
+		<spinnerItem name="60" value="60"/> 
+		<spinnerItem name="70" value="70"/> 
+		<spinnerItem name="80" value="80"/> 
+		<spinnerItem name="90" value="90"/> 
+	</spinner>
+      
       <seekBar description="Dirty background memory buffer. Default: 20%" name="Dirty Background ratio" action="generic /proc/sys/vm/dirty_background_ratio" unit="%" min="5" reversed="false" step="5" max="80"/>
 
       <seekBar description="Dirty real time memory buffer. Default: 40%" name="Dirty ratio" action="generic /proc/sys/vm/dirty_ratio" unit="%" min="5" reversed="false" step="5" max="90"/>
