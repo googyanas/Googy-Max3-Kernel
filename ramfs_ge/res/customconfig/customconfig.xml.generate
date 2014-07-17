@@ -278,7 +278,7 @@ cat << ENDCONFIG
       <seekBar  description="The read-ahead value for the internal storage. Default: 128" 
                 name="Internal storage read-ahead" 
                 action="readahead_int /tmp/int_read_ahead_kb"
-                unit="kB" min="128" reversed="false" step="128" max="2048"/>
+                unit="kB" min="128" reversed="false" step="128" max="4096"/>
 
 <spinner description="This will set the default I/O scheduler for the external Storage. Default: cfq" name="Default I/O Scheduler for SD-Card Storage" action="iosched_ext /tmp/ext_scheduler">
              <spinnerItem name="cfq" value="cfq"/>
@@ -295,7 +295,7 @@ cat << ENDCONFIG
       <seekBar  description="The read-ahead value for the external storage (SD-Card). Default: 256" 
                 name="SD card read-ahead" 
                 action="readahead_ext /tmp/ext_read_ahead_kb"
-                unit="kB" min="128" reversed="false" step="128" max="2048"/>
+                unit="kB" min="128" reversed="false" step="128" max="4096"/>
                 
       <button description="Apply IO-Scheduler settings." name="Set IO-Schedulers" action="ioschedapply" label="Set IO-Schedulers"/>
     
