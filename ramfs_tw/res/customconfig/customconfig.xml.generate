@@ -342,6 +342,8 @@ cat << ENDCONFIG
 
       <seekBar description="Vibration intensity. Default: 50%" name="Vibration intensity" action="generic /sys/devices/virtual/timed_output/vibrator/pwm_value" unit="%" min="5" reversed="false" step="5" max="100"/>
       
+      <checkbox description="Apply nfsmw_gr's kernel special tweaks (needs reboot). Default: off" name="Special tweaks" action="generic01 /tmp/tweaks" label="Special tweaks"/>      
+      
     </settingsPane>
 
   </settingsTab>

@@ -146,7 +146,9 @@ echo "$scaling_max_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 if [ "$sammyzram" == "on" ];then
 UNIT="M"
 /system/bin/rtccd3 -a "$zramdisksize$UNIT"
-fi
+else
+echo "0" > /proc/sys/vm/swappiness;
+fi;
 
 # dynamic fsync
 if [ "$Dyn_fsync_active" == "on" ];then
@@ -198,6 +200,7 @@ OPEN_RW;
 
 if [ ! -f /system/app/STweaks_Googy-Max.apk ] ; then
 	$BB rm -f /system/app/STweaks.apk > /dev/null 2>&1;
+	$BB rm -f /data/app/STweaks.apk > /dev/null 2>&1;
 	$BB rm -f /system/app/STweaks_Googy-Max.apk > /dev/null 2>&1;
 	$BB rm -f /data/app/com.gokhanmoral.stweaks* > /dev/null 2>&1;
 	$BB rm -f /data/data/com.gokhanmoral.stweaks*/* > /dev/null 2>&1;
@@ -209,6 +212,42 @@ fi;
 	# disabling knox security at boot
 	pm disable com.sec.knox.seandroid;
 	setenforce 0;
+
+# Special kernel tweaks (thx to nfsmw_gr)
+if [ "$tweaks" == "on" ];then
+
+echo "256" > /proc/sys/fs/inotify/max_user_instances;
+echo "32000" > /proc/sys/fs/inotify/max_queued_events;
+echo "10" > /proc/sys/kernel/panic;
+echo "10" > /proc/sys/fs/lease-break-time;
+echo "6144,87380,524288" > /proc/sys/net/ipv4/tcp_rmem;
+echo "524288" > /proc/sys/kernel/threads-max;
+echo "524288" > /proc/sys/fs/file-max;
+echo "65536" > /proc/sys/kernel/msgmax;
+echo "6144,87380,524288" > /proc/sys/net/ipv4/tcp_wmem;
+echo "500,512000,64,2048" > /proc/sys/kernel/sem;
+echo "524288" > /proc/sys/net/core/wmem_max;
+echo "8192" > /proc/sys/vm/min_free_kbytes;
+echo "524288" > /proc/sys/net/core/rmem_max;
+echo "90" > /proc/sys/vm/dirty_ratio;
+echo "268435456" > /proc/sys/kernel/shmmax;
+echo "250" > /proc/sys/vm/dirty_expire_centisecs;
+echo "1" > /proc/sys/vm/drop_caches;
+echo "2048" > /proc/sys/kernel/msgmni;
+echo "2" > /proc/sys/vm/min_free_order_shift;
+echo "10240" > /proc/sys/fs/inotify/max_user_watches;
+echo "70" > /proc/sys/vm/dirty_background_ratio;
+echo "1" > /proc/sys/net/ipv4/tcp_tw_recycle;
+echo "1" > /proc/sys/vm/overcommit_memory;
+echo "50" > /proc/sys/vm/overcommit_ratio;  
+
+    if [ "$sammyzram" == "on" ];then
+      echo "80" > /proc/sys/vm/swappiness;
+    else
+      echo "0" > /proc/sys/vm/swappiness;
+    fi;
+
+fi;
 
 	# Fix critical perms again after init.d mess
 	CRITICAL_PERM_FIX;
