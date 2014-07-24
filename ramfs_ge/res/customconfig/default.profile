@@ -55,3 +55,4 @@ CPUVOLT2=1162500
 CPUVOLT1=1212500
 hotplug=0
 pwm_value=50
+tweaks=off
