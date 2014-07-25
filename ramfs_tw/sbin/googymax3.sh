@@ -146,8 +146,6 @@ echo "$scaling_max_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 if [ "$sammyzram" == "on" ];then
 UNIT="M"
 /system/bin/rtccd3 -a "$zramdisksize$UNIT"
-else
-echo "0" > /proc/sys/vm/swappiness;
 fi;
 
 # dynamic fsync
@@ -183,6 +181,11 @@ export CONFIG_BOOTING=1
 export CONFIG_BOOTING=
 
 OPEN_RW;
+
+# in case zram is disabled
+if [ "$sammyzram" == "off" ];then
+echo "0" > /proc/sys/vm/swappiness;
+fi;
 
 # (
 	# Start any init.d scripts that may be present in the rom or added by the user
