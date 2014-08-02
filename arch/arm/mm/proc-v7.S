@@ -16,6 +16,9 @@
 #include <asm/hwcap.h>
 #include <asm/pgtable-hwdef.h>
 #include <asm/pgtable.h>
+#ifdef TIMA_EMUL_ENABLED
+#include <asm/entry-macro-tima.S>
+#endif
 
 #include "proc-macros.S"
 
@@ -56,8 +59,11 @@ ENTRY(cpu_v7_reset)
 	bic	r1, r1, #0x1			@ ...............m
  THUMB(	bic	r1, r1, #1 << 30 )		@ SCTLR.TE (Thumb exceptions)
 	mcr	p15, 0, r1, c1, c0, 0		@ disable MMU
+	mcr     p15, 0, ip, c8, c7, 0           @ invalidate I & D,flush TLB
+	mcr     p15, 0, ip, c7, c5, 6           @ flush BTC
+	dsb
 	isb
-	bx	r0
+	mov	pc, r0
 ENDPROC(cpu_v7_reset)
 	.popsection
 
@@ -83,7 +89,7 @@ ENTRY(cpu_v7_dcache_clean_area)
 	add	r0, r0, r2
 	subs	r1, r1, r2
 	bhi	2b
-	dsb	ishst
+	dsb
 	mov	pc, lr
 ENDPROC(cpu_v7_dcache_clean_area)
 
@@ -92,59 +98,68 @@ ENDPROC(cpu_v7_dcache_clean_area)
 
 /* Suspend/resume support: derived from arch/arm/mach-s5pv210/sleep.S */
 .globl	cpu_v7_suspend_size
-.equ	cpu_v7_suspend_size, 4 * 9
+.equ	cpu_v7_suspend_size, 4 * 8
 #ifdef CONFIG_ARM_CPU_SUSPEND
 ENTRY(cpu_v7_do_suspend)
 	stmfd	sp!, {r4 - r10, lr}
 	mrc	p15, 0, r4, c13, c0, 0	@ FCSE/PID
 	mrc	p15, 0, r5, c13, c0, 3	@ User r/o thread ID
 	stmia	r0!, {r4 - r5}
-#ifdef CONFIG_MMU
 	mrc	p15, 0, r6, c3, c0, 0	@ Domain ID
-#ifdef CONFIG_ARM_LPAE
-	mrrc	p15, 1, r5, r7, c2	@ TTB 1
-#else
 	mrc	p15, 0, r7, c2, c0, 1	@ TTB 1
-#endif
 	mrc	p15, 0, r11, c2, c0, 2	@ TTB control register
-#endif
 	mrc	p15, 0, r8, c1, c0, 0	@ Control register
 	mrc	p15, 0, r9, c1, c0, 1	@ Auxiliary control register
 	mrc	p15, 0, r10, c1, c0, 2	@ Co-processor access control
-	stmia	r0, {r5 - r11}
+	stmia	r0, {r6 - r11}
 	ldmfd	sp!, {r4 - r10, pc}
 ENDPROC(cpu_v7_do_suspend)
 
 ENTRY(cpu_v7_do_resume)
 	mov	ip, #0
+	mcr	p15, 0, ip, c8, c7, 0	@ invalidate TLBs
 	mcr	p15, 0, ip, c7, c5, 0	@ invalidate I cache
 	mcr	p15, 0, ip, c13, c0, 1	@ set reserved context ID
 	ldmia	r0!, {r4 - r5}
 	mcr	p15, 0, r4, c13, c0, 0	@ FCSE/PID
 	mcr	p15, 0, r5, c13, c0, 3	@ User r/o thread ID
-	ldmia	r0, {r5 - r11}
-#ifdef CONFIG_MMU
-	mcr	p15, 0, ip, c8, c7, 0	@ invalidate TLBs
+	ldmia	r0, {r6 - r11}
+#ifndef TIMA_EMUL_ENABLED
 	mcr	p15, 0, r6, c3, c0, 0	@ Domain ID
-#ifdef CONFIG_ARM_LPAE
-	mcrr	p15, 0, r1, ip, c2	@ TTB 0
-	mcrr	p15, 1, r5, r7, c2	@ TTB 1
 #else
+	tima_macro_emul_crit_instn r6, 0x3f806221
+
+#endif
+#ifndef CONFIG_ARM_LPAE
 	ALT_SMP(orr	r1, r1, #TTB_FLAGS_SMP)
 	ALT_UP(orr	r1, r1, #TTB_FLAGS_UP)
-	mcr	p15, 0, r1, c2, c0, 0	@ TTB 0
-	mcr	p15, 0, r7, c2, c0, 1	@ TTB 1
 #endif
+#ifndef TIMA_EMUL_ENABLED
+	mcr	p15, 0, r1, c2, c0, 0	@ TTB 0
+#else
+	tima_macro_emul_crit_instn r7, 0x3f803221
+
+#endif
+#ifndef TIMA_EMUL_ENABLED
+	mcr	p15, 0, r7, c2, c0, 1	@ TTB 1
+#else
+	tima_macro_emul_crit_instn r8, 0x3f804221
+
+#endif
+#ifndef TIMA_EMUL_ENABLED
 	mcr	p15, 0, r11, c2, c0, 2	@ TTB control register
-	ldr	r4, =PRRR		@ PRRR
-	ldr	r5, =NMRR		@ NMRR
-	mcr	p15, 0, r4, c10, c2, 0	@ write PRRR
-	mcr	p15, 0, r5, c10, c2, 1	@ write NMRR
-#endif	/* CONFIG_MMU */
+#else
+	tima_macro_emul_crit_instn ip, 0x3f805221
+
+#endif
 	mrc	p15, 0, r4, c1, c0, 1	@ Read Auxiliary control register
 	teq	r4, r9			@ Is it already set?
 	mcrne	p15, 0, r9, c1, c0, 1	@ No, so write it
 	mcr	p15, 0, r10, c1, c0, 2	@ Co-processor access control
+	ldr	r4, =PRRR		@ PRRR
+	ldr	r5, =NMRR		@ NMRR
+	mcr	p15, 0, r4, c10, c2, 0	@ write PRRR
+	mcr	p15, 0, r5, c10, c2, 1	@ write NMRR
 	isb
 	dsb
 	mov	r0, r8			@ control register
@@ -152,50 +167,6 @@ ENTRY(cpu_v7_do_resume)
 ENDPROC(cpu_v7_do_resume)
 #endif
 
-#ifdef CONFIG_CPU_PJ4B
-	globl_equ	cpu_pj4b_switch_mm,     cpu_v7_switch_mm
-	globl_equ	cpu_pj4b_set_pte_ext,	cpu_v7_set_pte_ext
-	globl_equ	cpu_pj4b_proc_init,	cpu_v7_proc_init
-	globl_equ	cpu_pj4b_proc_fin, 	cpu_v7_proc_fin
-	globl_equ	cpu_pj4b_reset,	   	cpu_v7_reset
-#ifdef CONFIG_PJ4B_ERRATA_4742
-ENTRY(cpu_pj4b_do_idle)
-	dsb					@ WFI may enter a low-power mode
-	wfi
-	dsb					@barrier
-	mov	pc, lr
-ENDPROC(cpu_pj4b_do_idle)
-#else
-	globl_equ	cpu_pj4b_do_idle,  	cpu_v7_do_idle
-#endif
-	globl_equ	cpu_pj4b_dcache_clean_area,	cpu_v7_dcache_clean_area
-#ifdef CONFIG_ARM_CPU_SUSPEND
-ENTRY(cpu_pj4b_do_suspend)
-	stmfd	sp!, {r6 - r10}
-	mrc	p15, 1, r6, c15, c1, 0  @ save CP15 - extra features
-	mrc	p15, 1, r7, c15, c2, 0	@ save CP15 - Aux Func Modes Ctrl 0
-	mrc	p15, 1, r8, c15, c1, 2	@ save CP15 - Aux Debug Modes Ctrl 2
-	mrc	p15, 1, r9, c15, c1, 1  @ save CP15 - Aux Debug Modes Ctrl 1
-	mrc	p15, 0, r10, c9, c14, 0  @ save CP15 - PMC
-	stmia	r0!, {r6 - r10}
-	ldmfd	sp!, {r6 - r10}
-	b cpu_v7_do_suspend
-ENDPROC(cpu_pj4b_do_suspend)
-
-ENTRY(cpu_pj4b_do_resume)
-	ldmia	r0!, {r6 - r10}
-	mcr	p15, 1, r6, c15, c1, 0  @ save CP15 - extra features
-	mcr	p15, 1, r7, c15, c2, 0	@ save CP15 - Aux Func Modes Ctrl 0
-	mcr	p15, 1, r8, c15, c1, 2	@ save CP15 - Aux Debug Modes Ctrl 2
-	mcr	p15, 1, r9, c15, c1, 1  @ save CP15 - Aux Debug Modes Ctrl 1
-	mcr	p15, 0, r10, c9, c14, 0  @ save CP15 - PMC
-	b cpu_v7_do_resume
-ENDPROC(cpu_pj4b_do_resume)
-#endif
-.globl	cpu_pj4b_suspend_size
-.equ	cpu_pj4b_suspend_size, 4 * 14
-
-#endif
 	__CPUINIT
 
 /*
@@ -211,13 +182,10 @@ ENDPROC(cpu_pj4b_do_resume)
  */
 __v7_ca5mp_setup:
 __v7_ca9mp_setup:
-__v7_cr7mp_setup:
-	mov	r10, #(1 << 0)			@ Cache/TLB ops broadcasting
+	mov	r10, #(1 << 0)			@ TLB ops broadcasting
 	b	1f
 __v7_ca7mp_setup:
-__v7_ca12mp_setup:
 __v7_ca15mp_setup:
-__v7_ca17mp_setup:
 	mov	r10, #0
 1:
 #ifdef CONFIG_SMP
@@ -228,64 +196,6 @@ __v7_ca17mp_setup:
 	orreq	r0, r0, r10			@ Enable CPU-specific SMP bits
 	mcreq	p15, 0, r0, c1, c0, 1
 #endif
-	b	__v7_setup
-
-__v7_pj4b_setup:
-#ifdef CONFIG_CPU_PJ4B
-
-/* Auxiliary Debug Modes Control 1 Register */
-#define PJ4B_STATIC_BP (1 << 2) /* Enable Static BP */
-#define PJ4B_INTER_PARITY (1 << 8) /* Disable Internal Parity Handling */
-#define PJ4B_BCK_OFF_STREX (1 << 5) /* Enable the back off of STREX instr */
-#define PJ4B_CLEAN_LINE (1 << 16) /* Disable data transfer for clean line */
-
-/* Auxiliary Debug Modes Control 2 Register */
-#define PJ4B_FAST_LDR (1 << 23) /* Disable fast LDR */
-#define PJ4B_SNOOP_DATA (1 << 25) /* Do not interleave write and snoop data */
-#define PJ4B_CWF (1 << 27) /* Disable Critical Word First feature */
-#define PJ4B_OUTSDNG_NC (1 << 29) /* Disable outstanding non cacheable rqst */
-#define PJ4B_L1_REP_RR (1 << 30) /* L1 replacement - Strict round robin */
-#define PJ4B_AUX_DBG_CTRL2 (PJ4B_SNOOP_DATA | PJ4B_CWF |\
-			    PJ4B_OUTSDNG_NC | PJ4B_L1_REP_RR)
-
-/* Auxiliary Functional Modes Control Register 0 */
-#define PJ4B_SMP_CFB (1 << 1) /* Set SMP mode. Join the coherency fabric */
-#define PJ4B_L1_PAR_CHK (1 << 2) /* Support L1 parity checking */
-#define PJ4B_BROADCAST_CACHE (1 << 8) /* Broadcast Cache and TLB maintenance */
-
-/* Auxiliary Debug Modes Control 0 Register */
-#define PJ4B_WFI_WFE (1 << 22) /* WFI/WFE - serve the DVM and back to idle */
-
-	/* Auxiliary Debug Modes Control 1 Register */
-	mrc	p15, 1,	r0, c15, c1, 1
-	orr     r0, r0, #PJ4B_CLEAN_LINE
-	orr     r0, r0, #PJ4B_BCK_OFF_STREX
-	orr     r0, r0, #PJ4B_INTER_PARITY
-	bic	r0, r0, #PJ4B_STATIC_BP
-	mcr	p15, 1,	r0, c15, c1, 1
-
-	/* Auxiliary Debug Modes Control 2 Register */
-	mrc	p15, 1,	r0, c15, c1, 2
-	bic	r0, r0, #PJ4B_FAST_LDR
-	orr	r0, r0, #PJ4B_AUX_DBG_CTRL2
-	mcr	p15, 1,	r0, c15, c1, 2
-
-	/* Auxiliary Functional Modes Control Register 0 */
-	mrc	p15, 1,	r0, c15, c2, 0
-#ifdef CONFIG_SMP
-	orr	r0, r0, #PJ4B_SMP_CFB
-#endif
-	orr	r0, r0, #PJ4B_L1_PAR_CHK
-	orr	r0, r0, #PJ4B_BROADCAST_CACHE
-	mcr	p15, 1,	r0, c15, c2, 0
-
-	/* Auxiliary Debug Modes Control 0 Register */
-	mrc	p15, 1,	r0, c15, c1, 0
-	orr	r0, r0, #PJ4B_WFI_WFE
-	mcr	p15, 1,	r0, c15, c1, 0
-
-#endif /* CONFIG_CPU_PJ4B */
-
 __v7_setup:
 	adr	r12, __v7_setup_stack		@ the local stack
 	stmia	r12, {r0-r5, r7, r9, r11, lr}
@@ -305,8 +215,7 @@ __v7_setup:
 	ldr	r10, =0x00000c08		@ Cortex-A8 primary part number
 	teq	r0, r10
 	bne	2f
-#if defined(CONFIG_ARM_ERRATA_430973) && !defined(CONFIG_ARCH_MULTIPLATFORM)
-
+#ifdef CONFIG_ARM_ERRATA_430973
 	teq	r5, #0x00100000			@ only present in r1p*
 	mrceq	p15, 0, r10, c1, c0, 1		@ read aux control register
 	orreq	r10, r10, #(1 << 6)		@ set IBE to 1
@@ -362,19 +271,7 @@ __v7_setup:
 1:
 #endif
 
-	/* Cortex-A15 Errata */
-3:	ldr	r10, =0x00000c0f		@ Cortex-A15 primary part number
-	teq	r0, r10
-	bne	4f
-
-#ifdef CONFIG_ARM_ERRATA_773022
-	cmp	r6, #0x4			@ only present up to r0p4
-	mrcle	p15, 0, r10, c1, c0, 1		@ read aux control register
-	orrle	r10, r10, #1 << 1		@ disable loop buffer
-	mcrle	p15, 0, r10, c1, c0, 1		@ write aux control register
-#endif
-
-4:	mov	r10, #0
+3:	mov	r10, #0
 	mcr	p15, 0, r10, c7, c5, 0		@ I+BTB cache invalidate
 #ifdef CONFIG_MMU
 	mcr	p15, 0, r10, c8, c7, 0		@ invalidate I + D TLBs
@@ -384,7 +281,32 @@ __v7_setup:
 	mcr	p15, 0, r5, c10, c2, 0		@ write PRRR
 	mcr	p15, 0, r6, c10, c2, 1		@ write NMRR
 #endif
+
+#if defined(CONFIG_ARCH_MSM_SCORPION) && !defined(CONFIG_MSM_SMP)
+	mov     r0, #0x33
+	mcr     p15, 3, r0, c15, c0, 3          @ set L2CR1
+#endif
+#if defined (CONFIG_ARCH_MSM_SCORPION)
+	mrc     p15, 0, r0, c1, c0, 1           @ read ACTLR
+#ifdef CONFIG_CPU_CACHE_ERR_REPORT
+	orr     r0, r0, #0x37                   @ turn on L1/L2 error reporting
+#else
+	bic     r0, r0, #0x37
+#endif
+#if defined (CONFIG_ARCH_MSM_SCORPIONMP)
+	orr    r0, r0, #0x1 << 24     @ optimal setting for Scorpion MP
+#endif
+#ifndef CONFIG_ARCH_MSM_KRAIT
+	mcr     p15, 0, r0, c1, c0, 1           @ write ACTLR
+#endif
+#endif
+#if defined (CONFIG_ARCH_MSM_SCORPIONMP)
+	mrc     p15, 3, r0, c15, c0, 2  @ optimal setting for Scorpion MP
+	orr         r0, r0, #0x1 << 21
+	mcr     p15, 3, r0, c15, c0, 2
+#endif
 	dsb					@ Complete invalidations
+
 #ifndef CONFIG_ARM_THUMBEE
 	mrc	p15, 0, r0, c0, c1, 0		@ read ID_PFR0 for ThumbEE
 	and	r0, r0, #(0xf << 12)		@ ThumbEE enabled field
@@ -421,9 +343,6 @@ __v7_setup_stack:
 
 	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
 	define_processor_functions v7, dabort=v7_early_abort, pabort=v7_pabort, suspend=1
-#ifdef CONFIG_CPU_PJ4B
-	define_processor_functions pj4b, dabort=v7_early_abort, pabort=v7_pabort, suspend=1
-#endif
 
 	.section ".rodata"
 
@@ -436,7 +355,7 @@ __v7_setup_stack:
 	/*
 	 * Standard v7 proc info content
 	 */
-.macro __v7_proc initfunc, mm_mmuflags = 0, io_mmuflags = 0, hwcaps = 0, proc_fns = v7_processor_functions
+.macro __v7_proc initfunc, mm_mmuflags = 0, io_mmuflags = 0, hwcaps = 0
 	ALT_SMP(.long	PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_SECT_AP_READ | \
 			PMD_SECT_AF | PMD_FLAGS_SMP | \mm_mmuflags)
 	ALT_UP(.long	PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_SECT_AP_READ | \
@@ -449,7 +368,7 @@ __v7_setup_stack:
 	.long	HWCAP_SWP | HWCAP_HALF | HWCAP_THUMB | HWCAP_FAST_MULT | \
 		HWCAP_EDSP | HWCAP_TLS | \hwcaps
 	.long	cpu_v7_name
-	.long	\proc_fns
+	.long	v7_processor_functions
 	.long	v7wbi_tlb_fns
 	.long	v6_user_fns
 	.long	v7_cache_fns
@@ -475,30 +394,7 @@ __v7_ca9mp_proc_info:
 	.long	0xff0ffff0
 	__v7_proc __v7_ca9mp_setup
 	.size	__v7_ca9mp_proc_info, . - __v7_ca9mp_proc_info
-
 #endif	/* CONFIG_ARM_LPAE */
-
-	/*
-	 * Marvell PJ4B processor.
-	 */
-#ifdef CONFIG_CPU_PJ4B
-	.type   __v7_pj4b_proc_info, #object
-__v7_pj4b_proc_info:
-	.long	0x560f5800
-	.long	0xff0fff00
-	__v7_proc __v7_pj4b_setup, proc_fns = pj4b_processor_functions
-	.size	__v7_pj4b_proc_info, . - __v7_pj4b_proc_info
-#endif
-
-	/*
-	 * ARM Ltd. Cortex R7 processor.
-	 */
-	.type	__v7_cr7mp_proc_info, #object
-__v7_cr7mp_proc_info:
-	.long	0x410fc170
-	.long	0xff0ffff0
-	__v7_proc __v7_cr7mp_setup
-	.size	__v7_cr7mp_proc_info, . - __v7_cr7mp_proc_info
 
 	/*
 	 * ARM Ltd. Cortex A7 processor.
@@ -511,16 +407,6 @@ __v7_ca7mp_proc_info:
 	.size	__v7_ca7mp_proc_info, . - __v7_ca7mp_proc_info
 
 	/*
-	 * ARM Ltd. Cortex A12 processor.
-	 */
-	.type	__v7_ca12mp_proc_info, #object
-__v7_ca12mp_proc_info:
-	.long	0x410fc0d0
-	.long	0xff0ffff0
-	__v7_proc __v7_ca12mp_setup
-	.size	__v7_ca12mp_proc_info, . - __v7_ca12mp_proc_info
-
-	/*
 	 * ARM Ltd. Cortex A15 processor.
 	 */
 	.type	__v7_ca15mp_proc_info, #object
@@ -529,16 +415,6 @@ __v7_ca15mp_proc_info:
 	.long	0xff0ffff0
 	__v7_proc __v7_ca15mp_setup
 	.size	__v7_ca15mp_proc_info, . - __v7_ca15mp_proc_info
-
-	/*
-	 * ARM Ltd. Cortex A17 processor.
-	 */
-	.type	__v7_ca17mp_proc_info, #object
-__v7_ca17mp_proc_info:
-	.long	0x410fc0e0
-	.long	0xff0ffff0
-	__v7_proc __v7_ca17mp_setup
-	.size	__v7_ca17mp_proc_info, . - __v7_ca17mp_proc_info
 
 	/*
 	 * Qualcomm Inc. Krait processors.
