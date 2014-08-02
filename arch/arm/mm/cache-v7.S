@@ -13,7 +13,6 @@
 #include <linux/linkage.h>
 #include <linux/init.h>
 #include <asm/assembler.h>
-#include <asm/errno.h>
 #include <asm/unwind.h>
 
 #include "proc-macros.S"
@@ -289,6 +288,7 @@ ENTRY(v7_coherent_user_range)
 	add	r12, r12, r2
 	cmp	r12, r1
 	blo	2b
+3:
 	mov	r0, #0
 	ALT_SMP(mcr	p15, 0, r0, c7, c1, 6)	@ invalidate BTB Inner Shareable
 	ALT_UP(mcr	p15, 0, r0, c7, c5, 6)	@ invalidate BTB
@@ -298,14 +298,16 @@ ENTRY(v7_coherent_user_range)
 
 /*
  * Fault handling for the cache operation above. If the virtual address in r0
- * isn't mapped, fail with -EFAULT.
+ * isn't mapped, just try the next page.
  */
 9001:
 #ifdef CONFIG_ARM_ERRATA_775420
 	dsb
 #endif
-	mov	r0, #-EFAULT
-	mov	pc, lr
+	mov	r12, r12, lsr #12
+	mov	r12, r12, lsl #12
+	add	r12, r12, #4096
+	b	3b
  UNWIND(.fnend		)
 ENDPROC(v7_coherent_kern_range)
 ENDPROC(v7_coherent_user_range)
