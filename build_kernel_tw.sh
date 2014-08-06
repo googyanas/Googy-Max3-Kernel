@@ -3,9 +3,9 @@ export KERNELDIR=`readlink -f .`
 export RAMFS_SOURCE="/home/googy/Anas/Googy-Max3-Kernel/Kernel/ramfs_tw"
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
-export CROSS_COMPILE=/usr/bin/arm-linux-gnueabihf-
+# export CROSS_COMPILE=/usr/bin/arm-linux-gnueabihf-
 # export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.7.4-2014.04/bin/arm-gnueabi-
-# export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.1-2014.07/bin/arm-cortex_a15-linux-gnueabihf-
+export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.1-2014.07/bin/arm-cortex_a15-linux-gnueabihf-
 
 # if [ "${1}" != "" ];then
 #  export KERNELDIR=`readlink -f ${1}`
@@ -24,7 +24,7 @@ find -name '*.ko' -exec rm -rf {} \;
 # fi
 
 # 
-make -j2 0googymax3_TW_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
+make -j4 0googymax3_TW_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
 
 . $KERNELDIR/.config
 
@@ -32,7 +32,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j2 || exit 1
+make -j4 || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
@@ -66,6 +66,6 @@ cd -
 cd /home/googy/Anas/Googy-Max3-Kernel
 mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM/boot.img
 cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM
-zip -v -r ../GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip .
+zip -v -r ../GoogyMax3_TW-Kernel_${1}_CWM.zip .
 
-adb push /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard1/GT-I9505_GoogyMax3_TW-Kernel_${1}_CWM.zip
+adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_TW-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_TW-Kernel_${1}_CWM.zip
