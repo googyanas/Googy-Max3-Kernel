@@ -452,7 +452,7 @@ int unthrottle_rt_rq(struct rq *rq)
 	if (rq->rt.rt_throttled 
 		&& current->sched_class == &stop_sched_class) {
 		rq->rt.rt_throttled = 0;
-		printk_sched("sched: RT unthrottled for migration\n");
+		printk_deferred("sched: RT unthrottled for migration\n");
 		return 1;
 	}
 
@@ -899,7 +899,7 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
 
 			if (!once) {
 				once = true;
-				printk_sched("sched: RT throttling activated\n");
+				printk_deferred("sched: RT throttling activated\n");
 			}
 		} else {
 			/*
