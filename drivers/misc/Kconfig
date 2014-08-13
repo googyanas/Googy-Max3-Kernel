@@ -765,6 +765,12 @@ config TIMA_TEST
 	help
 	  This option enables kernel component of tima test suite
 
+config GAMMA_CONTROL
+	bool "Gamma Control for OLED"
+	depends on FB_MSM_MIPI_DSI_SAMSUNG_OCTA
+	default y
+	help
+	  This adds full support for shifting RGB panel colors.
 	  
 source "drivers/misc/c2port/Kconfig"
 source "drivers/misc/eeprom/Kconfig"
