@@ -24,7 +24,7 @@ find -name '*.ko' -exec rm -rf {} \;
 # fi
 
 # 
-make -j4 0googymax3_TW_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
+make -j3 0googymax3_TW_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
 
 . $KERNELDIR/.config
 
@@ -32,7 +32,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j4 || exit 1
+make -j3 || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
