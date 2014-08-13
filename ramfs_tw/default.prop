@@ -1,6 +1,7 @@
 #
 # ADDITIONAL_DEFAULT_PROPERTIES
 #
+persist.security.ams.enforcing=0
 ro.secure=0
 ro.allow.mock.location=0
 ro.debuggable=1

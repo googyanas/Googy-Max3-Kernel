@@ -30,6 +30,7 @@ on early-init
     mkdir /mnt 0775 root system
 
 on init
+    ffu
     setenforce 0
     setprop ro.boot.selinux 0
     sysclktz 0
@@ -272,6 +273,9 @@ on post-fs-data
     mkdir /data/property 0700 root root
     mkdir /data/ssh 0750 root shell
     mkdir /data/ssh/empty 0700 root root
+    mkdir /data/system 0775 system system
+    mkdir /data/system/container 0700 system system
+    restorecon -R /data/system
 
     # SA, System SW, SAMSUNG create log directory
     mkdir /data/log 0775 system log
@@ -359,6 +363,7 @@ on post-fs-data
     mkdir /data/security/booleans 0711 system system
     mkdir /data/security/good 0700 system system
     mkdir /data/security/stig 0700 system system
+    mkdir /data/security/mycontainer 0700 system system
 
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems
@@ -387,6 +392,9 @@ on boot
 # Vibetonz
     chmod 0660 /dev/tspdrv
     chown vibe vibe /dev/tspdrv
+
+# Mobicore
+    mkdir /data/app/mcRegistry 0775 system system
 
 # basic network init
     ifup lo
@@ -479,7 +487,7 @@ on boot
     chown system system /sys/class/mdnie/mdnie/tuning
     chown system media_rw /sys/class/mdnie/mdnie/outdoor
     chown system system  /sys/class/mdnie/mdnie/mdnie_temp
-    chown system system /sys/class/mdnie/mdnie/mode
+    chown system media_rw /sys/class/mdnie/mdnie/mode
     chown system system /sys/class/mdnie/mdnie/negative
     chown system media_rw /sys/class/mdnie/mdnie/playspeed
     chown system system /sys/class/lcd/panel/window_type
@@ -548,6 +556,8 @@ on boot
 	chown system radio /sys/class/power_supply/battery/wifi
 	chown system radio /sys/class/power_supply/battery/lte
 	chown system radio /sys/class/power_supply/battery/wc_enable
+	chown system radio /sys/class/power_supply/ps/status
+	chmod 0664 /sys/class/power_supply/ps/status
 
 # Set these so we can remotely update SELinux policy
     chown system system /sys/fs/selinux/load
@@ -765,6 +775,10 @@ service healthd-charger /sbin/healthd -n
     critical
     seclabel u:r:healthd:s0
 
+# Reload SE Android Policy for MDM
+#on property:persist.security.mdm.policy=1
+#    setprop selinux.reload_policy 1
+
 on property:selinux.reload_policy=1
     chown system system /sys/fs/selinux/enforce
     chown -R system system /sys/fs/selinux/booleans
@@ -823,6 +837,7 @@ service vold /system/bin/vold
     socket vold stream 0660 root mount
     ioprio be 2
     socket dir_enc_report stream 0660 root mount
+    socket epm stream 0660 system system
 
 service netd /system/bin/netd
     class main
