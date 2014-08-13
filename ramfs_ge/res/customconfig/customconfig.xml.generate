@@ -129,6 +129,15 @@ cat << ENDCONFIG
 		name="GPU Voltage Level3. (Default: 1150000)" action="gpu-voltage 3" unit="µV" min="1050000" reversed="false" step="25000" max="1200000"/>
     </settingsPane>
 
+    <settingsPane description="RGB colors Control. Please turn the SCREEN OFF and ON for the settings to be applied !" name="RGB colors Control">
+      <seekBar description="Red tint control" 
+		name="Red tint. (Default: 60)" action="gamma_control r" unit="" min="0" reversed="false" step="2" max="120"/>
+      <seekBar description="Green tint control" 
+		name="Green tint. (Default: 60)" action="gamma_control g" unit="" min="0" reversed="false" step="2" max="120"/>
+      <seekBar description="Blue tint control" 
+		name="Blue tint. (Default: 60)" action="gamma_control b" unit="" min="0" reversed="false" step="2" max="120"/>
+    </settingsPane>
+
   </settingsTab>
         
   <settingsTab name="LED">

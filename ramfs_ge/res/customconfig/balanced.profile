@@ -55,3 +55,6 @@ CPUVOLT1=1212500
 hotplug=0
 pwm_value=50
 tweaks=off
+gamma_r=60
+gamma_g=60
+gamma_b=60
