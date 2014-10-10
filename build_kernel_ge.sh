@@ -32,7 +32,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j5 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
+make -j3 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
