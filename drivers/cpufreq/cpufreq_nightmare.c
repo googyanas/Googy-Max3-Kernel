@@ -36,7 +36,7 @@
 #ifdef CONFIG_HAS_EARLYSUSPEND
 #include <linux/earlysuspend.h>
 #endif
-#define EARLYSUSPEND_HOTPLUGLOCK 1
+#define EARLYSUSPEND_HOTPLUGLOCK 0
 
 /*
  * runqueue average
@@ -1541,9 +1541,6 @@ static int cpufreq_governor_nightmare(struct cpufreq_policy *policy,
 		mutex_init(&this_dbs_info->timer_mutex);
 		dbs_timer_init(this_dbs_info);
 
-#if !EARLYSUSPEND_HOTPLUGLOCK
-		register_pm_notifier(&pm_notifier);
-#endif
 #ifdef CONFIG_HAS_EARLYSUSPEND
 		register_early_suspend(&early_suspend);
 #endif
@@ -1552,9 +1549,6 @@ static int cpufreq_governor_nightmare(struct cpufreq_policy *policy,
 	case CPUFREQ_GOV_STOP:
 #ifdef CONFIG_HAS_EARLYSUSPEND
 		unregister_early_suspend(&early_suspend);
-#endif
-#if !EARLYSUSPEND_HOTPLUGLOCK
-		unregister_pm_notifier(&pm_notifier);
 #endif
 
 		dbs_timer_exit(this_dbs_info);
