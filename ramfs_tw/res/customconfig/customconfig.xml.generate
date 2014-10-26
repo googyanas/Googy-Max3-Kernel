@@ -38,41 +38,41 @@ cat << ENDCONFIG
       <spinner description="Set the maximum freqency the CPU scales up to. Default: 1890 MHz." 
                name="CPU max frequency" 
                action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq">"
-             <spinnerItem name="1890000" value="1890000"/> 
-             <spinnerItem name="1782000" value="1782000"/> 
-             <spinnerItem name="1674000" value="1674000"/> 
-             <spinnerItem name="1566000" value="1566000"/> 
-             <spinnerItem name="1458000" value="1458000"/> 
-             <spinnerItem name="1350000" value="1350000"/> 
-             <spinnerItem name="1242000" value="1242000"/> 
-             <spinnerItem name="1134000" value="1134000"/> 
-             <spinnerItem name="1026000" value="1026000"/> 
-             <spinnerItem name="918000" value="918000"/> 
-             <spinnerItem name="810000" value="810000"/> 
-             <spinnerItem name="702000" value="702000"/> 
-             <spinnerItem name="594000" value="594000"/> 
-             <spinnerItem name="486000" value="486000"/> 
-             <spinnerItem name="384000" value="384000"/> 
+             <spinnerItem name="1890 MHz" value="1890000"/> 
+             <spinnerItem name="1782 MHz" value="1782000"/> 
+             <spinnerItem name="1674 MHz" value="1674000"/> 
+             <spinnerItem name="1566 MHz" value="1566000"/> 
+             <spinnerItem name="1458 MHz" value="1458000"/> 
+             <spinnerItem name="1350 MHz" value="1350000"/> 
+             <spinnerItem name="1242 MHz" value="1242000"/> 
+             <spinnerItem name="1134 MHz" value="1134000"/> 
+             <spinnerItem name="1026 MHz" value="1026000"/> 
+             <spinnerItem name="918 MHz" value="918000"/> 
+             <spinnerItem name="810 MHz" value="810000"/> 
+             <spinnerItem name="702 MHz" value="702000"/> 
+             <spinnerItem name="594 MHz" value="594000"/> 
+             <spinnerItem name="486 MHz" value="486000"/> 
+             <spinnerItem name="384 MHz" value="384000"/> 
        </spinner>
        
       <spinner description="Set the minimum freqency the CPU scales down to. Default: 384 MHz." 
                name="CPU min frequency" 
                action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq">"
-             <spinnerItem name="384000" value="384000"/> 
-             <spinnerItem name="486000" value="486000"/> 
-             <spinnerItem name="594000" value="594000"/> 
-             <spinnerItem name="702000" value="702000"/> 
-             <spinnerItem name="810000" value="810000"/> 
-             <spinnerItem name="918000" value="918000"/> 
-             <spinnerItem name="1026000" value="1026000"/> 
-             <spinnerItem name="1134000" value="1134000"/> 
-             <spinnerItem name="1242000" value="1242000"/> 
-             <spinnerItem name="1350000" value="1350000"/> 
-             <spinnerItem name="1458000" value="1458000"/> 
-             <spinnerItem name="1566000" value="1566000"/> 
-             <spinnerItem name="1674000" value="1674000"/> 
-             <spinnerItem name="1782000" value="1782000"/> 
-             <spinnerItem name="1890000" value="1890000"/> 
+             <spinnerItem name="384 MHz" value="384000"/> 
+             <spinnerItem name="486 MHz" value="486000"/> 
+             <spinnerItem name="594 MHz" value="594000"/> 
+             <spinnerItem name="702 MHz" value="702000"/> 
+             <spinnerItem name="810 MHz" value="810000"/> 
+             <spinnerItem name="918 MHz" value="918000"/> 
+             <spinnerItem name="1026 MHz" value="1026000"/> 
+             <spinnerItem name="1134 MHz" value="1134000"/> 
+             <spinnerItem name="1242 MHz" value="1242000"/> 
+             <spinnerItem name="1350 MHz" value="1350000"/> 
+             <spinnerItem name="1458 MHz" value="1458000"/> 
+             <spinnerItem name="1566 MHz" value="1566000"/> 
+             <spinnerItem name="1674 MHz" value="1674000"/> 
+             <spinnerItem name="1782 MHz" value="1782000"/> 
+             <spinnerItem name="1890 MHz" value="1890000"/> 
        </spinner>
        
     </settingsPane>
@@ -98,6 +98,111 @@ cat << ENDCONFIG
 	</settingsPane>
 
   </settingsTab>
+ 
+  <settingsTab name="THERMAL">
+
+    <settingsPane name="Thermal Control"
+	      description="Thermal Control. CAUTION: Setting wrong values here can damage your phone in case of severe overheat. USE AT YOUR OWN RISK !!!">		  
+      
+    <settingsPane description="Poll interval" name="Poll interval">
+      <seekBar description="Poll interval (ms)" 
+		name="Poll interval. Default: 150ms" action="generic /sys/kernel/msm_thermal/conf/poll_ms" unit="ms" min="50" reversed="false" step="50" max="1000"/>
+    </settingsPane>
+       
+    <settingsPane name="Low level lock"
+	      description="Low level lock">		  
+	      
+      <spinner description="Set the CPU max frequency lock. Default: 1350 MHz" 
+               name="CPU max frequency lock" 
+               action="generic /sys/kernel/msm_thermal/conf/allowed_low_freq">"
+             <spinnerItem name="1890 MHz" value="1890000"/> 
+             <spinnerItem name="1782 MHz" value="1782000"/> 
+             <spinnerItem name="1674 MHz" value="1674000"/> 
+             <spinnerItem name="1566 MHz" value="1566000"/> 
+             <spinnerItem name="1458 MHz" value="1458000"/> 
+             <spinnerItem name="1350 MHz" value="1350000"/> 
+             <spinnerItem name="1242 MHz" value="1242000"/> 
+             <spinnerItem name="1134 MHz" value="1134000"/> 
+             <spinnerItem name="1026 MHz" value="1026000"/> 
+             <spinnerItem name="918 MHz" value="918000"/> 
+             <spinnerItem name="810 MHz" value="810000"/> 
+             <spinnerItem name="702 MHz" value="702000"/> 
+             <spinnerItem name="594 MHz" value="594000"/> 
+             <spinnerItem name="486 MHz" value="486000"/> 
+             <spinnerItem name="384 MHz" value="384000"/> 
+       </spinner>
+
+      <seekBar description="Low Level Lock Trigger (°C)" 
+		name="Low Level Lock Trigger (79°C)" action="generic /sys/kernel/msm_thermal/conf/allowed_low_high" unit="°C" min="60" reversed="false" step="1" max="90"/>
+      <seekBar description="Low Level Lock Release (°C)" 
+		name="Low Level Lock Release (73°C)" action="generic /sys/kernel/msm_thermal/conf/allowed_low_low" unit="°C" min="60" reversed="false" step="1" max="90"/>
+       
+    </settingsPane>
+    
+    <settingsPane name="Mid level lock"
+	      description="Mid level lock">		  
+	      
+      <spinner description="Set the CPU max frequency lock. Default: 810 MHz" 
+               name="CPU max frequency lock" 
+               action="generic /sys/kernel/msm_thermal/conf/allowed_mid_freq">"
+             <spinnerItem name="1890 MHz" value="1890000"/> 
+             <spinnerItem name="1782 MHz" value="1782000"/> 
+             <spinnerItem name="1674 MHz" value="1674000"/> 
+             <spinnerItem name="1566 MHz" value="1566000"/> 
+             <spinnerItem name="1458 MHz" value="1458000"/> 
+             <spinnerItem name="1350 MHz" value="1350000"/> 
+             <spinnerItem name="1242 MHz" value="1242000"/> 
+             <spinnerItem name="1134 MHz" value="1134000"/> 
+             <spinnerItem name="1026 MHz" value="1026000"/> 
+             <spinnerItem name="918 MHz" value="918000"/> 
+             <spinnerItem name="810 MHz" value="810000"/> 
+             <spinnerItem name="702 MHz" value="702000"/> 
+             <spinnerItem name="594 MHz" value="594000"/> 
+             <spinnerItem name="486 MHz" value="486000"/> 
+             <spinnerItem name="384 MHz" value="384000"/> 
+       </spinner>
+
+      <seekBar description="Mid Level Lock Trigger (°C)" 
+		name="Mid Level Lock Trigger (81°C)" action="generic /sys/kernel/msm_thermal/conf/allowed_mid_high" unit="°C" min="60" reversed="false" step="1" max="90"/>
+      <seekBar description="Mid Level Lock Release (°C)" 
+		name="Mid Level Lock Release (76°C)" action="generic /sys/kernel/msm_thermal/conf/allowed_mid_low" unit="°C" min="60" reversed="false" step="1" max="90"/>
+       
+    </settingsPane>
+    
+    <settingsPane name="High level lock"
+	      description="High level lock">		  
+	      
+      <spinner description="Set the CPU max frequency lock. Default: 384 MHz" 
+               name="CPU max frequency lock" 
+               action="generic /sys/kernel/msm_thermal/conf/allowed_max_freq">"
+             <spinnerItem name="1890 MHz" value="1890000"/> 
+             <spinnerItem name="1782 MHz" value="1782000"/> 
+             <spinnerItem name="1674 MHz" value="1674000"/> 
+             <spinnerItem name="1566 MHz" value="1566000"/> 
+             <spinnerItem name="1458 MHz" value="1458000"/> 
+             <spinnerItem name="1350 MHz" value="1350000"/> 
+             <spinnerItem name="1242 MHz" value="1242000"/> 
+             <spinnerItem name="1134 MHz" value="1134000"/> 
+             <spinnerItem name="1026 MHz" value="1026000"/> 
+             <spinnerItem name="918 MHz" value="918000"/> 
+             <spinnerItem name="810 MHz" value="810000"/> 
+             <spinnerItem name="702 MHz" value="702000"/> 
+             <spinnerItem name="594 MHz" value="594000"/> 
+             <spinnerItem name="486 MHz" value="486000"/> 
+             <spinnerItem name="384 MHz" value="384000"/> 
+       </spinner>
+
+      <seekBar description="High Level Lock Trigger (°C)" 
+		name="High Level Lock Trigger (84°C)" action="generic /sys/kernel/msm_thermal/conf/allowed_max_high" unit="°C" min="60" reversed="false" step="1" max="90"/>
+      <seekBar description="High Level Lock Release (°C)" 
+		name="High Level Lock Release (80°C)" action="generic /sys/kernel/msm_thermal/conf/allowed_max_low" unit="°C" min="60" reversed="false" step="1" max="90"/>
+       
+    </settingsPane>
+    
+    </settingsPane>
+    
+  </settingsTab>
+        
 
   <settingsTab name="GPU">
 
@@ -109,7 +214,7 @@ cat << ENDCONFIG
              <spinnerItem name="Simple" value="simple"/> 
        </spinner>
        
-      <spinner description="Set the maximum freqency the GPU scales up to. Default: 450 MHz." 
+      <spinner description="Set the maximum frequency the GPU scales up to. Default: 450 MHz." 
                name="GPU max frequency" 
                action="generic /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk">"
              <spinnerItem name="450 MHz" value="450000000"/> 
@@ -326,6 +431,8 @@ cat << ENDCONFIG
                 action="generic01 /sys/kernel/logger_mode/logger_mode" 
                 label="Enable Android logger"/>
     
+      <checkbox description="Sched Autogroup" name="Enable/Disable Sched Autogroup" action="generic01 /proc/sys/kernel/sched_autogroup_enabled" label="Sched Autogroup"/>      
+      
       <spinner description="TCP congestion control method. Default: cubic" name="TCP congestion control method" action="generic /proc/sys/net/ipv4/tcp_congestion_control">
              <spinnerItem name="cubic" value="cubic"/>
              <spinnerItem name="westwood" value="westwood"/>

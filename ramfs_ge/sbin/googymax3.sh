@@ -179,19 +179,28 @@ export CONFIG_BOOTING=
 
 OPEN_RW;
 
-# (
-	# Start any init.d scripts that may be present in the rom or added by the user
-#	if [ "$init_d" == "on" ]; then
-		$BB chmod 755 /system/etc/init.d/*;
-		$BB run-parts /system/etc/init.d/;
-#	fi;
+if [ -d /system/etc/init.d ]; then
+  /sbin/busybox chmod 755 /system/etc/init.d/*
+  /sbin/busybox run-parts /system/etc/init.d
+fi
 
-	# ROOT activation if supersu used
-	if [ -e /system/app/SuperSU.apk ] && [ -e /system/xbin/daemonsu ]; then
-		if [ "$(pgrep -f "/system/xbin/daemonsu" | wc -l)" -eq "0" ]; then
-			/system/xbin/daemonsu --auto-daemon &
-		fi;
+# ROOT activation if supersu used
+if [ -e /system/app/SuperSU.apk ] && [ -e /system/xbin/daemonsu ]; then
+	if [ "$(pgrep -f "/system/xbin/daemonsu" | wc -l)" -eq "0" ]; then
+		/system/xbin/daemonsu --auto-daemon &
 	fi;
+fi;
+
+if [ -f /system/app/STweaks.apk ] || [ -f /data/app/STweaks.apk ] ; then
+	$BB rm -f /system/app/STweaks.apk > /dev/null 2>&1;
+	$BB rm -f /data/app/STweaks.apk > /dev/null 2>&1;
+	$BB rm -f /system/app/STweaks_Googy-Max.apk > /dev/null 2>&1;
+	$BB rm -f /data/app/com.gokhanmoral.stweaks* > /dev/null 2>&1;
+	$BB rm -f /data/data/com.gokhanmoral.stweaks*/* > /dev/null 2>&1;
+	$BB cp /res/STweaks_Googy-Max.apk /system/app/;
+	$BB chown root.root /system/app/STweaks_Googy-Max.apk;
+	$BB chmod 644 /system/app/STweaks_Googy-Max.apk;
+fi;
 
 if [ ! -f /system/app/STweaks_Googy-Max.apk ] ; then
 	$BB rm -f /system/app/STweaks.apk > /dev/null 2>&1;
