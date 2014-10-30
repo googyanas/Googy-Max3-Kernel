@@ -74,7 +74,10 @@ extern void platform_smp_prepare_cpus(unsigned int);
  * Initial data for bringing up a secondary CPU.
  */
 struct secondary_data {
-	unsigned long pgdir;
+	union {
+		unsigned long mpu_rgn_szr;
+		unsigned long pgdir;
+	};
 	unsigned long swapper_pg_dir;
 	void *stack;
 };
