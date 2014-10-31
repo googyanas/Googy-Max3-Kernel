@@ -123,4 +123,6 @@ static inline void prefetch(const void *ptr)
 
 #endif
 
+#include <asm-generic/processor.h>
+
 #endif /* __ASM_ARM_PROCESSOR_H */
