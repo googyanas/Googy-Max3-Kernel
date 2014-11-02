@@ -2,6 +2,10 @@
 
 BB=/sbin/busybox
 
+rm /dev/random
+mknod -m 666 /dev/random c 1 9
+chown root:root /dev/random
+
 # protect init from oom
 echo "-1000" > /proc/1/oom_score_adj;
 

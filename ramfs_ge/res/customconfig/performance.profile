@@ -58,6 +58,7 @@ tweaks=off
 gamma_r=60
 gamma_g=60
 gamma_b=60
+poll_ms=150
 allowed_low_freq=1350000
 allowed_low_high=79
 allowed_low_low=73
