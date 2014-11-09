@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
  
 cat << ENDCONFIG
-<settingsRoot>
+<settingsRoot> 
 
   <settingsTab name="CPU">
 
@@ -79,21 +79,23 @@ cat << ENDCONFIG
     
 	<settingsPane description="CPU Voltage Control. FOR ADVANCED USERS ONLY! USE IT AT YOUR OWN RISK!!!" name="CPU Voltage Control">
 
-		<seekBar description="Voltage for 1890 MHz. (Default: 1212500)" name="Voltage 1890 MHz" action="cpu-voltage 1" unit="µV" min="1062500" reversed="false" step="12500" max="1312500"/>
-		<seekBar description="Voltage for 1782 MHz. (Default: 1162500)" name="Voltage 1782 MHz" action="cpu-voltage 2" unit="µV" min="1012500" reversed="false" step="12500" max="1262500"/>
-		<seekBar description="Voltage for 1674 MHz. (Default: 1112500)" name="Voltage 1674 MHz" action="cpu-voltage 3" unit="µV" min="962500" reversed="false" step="12500" max="1212500"/>
-		<seekBar description="Voltage for 1566 MHz. (Default: 1075000)" name="Voltage 1566 MHz" action="cpu-voltage 4" unit="µV" min="925000" reversed="false" step="12500" max="1175000"/>
-		<seekBar description="Voltage for 1458 MHz. (Default: 1050000)" name="Voltage 1458 MHz" action="cpu-voltage 5" unit="µV" min="900000" reversed="false" step="12500" max="1150000"/>
-		<seekBar description="Voltage for 1350 MHz. (Default: 1012500)" name="Voltage 1350 MHz" action="cpu-voltage 6" unit="µV" min="862500" reversed="false" step="12500" max="1112500"/>
-		<seekBar description="Voltage for 1242 MHz. (Default: 987500)" name="Voltage 1242 MHz" action="cpu-voltage 7" unit="µV" min="837500" reversed="false" step="12500" max="1087500"/>
-		<seekBar description="Voltage for 1134 MHz. (Default: 975000)" name="Voltage 1134 MHz" action="cpu-voltage 8" unit="µV" min="825000" reversed="false" step="12500" max="1075000"/>
-		<seekBar description="Voltage for 1026 MHz. (Default: 950000)" name="Voltage 1026 MHz" action="cpu-voltage 9" unit="µV" min="800000" reversed="false" step="12500" max="1050000"/>
-		<seekBar description="Voltage for 918 MHz. (Default: 925000)" name="Voltage 918 MHz" action="cpu-voltage 10" unit="µV" min="775000" reversed="false" step="12500" max="1025000"/>
-		<seekBar description="Voltage for 810 MHz. (Default: 912500)" name="Voltage 810 MHz" action="cpu-voltage 11" unit="µV" min="762500" reversed="false" step="12500" max="1012500"/>
-		<seekBar description="Voltage for 702 MHz. (Default: 900000)" name="Voltage 702 MHz" action="cpu-voltage 12" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
-		<seekBar description="Voltage for 594 MHz. (Default: 900000)" name="Voltage 594 MHz" action="cpu-voltage 13" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
-		<seekBar description="Voltage for 486 MHz. (Default: 900000)" name="Voltage 486 MHz" action="cpu-voltage 14" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
-		<seekBar description="Voltage for 384 MHz. (Default: 900000)" name="Voltage 384 MHz" action="cpu-voltage 15" unit="µV" min="750000" reversed="false" step="12500" max="1000000"/>
+      <checkbox description="Enable/Disable CPU Voltage Control." name="CPU Voltage Control Switch" action="generic01 /tmp/CONTROLSWITCH_CPU" label="CPU Voltage Control Switch"/>
+      
+		<seekBar description="Voltage delta for 1890 MHz." name="Voltage delta 1890 MHz" action="cpu-voltage 1" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1782 MHz." name="Voltage delta 1782 MHz" action="cpu-voltage 2" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1674 MHz." name="Voltage delta 1674 MHz" action="cpu-voltage 3" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1566 MHz." name="Voltage delta 1566 MHz" action="cpu-voltage 4" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1458 MHz." name="Voltage delta 1458 MHz" action="cpu-voltage 5" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1350 MHz." name="Voltage delta 1350 MHz" action="cpu-voltage 6" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1242 MHz." name="Voltage delta 1242 MHz" action="cpu-voltage 7" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1134 MHz." name="Voltage delta 1134 MHz" action="cpu-voltage 8" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 1026 MHz." name="Voltage delta 1026 MHz" action="cpu-voltage 9" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 918 MHz." name="Voltage delta 918 MHz" action="cpu-voltage 10" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 810 MHz." name="Voltage delta 810 MHz" action="cpu-voltage 11" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 702 MHz." name="Voltage delta 702 MHz" action="cpu-voltage 12" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 594 MHz." name="Voltage delta 594 MHz" action="cpu-voltage 13" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 486 MHz." name="Voltage delta 486 MHz" action="cpu-voltage 14" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Voltage delta for 384 MHz." name="Voltage delta 384 MHz" action="cpu-voltage 15" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
 
 	</settingsPane>
 
@@ -226,12 +228,15 @@ cat << ENDCONFIG
     </settingsPane>
     
     <settingsPane description="GPU Voltage Control. FOR ADVANCED USERS ONLY! USE IT AT YOUR OWN RISK!!!" name="GPU Voltage Control">
-      <seekBar description="GPU Voltage for the first (lowest) step" 
-		name="GPU Voltage Level1. (Default: 945000)" action="gpu-voltage 1" unit="µV" min="845000" reversed="false" step="25000" max="1050000"/>
-      <seekBar description="GPU Voltage for the second (mid) step" 
-		name="GPU Voltage Level2. (Default: 1050000)" action="gpu-voltage 2" unit="µV" min="950000" reversed="false" step="25000" max="1200000"/>
-      <seekBar description="GPU Voltage for the third (highest) step" 
-		name="GPU Voltage Level3. (Default: 1150000)" action="gpu-voltage 3" unit="µV" min="1050000" reversed="false" step="25000" max="1200000"/>
+    
+      <checkbox description="Enable/Disable GPU Voltage Control." name="GPU Voltage Control Switch" action="generic01 /tmp/CONTROLSWITCH_GPU" label="GPU Voltage Control Switch"/>
+
+      <seekBar description="GPU Voltage delta for the first (lowest) step" 
+		name="GPU Voltage delta Level1." action="gpu-voltage 1" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+      <seekBar description="GPU Voltage delta for the second (mid) step" 
+		name="GPU Voltage delta Level2." action="gpu-voltage 2" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+      <seekBar description="GPU Voltage delta for the third (highest) step" 
+		name="GPU Voltage delta Level3." action="gpu-voltage 3" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
     </settingsPane>
 
     <settingsPane description="RGB colors Control. Please turn the SCREEN OFF and ON for the settings to be applied !" name="RGB colors Control">
@@ -423,7 +428,7 @@ cat << ENDCONFIG
 
    <settingsPane name="Misc. Settings" 
                   description="Misc. Settings">
-      
+    
       <checkbox description="It is recommended to disable Android Logger if you do not need it. Default: On" 
                 name="Enable/Disable Android Logger" 
                 action="generic01 /sys/kernel/logger_mode/logger_mode" 

@@ -9,19 +9,75 @@ else
 	evalcmd='eval "echo \$CPUVOLT$2"'
 	eval $evalcmd
 
-		echo "384000 $CPUVOLT15" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "486000 $CPUVOLT14" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "594000 $CPUVOLT13" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "702000 $CPUVOLT12" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "810000 $CPUVOLT11" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "918000 $CPUVOLT10" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1026000 $CPUVOLT9" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1134000 $CPUVOLT8" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1242000 $CPUVOLT7" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1350000 $CPUVOLT6" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1458000 $CPUVOLT5" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1566000 $CPUVOLT4" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1674000 $CPUVOLT3" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1782000 $CPUVOLT2" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
-		echo "1890000 $CPUVOLT1" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+# Voltage Control Switch
+if [ "$CONTROLSWITCH_CPU" == "on" ];then
+
+	newvolt15=$(( $(grep 384000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT15) ))
+	newvolt14=$(( $(grep 486000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT14) ))
+	newvolt13=$(( $(grep 594000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT13) ))
+	newvolt12=$(( $(grep 702000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT12) ))
+	newvolt11=$(( $(grep 810000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT11) ))
+	newvolt10=$(( $(grep 918000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT10) ))
+	newvolt9=$(( $(grep 1026000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT9) ))
+	newvolt8=$(( $(grep 1134000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT8) ))
+	newvolt7=$(( $(grep 1242000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT7) ))
+	newvolt6=$(( $(grep 1350000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT6) ))
+	newvolt5=$(( $(grep 1458000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT5) ))
+	newvolt4=$(( $(grep 1566000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT4) ))
+	newvolt3=$(( $(grep 1674000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT3) ))
+	newvolt2=$(( $(grep 1782000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT2) ))
+	newvolt1=$(( $(grep 1890000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT1) ))
+
+	echo "384000 $newvolt15" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "486000 $newvolt14" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "594000 $newvolt13" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "702000 $newvolt12" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "810000 $newvolt11" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "918000 $newvolt10" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1026000 $newvolt9" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1134000 $newvolt8" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1242000 $newvolt7" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1350000 $newvolt6" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1458000 $newvolt5" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1566000 $newvolt4" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1674000 $newvolt3" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1782000 $newvolt2" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1890000 $newvolt1" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	
+else
+
+	newvolt15=$(( $(grep 384000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt14=$(( $(grep 486000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt13=$(( $(grep 594000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt12=$(( $(grep 702000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt11=$(( $(grep 810000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt10=$(( $(grep 918000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt9=$(( $(grep 1026000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt8=$(( $(grep 1134000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt7=$(( $(grep 1242000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt6=$(( $(grep 1350000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt5=$(( $(grep 1458000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt4=$(( $(grep 1566000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt3=$(( $(grep 1674000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt2=$(( $(grep 1782000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+	newvolt1=$(( $(grep 1890000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + 0 ))
+
+	echo "384000 $newvolt15" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "486000 $newvolt14" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "594000 $newvolt13" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "702000 $newvolt12" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "810000 $newvolt11" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "918000 $newvolt10" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1026000 $newvolt9" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1134000 $newvolt8" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1242000 $newvolt7" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1350000 $newvolt6" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1458000 $newvolt5" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1566000 $newvolt4" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1674000 $newvolt3" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1782000 $newvolt2" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1890000 $newvolt1" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	
+fi
+
 fi

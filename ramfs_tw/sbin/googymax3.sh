@@ -2,10 +2,6 @@
 
 BB=/sbin/busybox
 
-rm /dev/random
-mknod -m 666 /dev/random c 1 9
-chown root:root /dev/random
-
 # protect init from oom
 echo "-1000" > /proc/1/oom_score_adj;
 
@@ -20,6 +16,10 @@ OPEN_RW()
         $BB mount -o remount,rw /system;
 }
 OPEN_RW;
+
+$BB rm /dev/random;
+$BB mknod -m 666 /dev/random c 1 9;
+$BB chown root:root /dev/random;
 
 # Boot with CFQ I/O Gov
 $BB echo "cfq" > /sys/block/mmcblk0/queue/scheduler;
@@ -146,18 +146,8 @@ echo "$scaling_governor" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo "$scaling_min_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq;
 echo "$scaling_max_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq;
 
-# zram 700M
-if [ "$sammyzram" == "on" ];then
-UNIT="M"
-/system/bin/rtccd3 -a "$zramdisksize$UNIT"
-fi;
-
-# dynamic fsync
-if [ "$Dyn_fsync_active" == "on" ];then
-echo "1" > /sys/kernel/dyn_fsync/Dyn_fsync_active;
-else
-echo "0" > /sys/kernel/dyn_fsync/Dyn_fsync_active;
-fi;
+# zram isn't used so ...
+echo "0" > /proc/sys/vm/swappiness;
 
 if [ "$logger_mode" == "on" ]; then
 	echo "1" > /sys/kernel/logger_mode/logger_mode;
@@ -186,14 +176,64 @@ export CONFIG_BOOTING=
 
 OPEN_RW;
 
-# in case zram is disabled
-if [ "$sammyzram" == "off" ];then
-echo "0" > /proc/sys/vm/swappiness;
-fi;
-
 if [ -d /system/etc/init.d ]; then
   /sbin/busybox chmod 755 /system/etc/init.d/*
   /sbin/busybox run-parts /system/etc/init.d
+fi
+
+# CPU Voltage Control Switch
+
+$BB rm -f /data/.googymax3/vdd_levels.ggy;
+cat /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels > /data/.googymax3/vdd_levels.ggy;
+
+if [ "$CONTROLSWITCH_CPU" == "on" ]; then
+
+	newvolt15=$(( $(grep 384000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT15) ))
+	newvolt14=$(( $(grep 486000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT14) ))
+	newvolt13=$(( $(grep 594000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT13) ))
+	newvolt12=$(( $(grep 702000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT12) ))
+	newvolt11=$(( $(grep 810000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT11) ))
+	newvolt10=$(( $(grep 918000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT10) ))
+	newvolt9=$(( $(grep 1026000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT9) ))
+	newvolt8=$(( $(grep 1134000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT8) ))
+	newvolt7=$(( $(grep 1242000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT7) ))
+	newvolt6=$(( $(grep 1350000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT6) ))
+	newvolt5=$(( $(grep 1458000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT5) ))
+	newvolt4=$(( $(grep 1566000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT4) ))
+	newvolt3=$(( $(grep 1674000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT3) ))
+	newvolt2=$(( $(grep 1782000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT2) ))
+	newvolt1=$(( $(grep 1890000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT1) ))
+
+	echo "384000 $newvolt15" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "486000 $newvolt14" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "594000 $newvolt13" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "702000 $newvolt12" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "810000 $newvolt11" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "918000 $newvolt10" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1026000 $newvolt9" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1134000 $newvolt8" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1242000 $newvolt7" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1350000 $newvolt6" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1458000 $newvolt5" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1566000 $newvolt4" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1674000 $newvolt3" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1782000 $newvolt2" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+	echo "1890000 $newvolt1" > /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
+		
+fi
+
+# GPU Voltage Control Switch
+
+$BB rm -f /data/.googymax3/GPU_mV_table.ggy;
+cat /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table > /data/.googymax3/GPU_mV_table.ggy;
+
+if [ "$CONTROLSWITCH_GPU" == "on" ]; then
+
+	newvolt1=$(( $(sed -n '1p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT1) ))
+	newvolt2=$(( $(sed -n '2p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT2) ))
+	newvolt3=$(( $(sed -n '3p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT3) ))
+
+	echo "$newvolt1 $newvolt2 $newvolt3" > /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table	
 fi
 
 # ROOT activation if supersu used
@@ -256,12 +296,6 @@ echo "70" > /proc/sys/vm/dirty_background_ratio;
 echo "1" > /proc/sys/net/ipv4/tcp_tw_recycle;
 echo "1" > /proc/sys/vm/overcommit_memory;
 echo "50" > /proc/sys/vm/overcommit_ratio;  
-
-    if [ "$sammyzram" == "on" ];then
-      echo "80" > /proc/sys/vm/swappiness;
-    else
-      echo "0" > /proc/sys/vm/swappiness;
-    fi;
 
 fi;
 
