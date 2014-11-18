@@ -17,9 +17,25 @@ OPEN_RW()
 }
 OPEN_RW;
 
-$BB rm /dev/random;
-$BB mknod -m 666 /dev/random c 1 9;
-$BB chown root:root /dev/random;
+# frandom
+
+$BB chmod 666 /dev/frandom
+$BB chmod 666 /dev/erandom
+$BB mv /dev/random /dev/random.ori
+$BB mv /dev/urandom /dev/urandom.ori
+$BB ln /dev/frandom /dev/random
+$BB chmod 666 /dev/random
+$BB ln /dev/erandom /dev/urandom
+$BB chmod 666 /dev/urandom
+
+# $BB rm /dev/random;
+## $BB mknod -m 666 /dev/random c 1 9;
+## $BB chown root:root /dev/random;
+# $BB rm /dev/random /dev/urandom
+# $BB mknod -m 644 /dev/urandom c 235 12
+# $BB mknod -m 644 /dev/random c 235 11
+# $BB echo 0 > /proc/sys/kernel/random/write_wakeup_threshold 
+# $BB echo 1366 > /proc/sys/kernel/random/read_wakeup_threshold
 
 # Boot with CFQ I/O Gov
 $BB echo "cfq" > /sys/block/mmcblk0/queue/scheduler;
