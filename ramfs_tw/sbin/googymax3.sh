@@ -162,8 +162,11 @@ echo "$scaling_governor" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo "$scaling_min_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq;
 echo "$scaling_max_freq" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq;
 
-# zram isn't used so ...
-echo "0" > /proc/sys/vm/swappiness;
+# zram 700M
+if [ "$sammyzram" == "on" ];then
+UNIT="M"
+/system/bin/rtccd3 -a "$zramdisksize$UNIT"
+fi;
 
 if [ "$logger_mode" == "on" ]; then
 	echo "1" > /sys/kernel/logger_mode/logger_mode;
