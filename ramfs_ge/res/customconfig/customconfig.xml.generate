@@ -81,21 +81,21 @@ cat << ENDCONFIG
 
       <checkbox description="Enable/Disable CPU Voltage Control." name="CPU Voltage Control Switch" action="generic01 /tmp/CONTROLSWITCH_CPU" label="CPU Voltage Control Switch"/>
       
-		<seekBar description="Voltage delta for 1890 MHz." name="Voltage delta 1890 MHz" action="cpu-voltage 1" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1782 MHz." name="Voltage delta 1782 MHz" action="cpu-voltage 2" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1674 MHz." name="Voltage delta 1674 MHz" action="cpu-voltage 3" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1566 MHz." name="Voltage delta 1566 MHz" action="cpu-voltage 4" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1458 MHz." name="Voltage delta 1458 MHz" action="cpu-voltage 5" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1350 MHz." name="Voltage delta 1350 MHz" action="cpu-voltage 6" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1242 MHz." name="Voltage delta 1242 MHz" action="cpu-voltage 7" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1134 MHz." name="Voltage delta 1134 MHz" action="cpu-voltage 8" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 1026 MHz." name="Voltage delta 1026 MHz" action="cpu-voltage 9" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 918 MHz." name="Voltage delta 918 MHz" action="cpu-voltage 10" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 810 MHz." name="Voltage delta 810 MHz" action="cpu-voltage 11" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 702 MHz." name="Voltage delta 702 MHz" action="cpu-voltage 12" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 594 MHz." name="Voltage delta 594 MHz" action="cpu-voltage 13" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 486 MHz." name="Voltage delta 486 MHz" action="cpu-voltage 14" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-		<seekBar description="Voltage delta for 384 MHz." name="Voltage delta 384 MHz" action="cpu-voltage 15" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1890 MHz: `grep 1890000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1890 MHz" action="cpu-voltage 1" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1782 MHz: `grep 1782000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1782 MHz" action="cpu-voltage 2" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1674 MHz: `grep 1674000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1674 MHz" action="cpu-voltage 3" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1566 MHz: `grep 1566000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1566 MHz" action="cpu-voltage 4" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1458 MHz: `grep 1458000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1458 MHz" action="cpu-voltage 5" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1350 MHz: `grep 1350000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1350 MHz" action="cpu-voltage 6" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1242 MHz: `grep 1242000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1242 MHz" action="cpu-voltage 7" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1134 MHz: `grep 1134000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1134 MHz" action="cpu-voltage 8" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 1026 MHz: `grep 1026000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 1026 MHz" action="cpu-voltage 9" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 918 MHz: `grep 918000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 918 MHz" action="cpu-voltage 10" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 810 MHz: `grep 810000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 810 MHz" action="cpu-voltage 11" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 702 MHz: `grep 702000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 702 MHz" action="cpu-voltage 12" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 594 MHz: `grep 594000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 594 MHz" action="cpu-voltage 13" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 486 MHz: `grep 486000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 486 MHz" action="cpu-voltage 14" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
+		<seekBar description="Device default voltage for 384 MHz: `grep 384000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}'` µV" name="Voltage delta 384 MHz" action="cpu-voltage 15" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
 
 	</settingsPane>
 
@@ -231,11 +231,11 @@ cat << ENDCONFIG
     
       <checkbox description="Enable/Disable GPU Voltage Control." name="GPU Voltage Control Switch" action="generic01 /tmp/CONTROLSWITCH_GPU" label="GPU Voltage Control Switch"/>
 
-      <seekBar description="GPU Voltage delta for the first (lowest) step" 
+      <seekBar description="Device default voltage for Level1: `sed -n '1p' /data/.googymax3/GPU_mV_table.ggy` µV" 
 		name="GPU Voltage delta Level1." action="gpu-voltage 1" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-      <seekBar description="GPU Voltage delta for the second (mid) step" 
+      <seekBar description="Device default voltage for Level2: `sed -n '2p' /data/.googymax3/GPU_mV_table.ggy` µV" 
 		name="GPU Voltage delta Level2." action="gpu-voltage 2" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
-      <seekBar description="GPU Voltage delta for the third (highest) step" 
+      <seekBar description="Device default voltage for Level3: `sed -n '3p' /data/.googymax3/GPU_mV_table.ggy` µV" 
 		name="GPU Voltage delta Level3." action="gpu-voltage 3" unit="µV" min="-100000" reversed="false" step="12500" max="100000"/>
     </settingsPane>
 
