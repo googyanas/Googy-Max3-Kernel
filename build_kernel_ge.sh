@@ -36,7 +36,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j3 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
+make -j4 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
@@ -70,6 +70,6 @@ cd -
 cd /home/googy/Anas/Googy-Max3-Kernel
 mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_GE.CWM/boot.img
 cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_GE.CWM
-zip -v -r ../GoogyMax3_GE-Kernel_${1}_CWM.zip .
+zip -r ../GoogyMax3_GE-Kernel_${1}_CWM.zip .
 
 adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_GE-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_GE-Kernel_${1}_CWM.zip
