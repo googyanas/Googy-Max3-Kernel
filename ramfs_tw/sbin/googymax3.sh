@@ -140,6 +140,12 @@ fi;
 
 $BB chmod -R 0777 /data/.googymax3/;
 
+$BB rm -f /data/.googymax3/vdd_levels.ggy;
+$BB cat /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels > /data/.googymax3/vdd_levels.ggy
+
+$BB rm -f /data/.googymax3/GPU_mV_table.ggy;
+$BB cat /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table > /data/.googymax3/GPU_mV_table.ggy
+
 . /res/customconfig/customconfig-helper;
 
 ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
@@ -202,9 +208,6 @@ fi
 
 # CPU Voltage Control Switch
 
-$BB rm -f /data/.googymax3/vdd_levels.ggy;
-cat /sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels > /data/.googymax3/vdd_levels.ggy;
-
 if [ "$CONTROLSWITCH_CPU" == "on" ]; then
 
 	newvolt15=$(( $(grep 384000 /data/.googymax3/vdd_levels.ggy | awk '{print $2}') + ($CPUVOLT15) ))
@@ -243,16 +246,13 @@ fi
 
 # GPU Voltage Control Switch
 
-$BB rm -f /data/.googymax3/GPU_mV_table.ggy;
-cat /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table > /data/.googymax3/GPU_mV_table.ggy;
-
 if [ "$CONTROLSWITCH_GPU" == "on" ]; then
 
 	newvolt1=$(( $(sed -n '1p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT1) ))
 	newvolt2=$(( $(sed -n '2p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT2) ))
 	newvolt3=$(( $(sed -n '3p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT3) ))
 
-	echo "$newvolt1 $newvolt2 $newvolt3" > /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table	
+	echo "$newvolt1 $newvolt2 $newvolt3" > /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table
 fi
 
 # ROOT activation if supersu used
@@ -315,6 +315,12 @@ echo "70" > /proc/sys/vm/dirty_background_ratio;
 echo "1" > /proc/sys/net/ipv4/tcp_tw_recycle;
 echo "1" > /proc/sys/vm/overcommit_memory;
 echo "50" > /proc/sys/vm/overcommit_ratio;  
+
+if [ "$sammyzram" == "on" ];then
+   echo "80" > /proc/sys/vm/swappiness;
+else
+   echo "0" > /proc/sys/vm/swappiness;
+fi;
 
 fi;
 
