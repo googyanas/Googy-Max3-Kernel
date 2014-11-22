@@ -114,6 +114,7 @@ $BB chmod 666 /sys/module/msm_thermal/parameters/*
 $BB chmod 666 /sys/module/msm_thermal/core_control/enabled
 $BB chmod 666 /sys/class/kgsl/kgsl-3d0/max_gpuclk
 $BB chmod 666 /sys/devices/platform/kgsl-3d0/kgsl/kgsl-3d0/pwrscale/trustzone/governor
+$BB chmod 666 /sys/module/lowmemorykiller/parameters/minfree
 
 $BB chown -R root:root /data/property;
 $BB chmod -R 0700 /data/property

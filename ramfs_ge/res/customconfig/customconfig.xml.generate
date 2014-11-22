@@ -10,6 +10,8 @@ cat << ENDCONFIG
 	      
       <checkbox description="Disabling GENTLE_FAIR_SLEEPERS may give you better UI responsiveness." name="GENTLE_FAIR_SLEEPERS" action="generic01 /sys/kernel/sched/gentle_fair_sleepers" label="GENTLE_FAIR_SLEEPERS"/>
       
+      <checkbox description="Enable ARCH_POWER to use arch dependent power functions" name="ARCH_POWER" action="generic01 /sys/kernel/sched/arch_power" label="ARCH_POWER"/>
+      
       <seekBar description="Sets the sched_mc value which changes the cpu scheduler behaviour for multi-cpu systems. 0 is kernel's default value which turns sched_mc off. Setting it to 1 means that the first core will be tried to be loaded more and setting it to 2 will bias task wake-ups to semi-idle cpu package for power savings. (default: 0)"
             name="sched_mc" action="generic /sys/devices/system/cpu/sched_mc_power_savings" unit="" min="0" reversed="false" step="1" max="2"/>
             
@@ -445,6 +447,15 @@ cat << ENDCONFIG
              <spinnerItem name="hybla" value="hybla"/> 
       </spinner>
       
+      <spinner description="Set the low memory killer profile" 
+               name="Low memory killer profile" 
+               action="generic /sys/module/lowmemorykiller/parameters/minfree">"
+             <spinnerItem name="Stock" value="12288,15360,18432,21504,24576,30720"/> 
+             <spinnerItem name="Light" value="1024,2048,2560,4096,6144,8192"/> 
+             <spinnerItem name="Moderate" value="1024,2048,4096,8192,12288,16384"/> 
+             <spinnerItem name="Agressive" value="2048,4096,8192,16384,24576,32768"/> 
+       </spinner>
+
       <seekBar description="Dirty background memory buffer. Default: 20%" name="Dirty Background ratio" action="generic /proc/sys/vm/dirty_background_ratio" unit="%" min="5" reversed="false" step="5" max="80"/>
 
       <seekBar description="Dirty real time memory buffer. Default: 40%" name="Dirty ratio" action="generic /proc/sys/vm/dirty_ratio" unit="%" min="5" reversed="false" step="5" max="90"/>
