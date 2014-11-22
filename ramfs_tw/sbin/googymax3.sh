@@ -17,17 +17,6 @@ OPEN_RW()
 }
 OPEN_RW;
 
-# frandom
-
-$BB chmod 666 /dev/frandom
-$BB chmod 666 /dev/erandom
-$BB mv /dev/random /dev/random.ori
-$BB mv /dev/urandom /dev/urandom.ori
-$BB ln /dev/frandom /dev/random
-$BB chmod 666 /dev/random
-$BB ln /dev/erandom /dev/urandom
-$BB chmod 666 /dev/urandom
-
 # $BB rm /dev/random;
 ## $BB mknod -m 666 /dev/random c 1 9;
 ## $BB chown root:root /dev/random;

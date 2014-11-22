@@ -1,2 +1,2 @@
-obj-y := frandom.o
+obj-m := frandom.o
 PWD := $(shell pwd)
