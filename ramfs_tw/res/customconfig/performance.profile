@@ -72,5 +72,5 @@ allowed_max_freq=384000
 allowed_max_high=84
 allowed_max_low=80
 sched_autogroup_enabled=on
-arch_power=on
+arch_power=off
 minfree=1024,2048,4096,8192,12288,16384
