@@ -1,0 +1,14 @@
+#!/sbin/busybox sh
+
+if [ "a$3" == "a" ]; then
+	evalcmd='eval "echo \$gamma_$2"'
+	eval $evalcmd
+else
+	evalcmd='eval "gamma_$2=$3"'
+	eval $evalcmd
+	evalcmd='eval "echo \$gamma_$2"'
+	eval $evalcmd
+
+	echo "$gamma_r $gamma_g $gamma_b" > /sys/class/misc/gammacontrol/tuner
+		
+fi

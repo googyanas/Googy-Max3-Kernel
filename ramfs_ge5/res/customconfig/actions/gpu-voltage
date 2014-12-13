@@ -1,0 +1,30 @@
+#!/sbin/busybox sh
+
+if [ "a$3" == "a" ]; then
+	evalcmd='eval "echo \$GPUVOLT$2"'
+	eval $evalcmd
+else
+	evalcmd='eval "GPUVOLT$2=$3"'
+	eval $evalcmd
+	evalcmd='eval "echo \$GPUVOLT$2"'
+	eval $evalcmd
+
+# Voltage Control Switch
+if [ "$CONTROLSWITCH_GPU" == "on" ];then
+
+	newvolt1=$(( $(sed -n '1p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT1) ))
+	newvolt2=$(( $(sed -n '2p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT2) ))
+	newvolt3=$(( $(sed -n '3p' /data/.googymax3/GPU_mV_table.ggy) + ($GPUVOLT3) ))
+
+	echo "$newvolt1 $newvolt2 $newvolt3" > /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table	
+else
+
+	newvolt1=$(( $(sed -n '1p' /data/.googymax3/GPU_mV_table.ggy) + 0 ))
+	newvolt2=$(( $(sed -n '2p' /data/.googymax3/GPU_mV_table.ggy) + 0 ))
+	newvolt3=$(( $(sed -n '3p' /data/.googymax3/GPU_mV_table.ggy) + 0 ))
+
+	echo "$newvolt1 $newvolt2 $newvolt3" > /sys/devices/system/cpu/cpu0/cpufreq/GPU_mV_table	
+
+fi
+
+fi
