@@ -12,8 +12,8 @@ export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.3-2014.11/bin/arm-cortex_a1
 RAMFS_TMP="/home/googy/Anas/tmp_ge5/ramfs_ge5"
 
 VER="\"-GoogyMax3_GE5-v$1\""
-cp -f /home/googy/Anas/Googy-Max3-Kernel/Kernel/arch/arm/configs/0googymax3_GE_defconfig /home/googy/Anas/Googy-Max3-Kernel/0googymax3_GE_defconfig
-sed "s#^CONFIG_LOCALVERSION=.*#CONFIG_LOCALVERSION=$VER#" /home/googy/Anas/Googy-Max3-Kernel/0googymax3_GE_defconfig > /home/googy/Anas/Googy-Max3-Kernel/Kernel/arch/arm/configs/0googymax3_GE_defconfig
+cp -f /home/googy/Anas/Googy-Max3-Kernel/Kernel/arch/arm/configs/0googymax3_GE5_defconfig /home/googy/Anas/Googy-Max3-Kernel/0googymax3_GE5_defconfig
+sed "s#^CONFIG_LOCALVERSION=.*#CONFIG_LOCALVERSION=$VER#" /home/googy/Anas/Googy-Max3-Kernel/0googymax3_GE5_defconfig > /home/googy/Anas/Googy-Max3-Kernel/Kernel/arch/arm/configs/0googymax3_GE5_defconfig
 
 if [ "${2}" = "x" ];then
  make mrproper || exit 1
@@ -26,7 +26,7 @@ find -name '*.ko' -exec rm -rf {} \;
 # fi
 
 # 
-make 0googymax3_GE_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
+make 0googymax3_GE5_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig || exit 1
 
 . $KERNELDIR/.config
 
