@@ -45,6 +45,10 @@ void ssp_enable(struct ssp_data *data, bool enable)
 static irqreturn_t sensordata_irq_thread_fn(int iIrq, void *dev_id)
 {
 	struct ssp_data *data = dev_id;
+	struct timespec ts;
+
+	ts = ktime_to_timespec(alarm_get_elapsed_realtime());
+	data->timestamp = ts.tv_sec * 1000000000ULL + ts.tv_nsec;
 
 	select_irq_msg(data);
 	data->uIrqCnt++;
@@ -428,6 +432,8 @@ static void ssp_shutdown(struct i2c_client *client)
 	ssp_sensorhub_remove(data);
 #endif
 
+	del_timer_sync(&data->debug_timer);
+	cancel_work_sync(&data->work_debug);
 	destroy_workqueue(data->debug_wq);
 	wake_lock_destroy(&data->ssp_wake_lock);
 #ifdef CONFIG_SENSORS_SSP_SHTC1
