@@ -6455,6 +6455,7 @@ void axi_stop(struct msm_cam_media_controller *pmctl,
 	uint32_t vfe_mode =
 	axi_ctrl->share_ctrl->current_mode & ~(VFE_OUTPUTS_RDI0|
 		VFE_OUTPUTS_RDI1|VFE_OUTPUTS_RDI2);
+	pr_err("AXI Debug %d\n",vfe_params.cmd_type);
 	switch (vfe_params.cmd_type) {
 	case AXI_CMD_PREVIEW:
 	case AXI_CMD_CAPTURE:
@@ -6477,10 +6478,11 @@ void axi_stop(struct msm_cam_media_controller *pmctl,
 	}
 
 	if (axi_ctrl->share_ctrl->stop_immediately) {
+		pr_err("AXI Debug stop_immediately start\n");
 		axi_disable_irq(axi_ctrl->share_ctrl,
 			axi_ctrl->share_ctrl->current_mode);
 		axi_stop_process(axi_ctrl->share_ctrl);
-
+		pr_err("AXI Debug stop_immediately end \n");
 		if (axi_ctrl->share_ctrl->stream_error == 1) {
 			pr_err(" Indicate stream error");
 			vfe32_send_isp_msg(
@@ -6804,6 +6806,7 @@ static int msm_axi_config(struct v4l2_subdev *sd, void __user *arg)
 		break;
 	case CMD_AXI_STOP: {
 		struct msm_camera_vfe_params_t vfe_params;
+		pr_err("AXI Debug start\n");
 		if (copy_from_user(&vfe_params,
 				(void __user *)(vfecmd.value),
 				sizeof(struct msm_camera_vfe_params_t))) {
@@ -6816,6 +6819,7 @@ static int msm_axi_config(struct v4l2_subdev *sd, void __user *arg)
 		axi_ctrl->share_ctrl->stream_error =
 			vfe_params.stream_error;
 		axi_stop(pmctl, axi_ctrl, vfe_params);
+		pr_err("AXI Debug stop\n");
 		}
 		break;
 	case CMD_AXI_RESET: {
