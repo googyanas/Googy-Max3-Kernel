@@ -450,7 +450,7 @@ cat << ENDCONFIG
       <spinner description="Set the low memory killer profile" 
                name="Low memory killer profile" 
                action="generic /sys/module/lowmemorykiller/parameters/minfree">"
-             <spinnerItem name="Stock" value="12288,15360,18432,21504,24576,30720"/> 
+             <spinnerItem name="Stock" value="18432,23040,27648,32256,36864,46080"/> 
              <spinnerItem name="Light" value="1024,2048,2560,4096,6144,8192"/> 
              <spinnerItem name="Moderate" value="1024,2048,4096,8192,12288,16384"/> 
              <spinnerItem name="Agressive" value="2048,4096,8192,16384,24576,32768"/> 

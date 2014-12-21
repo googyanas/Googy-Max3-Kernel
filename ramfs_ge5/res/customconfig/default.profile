@@ -70,4 +70,4 @@ allowed_max_high=84
 allowed_max_low=80
 sched_autogroup_enabled=on
 arch_power=off
-minfree=1024,2048,4096,8192,12288,16384
+minfree=18432,23040,27648,32256,36864,46080
