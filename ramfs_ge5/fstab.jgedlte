@@ -11,10 +11,4 @@
 
 
 #
-/devices/platform/msm_sdcc.2/mmc_host/mmc2          auto                    vfat    default     voldmanaged=extSdCard:auto
-/devices/platform/msm_hsusb_host/usb*sda            auto                    vfat    default     voldmanaged=UsbDriveA:auto
-/devices/platform/msm_hsusb_host/usb*sdb            auto                    vfat    default     voldmanaged=UsbDriveB:auto
-/devices/platform/msm_hsusb_host/usb*sdc            auto                    vfat    default     voldmanaged=UsbDriveC:auto
-/devices/platform/msm_hsusb_host/usb*sdd            auto                    vfat    default     voldmanaged=UsbDriveD:auto
-/devices/platform/msm_hsusb_host/usb*sde            auto                    vfat    default     voldmanaged=UsbDriveE:auto
-/devices/platform/msm_hsusb_host/usb*sdf            auto                    vfat    default     voldmanaged=UsbDriveF:auto
+/devices/platform/msm_sdcc.2/mmc_host               auto                    vfat    default     voldmanaged=extSdCard:auto

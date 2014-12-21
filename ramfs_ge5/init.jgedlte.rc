@@ -32,12 +32,6 @@ import init.target.rc
 on init
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/media_rw/extSdCard 0700 media_rw media_rw
-    mkdir /mnt/media_rw/UsbDriveA 0700 media_rw media_rw
-    mkdir /mnt/media_rw/UsbDriveB 0700 media_rw media_rw
-    mkdir /mnt/media_rw/UsbDriveC 0700 media_rw media_rw
-    mkdir /mnt/media_rw/UsbDriveD 0700 media_rw media_rw
-    mkdir /mnt/media_rw/UsbDriveE 0700 media_rw media_rw
-    mkdir /mnt/media_rw/UsbDriveF 0700 media_rw media_rw
 
     # Set permissions for persist partition
     mkdir /persist 0771 system system
@@ -60,22 +54,10 @@ on init
     export SECONDARY_STORAGE /storage/extSdCard
     # map "real" external storages paths also in same way. backwards compatibility.
     symlink /storage/extSdCard /mnt/extSdCard
-    symlink /storage/UsbDriveA /mnt/UsbDriveA
-    symlink /storage/UsbDriveB /mnt/UsbDriveB
-    symlink /storage/UsbDriveC /mnt/UsbDriveC
-    symlink /storage/UsbDriveD /mnt/UsbDriveD
-    symlink /storage/UsbDriveE /mnt/UsbDriveE
-    symlink /storage/UsbDriveF /mnt/UsbDriveF
 
     export SECONDARY_STORAGE /storage/extSdCard
 
     mkdir /storage/extSdCard 0700 root root
-    mkdir /storage/UsbDriveA 0700 root root
-    mkdir /storage/UsbDriveB 0700 root root
-    mkdir /storage/UsbDriveC 0700 root root
-    mkdir /storage/UsbDriveD 0700 root root
-    mkdir /storage/UsbDriveE 0700 root root
-    mkdir /storage/UsbDriveF 0700 root root
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -712,31 +694,6 @@ on property:ro.fuse_sdcard=true
 service fuse_extSdCard /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/extSdCard /storage/extSdCard
     class late_start
     disabled
-
-service fuse_UsbDriveA /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/UsbDriveA /storage/UsbDriveA
-    class late_start
-    disabled
-
-service fuse_UsbDriveB /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/UsbDriveB /storage/UsbDriveB
-    class late_start
-    disabled
-
-service fuse_UsbDriveC /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/UsbDriveC /storage/UsbDriveC
-    class late_start
-    disabled
-
-service fuse_UsbDriveD /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/UsbDriveD /storage/UsbDriveD
-    class late_start
-    disabled
-
-service fuse_UsbDriveE /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/UsbDriveE /storage/UsbDriveE
-    class late_start
-    disabled
-
-service fuse_UsbDriveF /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/UsbDriveF /storage/UsbDriveF
-    class late_start
-    disabled
-
 
 # Binding fuse mount point to /storage/emulated/legacy
 #on property:init.svc.sdcard=running
