@@ -34,21 +34,21 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j3 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
+make -j4 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
 rm -rf $RAMFS_TMP.cpio
 rm -rf $RAMFS_TMP.cpio.gz
+rm -rf $RAMFS_TMP/*
 #copy ramfs files to tmp directory
 cp -ax $RAMFS_SOURCE $RAMFS_TMP
 #clear git repositories in ramfs
 find $RAMFS_TMP -name .git -exec rm -rf {} \;
 #remove orig backup files
-# find $RAMFS_TMP -name .orig -exec rm -rf {} \;
+find $RAMFS_TMP -name .orig -exec rm -rf {} \;
 #remove empty directory placeholders
 find $RAMFS_TMP -name EMPTY_DIRECTORY -exec rm -rf {} \;
-rm -rf $RAMFS_TMP/tmp3/*
 #remove mercurial repository
 rm -rf $RAMFS_TMP/.hg
 #copy modules into ramfs
