@@ -3,7 +3,7 @@ export KERNELDIR=`readlink -f .`
 export RAMFS_SOURCE="/home/googy/Anas/Googy-Max3-Kernel/Kernel/ramfs_ge5"
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
-export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.3-2014.11/bin/arm-cortex_a15-linux-gnueabihf-
+export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.3-2014.12/bin/arm-cortex_a15-linux-gnueabihf-
 
 # if [ "${1}" != "" ];then
 #  export KERNELDIR=`readlink -f ${1}`
