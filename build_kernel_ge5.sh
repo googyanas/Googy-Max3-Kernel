@@ -70,4 +70,10 @@ mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Goo
 cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_GE5.CWM
 zip -r ../GoogyMax3_GE5-Kernel_${1}_CWM.zip .
 
-adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE5-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_GE5-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE5-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_GE5-Kernel_${1}_CWM.zip
+# adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE5-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_GE5-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE5-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_GE5-Kernel_${1}_CWM.zip
+
+adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE5-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
+
+adb shell su -c "echo 'boot-recovery ' > /cache/recovery/command"
+adb shell su -c "echo '--update_package=/storage/sdcard0/update-gmax3.zip' >> /cache/recovery/command"
+adb shell su -c "reboot recovery"
