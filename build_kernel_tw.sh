@@ -71,7 +71,7 @@ mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Goo
 cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM
 zip -r ../GoogyMax3_TW-Kernel_${1}_CWM.zip .
 
-# adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_TW-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_TW-Kernel_${1}_CWM.zip
+adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_TW-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_TW-Kernel_${1}_CWM.zip
 
 adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
 
