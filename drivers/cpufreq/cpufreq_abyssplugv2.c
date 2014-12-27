@@ -691,12 +691,12 @@ static void bds_check_cpu(struct cpu_bds_info_s *this_bds_info)
 
 		if (!bds_tuners_ins.powersave_bias) {
 			__cpufreq_driver_target(policy, freq_next,
-					CPUFREQ_RELATION_L);
+					CPUFREQ_RELATION_C);
 		} else {
 			int freq = powersave_bias_target(policy, freq_next,
 					CPUFREQ_RELATION_L);
 			__cpufreq_driver_target(policy, freq,
-				CPUFREQ_RELATION_L);
+				CPUFREQ_RELATION_C);
 		}
 	}
 }
