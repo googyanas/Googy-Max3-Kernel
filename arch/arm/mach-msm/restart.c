@@ -404,9 +404,9 @@ static int __init msm_pmic_restart_init(void)
 
 #if defined(CONFIG_MACH_JF_VZW) || defined(CONFIG_MACH_MELIUS)
 	return 0;
-#else
-	if (kernel_sec_get_debug_level() != KERNEL_SEC_DEBUG_LEVEL_LOW)
-		return 0;
+// #else
+// 	if (kernel_sec_get_debug_level() != KERNEL_SEC_DEBUG_LEVEL_LOW)
+// 		return 0;
 #endif
 
 	if (pmic_reset_irq != 0) {
