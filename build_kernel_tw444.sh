@@ -1,6 +1,6 @@
 #!/bin/sh
 export KERNELDIR=`readlink -f .`
-export RAMFS_SOURCE="/home/googy/Anas/Ramdisks/ramfs_tw"
+export RAMFS_SOURCE="/home/googy/Anas/Ramdisks/ramfs_tw444"
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
 # export CROSS_COMPILE=/usr/bin/arm-linux-gnueabihf-
@@ -69,11 +69,11 @@ cd -
 cd /home/googy/Anas/Googy-Max3-Kernel
 mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM/boot.img
 cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_TW.CWM
-zip -r ../GoogyMax3_TW-Kernel_${1}_CWM.zip .
+zip -r ../GoogyMax3_TW444-Kernel_${1}_CWM.zip .
 
-adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_TW-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_TW-Kernel_${1}_CWM.zip
+adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW444-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_TW444-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW444-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_TW444-Kernel_${1}_CWM.zip
 
-adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
+adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW444-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
 
 adb shell su -c "echo 'boot-recovery ' > /cache/recovery/command"
 adb shell su -c "echo '--update_package=/storage/sdcard0/update-gmax3.zip' >> /cache/recovery/command"
