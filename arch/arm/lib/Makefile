@@ -9,7 +9,7 @@ lib-y		:= backtrace.o changebit.o csumipv6.o csumpartial.o   \
 		   delay.o findbit.o memchr.o  			      \
 		   memset.o memzero.o setbit.o  	              \
 		   strncpy_from_user.o strnlen_user.o                 \
-		   delay.o delay-loop.o findbit.o memchr.o 	      \
+		   findbit.o memchr.o 	      			      \
 		   memset.o memzero.o setbit.o 			      \
 		   strchr.o strrchr.o                                 \
 		   testchangebit.o testclearbit.o testsetbit.o        \
