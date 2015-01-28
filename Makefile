@@ -370,7 +370,8 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 KBUILD_CPPFLAGS := -D__KERNEL__
 
 KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -Wno-unused-variable -Wno-maybe-uninitialized \
-		   -fno-strict-aliasing -fno-common -mtune="cortex-a15" -mfpu=neon-vfpv4 \
+		   -fno-strict-aliasing -fno-common -marm -mtune=cortex-a15 -mcpu=cortex-a15 -mfpu=neon-vfpv4 \
+		   -mvectorize-with-neon-quad -ffast-math -funsafe-math-optimizations -std=gnu89 \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security -Wno-unused-function -Wno-array-bounds \
 		   -fno-delete-null-pointer-checks -Wno-cpp -Wno-declaration-after-statement -fno-var-tracking-assignments -Wno-sizeof-pointer-memaccess -Wno-aggressive-loop-optimizations -Wno-sequence-point
