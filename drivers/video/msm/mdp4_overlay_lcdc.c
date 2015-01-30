@@ -343,7 +343,7 @@ void mdp4_lcdc_vsync_ctrl(struct fb_info *info, int enable)
 	pr_debug("%s: vsync enable=%d\n", __func__, enable);
 
 	vctrl->vsync_irq_enabled = enable;
-	
+
 	mdp4_lcdc_vsync_irq_ctrl(cndx, enable);
 
 
@@ -370,9 +370,9 @@ void mdp4_lcdc_wait4vsync(int cndx)
 
 	/* start timing generator & mmu if they are not started yet */
 	mdp4_overlay_lcdc_start();
-	
+
 	mdp4_lcdc_vsync_irq_ctrl(cndx, 1);
-	
+
 	spin_lock_irqsave(&vctrl->spin_lock, flags);
 
 	if (vctrl->wait_vsync_cnt == 0)

@@ -243,12 +243,9 @@ static void tz_idle(struct kgsl_device *device, struct kgsl_pwrscale *pwrscale)
 	}
 	priv->bin.total_time = 0;
 	priv->bin.busy_time = 0;
-	if (val) {
+	if (val)
 		kgsl_pwrctrl_pwrlevel_change(device,
 					     pwr->active_pwrlevel + val);
-		//pr_info("TZ idle stat: %d, TZ PL: %d, TZ out: %d\n",
-		//		idle, pwr->active_pwrlevel, val);
-	}
 }
 
 static void tz_busy(struct kgsl_device *device,

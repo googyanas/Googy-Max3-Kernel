@@ -845,11 +845,11 @@ static inline int mdp_bus_scale_update_request(u64 ab_p0,
         return 0;
  }
 
- 
-static int mdp_bus_scale_restore_request(void) 
-{ 
- return 0; 
-} 
+
+static int mdp_bus_scale_restore_request(void)
+{
+ return 0;
+}
 #endif
 void mdp_dma_vsync_ctrl(int enable);
 void mdp_dma_video_vsync_ctrl(int enable);
@@ -884,7 +884,7 @@ void mdp_histogram_handle_isr(struct mdp_hist_mgmt *mgmt);
 void __mdp_histogram_kickoff(struct mdp_hist_mgmt *mgmt);
 void __mdp_histogram_reset(struct mdp_hist_mgmt *mgmt);
 void mdp_footswitch_ctrl(boolean on);
-int mdp_enable_iommu_clocks(void); 
+int mdp_enable_iommu_clocks(void);
 int mdp_disable_iommu_clocks(void);
 
 #ifdef CONFIG_FB_MSM_MDP303

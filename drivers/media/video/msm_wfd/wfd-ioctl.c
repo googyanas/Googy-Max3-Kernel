@@ -506,7 +506,7 @@ int wfd_vidbuf_buf_init(struct vb2_buffer *vb)
 		WFD_MSG_ERR("not init buffers since allocation failed");
 		return -ENOBUFS;
 	}
-	
+
 	mregion.fd = minfo->fd;
 	mregion.offset = minfo->offset;
 	mregion.cookie = (u32)vb;

@@ -408,7 +408,7 @@ void update_csc_registers(int mode)
 	uint32_t csc_array[CSC_UPDATA_SIZE][2];
 	uint32_t off;
 	uint32_t base;
-	
+
 	vg_base = MDP_BASE + MDP4_VIDEO_BASE;
 	base = (uint32_t) (vg_base + MDP4_VIDEO_CSC_OFF);
 	off = ((uint32_t) base + CSC_MV_OFF);

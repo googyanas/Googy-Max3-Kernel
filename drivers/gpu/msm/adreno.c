@@ -3056,6 +3056,10 @@ int adreno_idle(struct kgsl_device *device)
 		adreno_dev->gpudev->reg_rbbm_status << 2,
 		0x00000000, 0x80000000);
 
+	/* If the device clock is off, it's already idle. Don't wake it up */
+	if (!kgsl_pwrctrl_isenabled(device))
+		return 0;
+
 retry:
 	/* First, wait for the ringbuffer to drain */
 	if (adreno_ringbuffer_drain(device, prev_reg_val))
@@ -3868,12 +3872,15 @@ static void adreno_power_stats(struct kgsl_device *device,
 	unsigned int cycles = 0;
 
 	/*
-	 * Get the busy cycles counted since the counter was last reset.
 	 * If we're not currently active, there shouldn't have been
 	 * any cycles since the last time this function was called.
 	 */
-	if (device->state == KGSL_STATE_ACTIVE)
-		cycles = adreno_dev->gpudev->busy_cycles(adreno_dev);
+
+	if (device->state != KGSL_STATE_ACTIVE)
+		return;
+
+	/* Get the busy cycles counted since the counter was last reset */
+	cycles = adreno_dev->gpudev->busy_cycles(adreno_dev);
 
 	/*
 	 * In order to calculate idle you have to have run the algorithm

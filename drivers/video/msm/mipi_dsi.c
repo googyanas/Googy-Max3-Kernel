@@ -125,7 +125,7 @@ static int mipi_dsi_off(struct platform_device *pdev)
 	ret = panel_next_off(pdev);
 
 	spin_lock_bh(&dsi_clk_lock);
-	
+
 	mipi_dsi_clk_disable();
 
 	/* disbale dsi engine */
@@ -144,17 +144,16 @@ static int mipi_dsi_off(struct platform_device *pdev)
 	mipi_dsi_unprepare_clocks();
 	mipi_dsi_unprepare_ahb_clocks();
 
-
 	usleep(5000);
 
 	if (mipi_dsi_pdata && mipi_dsi_pdata->active_reset)
 		mipi_dsi_pdata->active_reset(0); /* low */
 
 	usleep(2000); /*1ms delay(minimum) required between reset low and AVDD off*/
-
+#if defined(CONFIG_SUPPORT_SECOND_POWER)
 	if (mipi_dsi_pdata && mipi_dsi_pdata->panel_power_save)
 		mipi_dsi_pdata->panel_power_save(0);
-
+#endif
 	if (mipi_dsi_pdata && mipi_dsi_pdata->dsi_power_save)
 		mipi_dsi_pdata->dsi_power_save(0);
 
@@ -182,6 +181,9 @@ static int mipi_dsi_on(struct platform_device *pdev)
 	u32 dummy_xres, dummy_yres;
 	int target_type = 0;
 	u32 tmp;
+#if defined(CONFIG_FB_MSM_MIPI_RENESAS_TFT_VIDEO_FULL_HD_PT_PANEL)
+	static int is_booting = 1;
+#endif
 
 	pr_debug("%s+:\n", __func__);
 
@@ -198,6 +200,23 @@ static int mipi_dsi_on(struct platform_device *pdev)
 		mipi_dsi_pdata->power_common();
 
 #if defined(CONFIG_SUPPORT_SECOND_POWER)
+#if defined(CONFIG_FB_MSM_MIPI_RENESAS_TFT_VIDEO_FULL_HD_PT_PANEL)
+	if( is_booting == 1 )
+	{
+		is_booting = 0;
+#if defined(CONFIG_MACH_JACTIVE_ATT) || defined(CONFIG_MACH_JACTIVE_EUR)
+		usleep(5000);
+		if (mipi_dsi_pdata && mipi_dsi_pdata->active_reset)
+				mipi_dsi_pdata->active_reset(0); /* low */
+		usleep(2000);
+
+		if (mipi_dsi_pdata && mipi_dsi_pdata->panel_power_save)
+			mipi_dsi_pdata->panel_power_save(0);
+		msleep(10);
+#endif
+	}
+#endif
+
 	if (mipi_dsi_pdata && mipi_dsi_pdata->panel_power_save)
 		mipi_dsi_pdata->panel_power_save(1);
 #endif
@@ -413,10 +432,10 @@ void esd_recovery(void)
 			mutex_lock(&power_state_chagne);
 
 			panel_next_off(pdev_for_esd);
-			
+
 			if (mipi_dsi_pdata && mipi_dsi_pdata->active_reset)
 				mipi_dsi_pdata->active_reset(0); /* low */
-	
+
 			if (mipi_dsi_pdata && mipi_dsi_pdata->panel_power_save)
 				mipi_dsi_pdata->panel_power_save(0);
 

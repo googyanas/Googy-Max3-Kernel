@@ -1544,6 +1544,9 @@ static long kgsl_ioctl_rb_issueibcmds(struct kgsl_device_private *dev_priv,
 	context = kgsl_context_get_owner(dev_priv, param->drawctxt_id);
 	if (context == NULL) {
 		result = -EINVAL;
+		KGSL_DRV_ERR(dev_priv->device,
+			"invalid context_id %d\n",
+			param->drawctxt_id);
 		goto done;
 	}
 
@@ -2182,6 +2185,8 @@ static int kgsl_setup_ion(struct kgsl_mem_entry *entry,
 		entry->memdesc.size += s->length;
 		entry->memdesc.sglen++;
 	}
+	
+	entry->memdesc.size = PAGE_ALIGN(entry->memdesc.size);
 
 	return 0;
 err:
