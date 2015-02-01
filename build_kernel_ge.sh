@@ -34,7 +34,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j3 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
+fakeroot nice --10 make -j5 CONFIG_NO_ERROR_ON_MISMATCH=y || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
@@ -70,10 +70,10 @@ mv -f -v /home/googy/Anas/Googy-Max3-Kernel/Kernel/boot.img /home/googy/Anas/Goo
 cd /home/googy/Anas/Googy-Max3-Kernel/GT-I9505_GoogyMax3_GE.CWM
 zip -r ../GoogyMax3_GE-Kernel_${1}_CWM.zip .
 
-# adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_GE-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_GE-Kernel_${1}_CWM.zip
+adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_GE-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_GE-Kernel_${1}_CWM.zip
 
-adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
-
-adb shell su -c "echo 'boot-recovery ' > /cache/recovery/command"
-adb shell su -c "echo '--update_package=/storage/sdcard0/update-gmax3.zip' >> /cache/recovery/command"
-adb shell su -c "reboot recovery"
+# adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_GE-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
+# 
+# adb shell su -c "echo 'boot-recovery ' > /cache/recovery/command"
+# adb shell su -c "echo '--update_package=/storage/sdcard0/update-gmax3.zip' >> /cache/recovery/command"
+# adb shell su -c "reboot recovery"

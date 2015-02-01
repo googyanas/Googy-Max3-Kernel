@@ -35,7 +35,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j4 || exit 1
+fakeroot nice --10 make -j5 || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
@@ -73,8 +73,8 @@ zip -r ../GoogyMax3_TW444-Kernel_${1}_CWM.zip .
 
 adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW444-Kernel_${1}_CWM.zip /storage/sdcard0/GoogyMax3_TW444-Kernel_${1}_CWM.zip || adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW444-Kernel_${1}_CWM.zip /storage/sdcard1/GoogyMax3_TW444-Kernel_${1}_CWM.zip
 
-adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW444-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
-
-adb shell su -c "echo 'boot-recovery ' > /cache/recovery/command"
-adb shell su -c "echo '--update_package=/storage/sdcard0/update-gmax3.zip' >> /cache/recovery/command"
-adb shell su -c "reboot recovery"
+# adb push /home/googy/Anas/Googy-Max3-Kernel/GoogyMax3_TW444-Kernel_${1}_CWM.zip /storage/sdcard0/update-gmax3.zip
+# 
+# adb shell su -c "echo 'boot-recovery ' > /cache/recovery/command"
+# adb shell su -c "echo '--update_package=/storage/sdcard0/update-gmax3.zip' >> /cache/recovery/command"
+# adb shell su -c "reboot recovery"
