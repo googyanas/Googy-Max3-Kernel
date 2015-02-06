@@ -105,7 +105,7 @@ extern unsigned long membank0_size;
 extern unsigned long membank1_start;
 void find_membank0_hole(void);
 
-#define MEMBANK0_PHYS_OFFSET PHYS_OFFSET
+#define MEMBANK0_PHYS_OFFSET PLAT_PHYS_OFFSET
 #define MEMBANK0_PAGE_OFFSET PAGE_OFFSET
 
 #define MEMBANK1_PHYS_OFFSET (membank1_start)
