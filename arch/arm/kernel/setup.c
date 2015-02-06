@@ -672,7 +672,7 @@ static int __init early_mem(char *p)
 		meminfo.nr_banks = 0;
 	}
 
-	start = PHYS_OFFSET;
+	start = PLAT_PHYS_OFFSET;
 	size  = memparse(p, &endp);
 	if (*endp == '@')
 		start = memparse(endp + 1, NULL);
@@ -963,7 +963,7 @@ static struct machine_desc * __init setup_machine_tags(unsigned int nr)
 	struct machine_desc *mdesc = NULL, *p;
 	char *from = default_command_line;
 
-	init_tags.mem.start = PHYS_OFFSET;
+	init_tags.mem.start = PLAT_PHYS_OFFSET;
 
 	/*
 	 * locate machine in the list of supported machines.
