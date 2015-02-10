@@ -35,7 +35,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-make -j3 || exit 1
+fakeroot nice --10 make -j5 || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
