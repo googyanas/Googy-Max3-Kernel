@@ -475,7 +475,6 @@ store_one(scaling_min_freq, min);
 store_one(scaling_max_freq, max);
 ssize_t show_GPU_mV_table(struct cpufreq_policy *policy, char *buf)
 {
-	int modu = 0;
 	return get_gpu_vdd_levels_str(buf);
 }
 
