@@ -4,7 +4,7 @@ export RAMFS_SOURCE="/home/googy/Anas/Ramdisks/ramfs_tw444"
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
 # export CROSS_COMPILE=/usr/bin/arm-linux-gnueabihf-
-export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.3-2015.01/bin/arm-cortex_a15-linux-gnueabihf-
+export CROSS_COMPILE=/home/googy/Anas/linaro_a15_4.9.3-2015.02/bin/arm-cortex_a15-linux-gnueabihf-
 
 # if [ "${1}" != "" ];then
 #  export KERNELDIR=`readlink -f ${1}`
@@ -35,7 +35,7 @@ export KCONFIG_NOTIMESTAMP=true
 export ARCH=arm
 
 cd $KERNELDIR/
-fakeroot nice --10 make -j5 || exit 1
+make -j3 || exit 1
 
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
