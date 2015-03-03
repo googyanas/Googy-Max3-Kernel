@@ -63,9 +63,9 @@ static struct scalable scalable[] __initdata = {
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x5501,
 #ifdef CONFIG_CPU_OVERCLOCK
-		.vreg[VREG_CORE] = { "krait0", 1450000 },
+		.vreg[VREG_CORE] = { "krait1", 1450000 },
 #else
-		.vreg[VREG_CORE] = { "krait0", 1300000 },
+		.vreg[VREG_CORE] = { "krait1", 1300000 },
 #endif
 		.vreg[VREG_MEM]  = { "krait1_mem", 1150000 },
 		.vreg[VREG_DIG]  = { "krait1_dig", 1150000 },
@@ -78,9 +78,9 @@ static struct scalable scalable[] __initdata = {
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x6501,
 #ifdef CONFIG_CPU_OVERCLOCK
-		.vreg[VREG_CORE] = { "krait0", 1450000 },
+		.vreg[VREG_CORE] = { "krait2", 1450000 },
 #else
-		.vreg[VREG_CORE] = { "krait0", 1300000 },
+		.vreg[VREG_CORE] = { "krait2", 1300000 },
 #endif
 		.vreg[VREG_MEM]  = { "krait2_mem", 1150000 },
 		.vreg[VREG_DIG]  = { "krait2_dig", 1150000 },
@@ -93,9 +93,9 @@ static struct scalable scalable[] __initdata = {
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x7501,
 #ifdef CONFIG_CPU_OVERCLOCK
-		.vreg[VREG_CORE] = { "krait0", 1450000 },
+		.vreg[VREG_CORE] = { "krait3", 1450000 },
 #else
-		.vreg[VREG_CORE] = { "krait0", 1300000 },
+		.vreg[VREG_CORE] = { "krait3", 1300000 },
 #endif
 		.vreg[VREG_MEM]  = { "krait3_mem", 1150000 },
 		.vreg[VREG_DIG]  = { "krait3_dig", 1150000 },
@@ -132,6 +132,24 @@ static struct msm_bus_scale_pdata bus_scale_data __initdata = {
 };
 
 static struct l2_level l2_freq_tbl[] __initdata = {
+#ifdef CONFIG_LOW_CPUCLOCKS
+	[0]  = { {  378000, HFPLL, 2, 0x1C },  950000, 1050000, 1 },
+	[1]  = { {  384000, PLL_8, 0, 0x00 },  950000, 1050000, 1 },
+	[2]  = { {  432000, HFPLL, 2, 0x20 }, 1050000, 1050000, 2 },
+	[3]  = { {  486000, HFPLL, 2, 0x24 }, 1050000, 1050000, 2 },
+	[4]  = { {  540000, HFPLL, 2, 0x28 }, 1050000, 1050000, 2 },
+	[5]  = { {  594000, HFPLL, 1, 0x16 }, 1050000, 1050000, 2 },
+	[6]  = { {  648000, HFPLL, 1, 0x18 }, 1050000, 1050000, 4 },
+	[7]  = { {  702000, HFPLL, 1, 0x1A }, 1050000, 1050000, 4 },
+	[8]  = { {  756000, HFPLL, 1, 0x1C }, 1150000, 1150000, 4 },
+	[9]  = { {  810000, HFPLL, 1, 0x1E }, 1150000, 1150000, 4 },
+	[10] = { {  864000, HFPLL, 1, 0x20 }, 1150000, 1150000, 4 },
+	[11] = { {  918000, HFPLL, 1, 0x22 }, 1150000, 1150000, 5 },
+	[12] = { {  972000, HFPLL, 1, 0x24 }, 1150000, 1150000, 5 },
+	[13] = { { 1026000, HFPLL, 1, 0x26 }, 1150000, 1150000, 5 },
+	[14] = { { 1080000, HFPLL, 1, 0x28 }, 1150000, 1150000, 5 },
+	[15] = { { 1134000, HFPLL, 1, 0x2A }, 1150000, 1150000, 5 },
+#else
 	[0]  = { {  384000, PLL_8, 0, 0x00 },  950000, 1050000, 1 },
 	[1]  = { {  432000, HFPLL, 2, 0x20 }, 1050000, 1050000, 2 },
 	[2]  = { {  486000, HFPLL, 2, 0x24 }, 1050000, 1050000, 2 },
@@ -148,6 +166,7 @@ static struct l2_level l2_freq_tbl[] __initdata = {
 	[13] = { { 1080000, HFPLL, 1, 0x28 }, 1150000, 1150000, 5 },
 	[14] = { { 1134000, HFPLL, 1, 0x2A }, 1150000, 1150000, 5 },
 	{ }
+#endif
 };
 
 static struct acpu_level tbl_slow[] __initdata = {
