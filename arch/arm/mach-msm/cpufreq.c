@@ -397,8 +397,8 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 		if (ret)
 			return ret;
 		pr_info("cpufreq: cpu%d init at %d switching to %d\n",
-				policy->cpu, cur_freq, policy->max);
-		cur_freq = policy->max;
+				policy->cpu, cur_freq, table[index].frequency);
+		cur_freq = table[index].frequency;
 	}
 
 	policy->cur = cur_freq;
