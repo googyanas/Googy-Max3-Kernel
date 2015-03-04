@@ -39,6 +39,7 @@
 #include "acpuclock.h"
 #include "acpuclock-krait.h"
 #include "avs.h"
+#include "acpuclock-common.h"
 #ifdef CONFIG_SEC_DEBUG_DCVS_LOG
 #include <mach/sec_debug.h>
 #endif
@@ -46,18 +47,6 @@
 #define PRI_SRC_SEL_SEC_SRC	0
 #define PRI_SRC_SEL_HFPLL	1
 #define PRI_SRC_SEL_HFPLL_DIV2	2
-
-#ifdef CONFIG_CPU_OVERCLOCK
-#define OVERCLOCK_EXTRA_FREQS	2
-#else
-#define OVERCLOCK_EXTRA_FREQS	0
-#endif
-
-#ifdef CONFIG_LOW_CPUCLOCKS
-#define FREQ_TABLE_SIZE		(38 + OVERCLOCK_EXTRA_FREQS)
-#else
-#define FREQ_TABLE_SIZE		(35 + OVERCLOCK_EXTRA_FREQS)
-#endif
 
 #define SECCLKAGD		BIT(4)
 #ifdef CONFIG_SEC_DEBUG_SUBSYS

@@ -52,7 +52,7 @@ VREG_CONSUMERS(L4) = {
 	REGULATOR_SUPPLY("HSUSB_1p8",		"msm_otg"),
 #ifdef CONFIG_WCNSS_CORE
 	REGULATOR_SUPPLY("iris_vddxo",		"wcnss_wlan.0"),
-#endif	
+#endif
 #ifdef CONFIG_MMC_MSM_SDC4_SUPPORT
 	REGULATOR_SUPPLY("sdc_vdd",	"msm_sdcc.3"),
 #endif
@@ -84,7 +84,7 @@ VREG_CONSUMERS(L8) = {
 	REGULATOR_SUPPLY("cam_vana",		"4-0020"),
 	REGULATOR_SUPPLY("cam_vana",		"7-006a"),
 	REGULATOR_SUPPLY("cam_vana",		"4-003e"),
-	REGULATOR_SUPPLY("cam_vana",		"4-002d"),	
+	REGULATOR_SUPPLY("cam_vana",		"4-002d"),
 #ifdef CONFIG_CAMERA_USE_GSBI7
 	REGULATOR_SUPPLY("cam_vana",		"7-003e"),
 #endif
@@ -116,7 +116,7 @@ VREG_CONSUMERS(L12) = {
 	REGULATOR_SUPPLY("cam_vdig",		"7-006a"),
 	REGULATOR_SUPPLY("8921_l12",		NULL),
 	REGULATOR_SUPPLY("cam_vdig",		"4-003e"),
-	REGULATOR_SUPPLY("cam_vdig",		"4-002d"),	
+	REGULATOR_SUPPLY("cam_vdig",		"4-002d"),
 #ifdef CONFIG_CAMERA_USE_GSBI7
 	REGULATOR_SUPPLY("cam_vdig",		"7-003e"),
 #endif
@@ -145,7 +145,7 @@ VREG_CONSUMERS(L16) = {
 	REGULATOR_SUPPLY("cam_vaf",		"4-0020"),
 	REGULATOR_SUPPLY("cam_vaf",		"7-006a"),
 	REGULATOR_SUPPLY("cam_vaf",		"4-003e"),
-	REGULATOR_SUPPLY("cam_vaf",		"4-002d"),	
+	REGULATOR_SUPPLY("cam_vaf",		"4-002d"),
 #ifdef CONFIG_CAMERA_USE_GSBI7
 	REGULATOR_SUPPLY("cam_vaf",		"7-003e"),
 #endif
@@ -279,7 +279,7 @@ VREG_CONSUMERS(LVS5) = {
 	REGULATOR_SUPPLY("cam_vio",		"4-0020"),
 	REGULATOR_SUPPLY("cam_vio",		"7-006a"),
 	REGULATOR_SUPPLY("cam_vio",		"4-003e"),
-	REGULATOR_SUPPLY("cam_vio",		"4-002d"),	
+	REGULATOR_SUPPLY("cam_vio",		"4-002d"),
 #ifdef CONFIG_CAMERA_USE_GSBI7
 	REGULATOR_SUPPLY("cam_vio",		"7-003e"),
 #endif

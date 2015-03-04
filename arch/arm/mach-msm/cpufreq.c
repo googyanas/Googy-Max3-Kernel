@@ -327,6 +327,10 @@ int msm_cpufreq_set_freq_limits(uint32_t cpu, uint32_t min, uint32_t max)
 }
 EXPORT_SYMBOL(msm_cpufreq_set_freq_limits);
 
+#ifdef CONFIG_LOW_CPUCLOCKS
+#define LOW_CPUCLOCKS_FREQ_MIN	270000
+#endif
+
 static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 {
 	int cur_freq;
@@ -352,8 +356,19 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 #endif
 	}
 #ifdef CONFIG_MSM_CPU_FREQ_SET_MIN_MAX
+#ifdef CONFIG_LOW_CPUCLOCKS
+	policy->min = LOW_CPUCLOCKS_FREQ_MIN;
+#else
 	policy->min = CONFIG_MSM_CPU_FREQ_MIN;
+#endif
 	policy->max = CONFIG_MSM_CPU_FREQ_MAX;
+#else
+	policy->max = 1890000;
+#ifdef CONFIG_LOW_CPUCLOCKS
+	policy->min = LOW_CPUCLOCKS_FREQ_MIN;
+#else
+	policy->min = 384000;
+#endif
 #endif
 
 #ifdef CONFIG_SEC_DVFS
@@ -378,8 +393,8 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 		if (ret)
 			return ret;
 		pr_info("cpufreq: cpu%d init at %d switching to %d\n",
-				policy->cpu, cur_freq, table[index].frequency);
-		cur_freq = table[index].frequency;
+				policy->cpu, cur_freq, policy->max);
+		cur_freq = policy->max
 	}
 
 	policy->cur = cur_freq;
