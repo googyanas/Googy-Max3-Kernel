@@ -199,7 +199,7 @@ static char * const zone_names[MAX_NR_ZONES] = {
 	 "Movable",
 };
 
-int min_free_kbytes = 5752;
+int min_free_kbytes = 1024;
 int wmark_min_kbytes = 5752;
 int wmark_low_kbytes = 7190;
 int wmark_high_kbytes = 8628;
