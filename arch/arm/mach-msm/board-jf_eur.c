@@ -3257,20 +3257,16 @@ static struct msm_thermal_data msm_thermal_pdata = {
 #endif
 	.temp_hysteresis_degC = 10,
 	.freq_step = 2,
+#ifdef CONFIG_INTELLI_THERMAL
+	.freq_control_mask = 0xf,
+#endif
+#ifdef CONFIG_CPU_OVERCLOCK
+	.core_limit_temp_degC = 90,
+#else
 	.core_limit_temp_degC = 80,
+#endif
 	.core_temp_hysteresis_degC = 10,
 	.core_control_mask = 0xe,
-#ifdef CONFIG_MAKO_THERMAL
-	.allowed_max_high = 84,
-	.allowed_max_low = 80,
-	.allowed_max_freq = 384000,
-	.allowed_mid_high = 81,
-	.allowed_mid_low = 76,
-	.allowed_mid_freq = 810000,
-	.allowed_low_high = 79,
-	.allowed_low_low = 73,
-	.allowed_low_freq = 1350000,
-#endif
 };
 
 #define MSM_SHARED_RAM_PHYS 0x80000000
