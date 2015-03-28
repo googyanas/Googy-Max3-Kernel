@@ -224,11 +224,10 @@ config CPU_FREQ_DEFAULT_GOV_DARKNESS
 endchoice
 
 config CPU_FREQ_GOV_LIONHEART
-	tristate "lionheart"
+	tristate "'Lionheart' cpufreq governor"
 	depends on CPU_FREQ
 	help
-	 Use the CPUFreq governor 'lionheart' as default.
-
+	  'Lionheart' - A brave and agile conservative-based governor.
 	  If in doubt, say N.
 
 config CPU_FREQ_GOV_DARKNESS
