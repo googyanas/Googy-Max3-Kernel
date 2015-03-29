@@ -512,7 +512,7 @@ void set_close_on_exec(unsigned int fd, int flag)
 	spin_unlock(&files->file_lock);
 }
 
-static bool get_close_on_exec(unsigned int fd)
+bool get_close_on_exec(unsigned int fd)
 {
 	struct files_struct *files = current->files;
 	struct fdtable *fdt;
