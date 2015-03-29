@@ -402,9 +402,9 @@ static int cond_read_node(struct policydb *p, struct cond_node *node, void *fp)
 	int rc;
 	struct cond_expr *expr = NULL, *last = NULL;
 
-	rc = next_entry(buf, fp, sizeof(u32)*2);
+	rc = next_entry(buf, fp, sizeof(u32) * 2);
 	if (rc)
-		return rc;
+		goto err;
 
 	node->cur_state = le32_to_cpu(buf[0]);
 
