@@ -616,3 +616,16 @@ SYSCALL_DEFINE1(dup, unsigned int, fildes)
 	}
 	return ret;
 }
+
+int f_dupfd(unsigned int from, struct file *file, unsigned flags)
+{
+	int err;
+	if (from >= rlimit(RLIMIT_NOFILE))
+		return -EINVAL;
+	err = alloc_fd(from, flags);
+	if (err >= 0) {
+		get_file(file);
+		fd_install(err, file);
+	}
+	return err;
+}
