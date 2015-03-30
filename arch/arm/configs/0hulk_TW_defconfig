@@ -1,4 +1,4 @@
-CONFIG_LOCALVERSION="-Hulk-Kernel_TW-V1"
+CONFIG_LOCALVERSION="-Hulk-Kernel_TW-V1.0.1"
 # CONFIG_LOCALVERSION_AUTO is not set
 
 # Hulk-Kernel
