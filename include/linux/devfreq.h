@@ -106,7 +106,8 @@ struct devfreq_dev_profile {
  */
 struct devfreq_governor {
 	const char name[DEVFREQ_NAME_LEN];
-	int (*get_target_freq)(struct devfreq *this, unsigned long *freq);
+	int (*get_target_freq)(struct devfreq *this, unsigned long *freq,
+				u32 *flag);
 	int (*init)(struct devfreq *this);
 	void (*exit)(struct devfreq *this);
 	const bool no_central_polling;
