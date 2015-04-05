@@ -1,4 +1,6 @@
-#!/bin/sh
-
-./build_kernel_ge.sh ${1} ${2} || exit 1
-./build_kernel_tw.sh ${1}
+#!/bin/bash
+{
+	make mrproper
+	make 0hulk_TW_defconfig VARIANT_DEFCONFIG=jf_eur_defconfig SELINUX_DEFCONFIG=selinux_defconfig SELINUX_LOG_DEFCONFIG=selinux_log_defconfig DEBUG_DEFCONFIG=jfuserdebug_defconfig
+        make -j3
+}
